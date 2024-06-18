@@ -8,3 +8,7 @@
     background-color: white;
     cursor: pointer;
 }
+
+.bb:hover {
+    background-color: #f0f0f0; /* hover 상태에서의 배경색 */
+}

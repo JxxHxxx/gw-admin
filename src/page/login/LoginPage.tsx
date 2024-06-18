@@ -58,5 +58,9 @@ export default function LoginPage() {
                     onClick={handleOnClickLoginButton} />
             </div>
         </div>
+        <div style={{'textAlign':'center', 'marginTop' : '25px'}}>
+            <p style={{'fontSize':'12px', 'color':'grey', 'margin':'0px'}}>Copyright JxxHxxx. All Rights Reserved</p>
+            <a href="https://github.com/JxxHxxx" style={{'fontSize':'12px', 'color':'grey', 'margin':'0px'}}>Visit JxxHxx Github</a>
+        </div>
     </Fragment>
 }
