@@ -1,0 +1,11 @@
+.input-container {    
+    width: 100%; /* 원하는 너비를 설정합니다. */
+    max-width: 400px; /* 필요에 따라 최대 너비를 설정할 수도 있습니다. */
+    margin: 0 auto; /* 중앙 정렬을 원할 경우 사용 */
+}
+
+.input-container input,
+.input-container button {
+    width: 100%;
+    box-sizing: border-box; /* 패딩과 보더를 포함한 너비를 설정합니다. */
+}

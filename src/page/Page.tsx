@@ -6,15 +6,14 @@ type PageProps = {
     children: ReactNode;
 }
 
-const Page: React.FC<PageProps> = ({ header, sidebar, children }) => {
-    return <Fragment>
-        <header>{header}</header>
-        <div className="page-container">
-            <aside>{sidebar}</aside>
-            <main className="content">{children}</main>
-        </div>
-    </Fragment>
+export default function Page({ header, sidebar, children }: PageProps) {
+    return (
+        <Fragment>
+            <header>{header}</header>
+            <div className="page-container">
+                <aside>{sidebar}</aside>
+                <main className="content">{children}</main>
+            </div>
+        </Fragment>
+    );
 }
-
-
-export default Page
