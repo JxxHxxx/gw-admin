@@ -48,6 +48,7 @@ export default function LoginPage() {
                 <Input
                     className="bi"
                     onChange={handlePasswordOnChange}
+                    type="password"
                     placeholder="비밀번호를 입력해주세요" />
             </div>
             <div>
