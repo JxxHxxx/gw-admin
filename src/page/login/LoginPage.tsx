@@ -78,11 +78,11 @@ export default function LoginPage() {
                     placeholder="비밀번호를 입력해주세요" />
             </div>
             {signIn.failFlag && <div className="signin_err_msg">
-                {Array.isArray(signIn.failMsg) ? signIn.failMsg.map(msg => {
+                {/* {Array.isArray(signIn.failMsg) ? signIn.failMsg.map(msg => {
                     <>
                         msg <br />
                     </>
-                }) : { signIn.failMsg }}
+                }) : {signIn.failMsg}} */}
             </div>}
             <div>
                 <Button
