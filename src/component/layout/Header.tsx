@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 
 
 export default function Header() {
+    const nav = useNavigate();
+
+    
+
     return <Fragment>
         <ul style={{'display':'flex',
             'listStyleType':'none', 
@@ -13,17 +18,17 @@ export default function Header() {
              'color': 'white',
              'fontWeight': 'bold'
              }}>
-            <li style={{'marginRight':'15px'}}>
-                <span>휴가 관리</span>
+            <li style={{'marginRight':'15px' ,'cursor':'pointer'}}>
+                <span onClick={() => nav('/vacation')}>휴가 관리</span>
             </li>
-            <li style={{'marginRight':'15px'}}>
-                <span>결재 관리</span>
+            <li style={{'marginRight':'15px','cursor':'pointer'}}>
+                <span onClick={() => nav('/confirm')}>결재 관리</span>
             </li>
-            <li style={{'marginRight':'15px'}}>
-                <span>배치 관리</span>
+            <li style={{'marginRight':'15px','cursor':'pointer'}}>
+                <span onClick={() => nav('/batch')}>배치 관리</span>
             </li>
-            <li style={{'marginRight':'15px'}}>
-                <span>메시지 관리</span>
+            <li style={{'marginRight':'15px','cursor':'pointer'}}>
+                <span onClick={() => nav('/message')}>메시지 관리</span>
             </li>
         </ul>
     </Fragment>

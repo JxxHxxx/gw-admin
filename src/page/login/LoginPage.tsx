@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 interface signInState {
     id: string;
     password: string;
-    failFlag: boolean // 로그인 시도 시 성공 유무
     failMsg: string | string[] | null;
 }
 
@@ -19,8 +18,7 @@ export default function LoginPage() {
     const [signIn, setSignIn] = useState<signInState>({
         id: '',
         password: '',
-        failFlag: false,
-        failMsg: ''
+        failMsg: null
     });
 
     const handleIdOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,20 +41,17 @@ export default function LoginPage() {
         if (signIn.id === '' || signIn.password === '') {
             setSignIn((prev) => ({
                 ...prev,
-                failFlag: true,
                 failMsg: '아이디/비밀번호를 입력해주세요'
             }))
         } else if (signIn.id === signIn.password) {
             setSignIn((prev) => ({
                 ...prev,
-                failFlag: false,
                 failMsg: null
             }))
             nav('/')
         } else {
             setSignIn((prev) => ({
                 ...prev,
-                failFlag: true,
                 failMsg: ['아이디 또는 비밀번호를 잘못 입력했습니다.', '입력하신 내용을 다시 확인해주세요.']
             }))
         }
@@ -77,13 +72,15 @@ export default function LoginPage() {
                     type="password"
                     placeholder="비밀번호를 입력해주세요" />
             </div>
-            {signIn.failFlag && <div className="signin_err_msg">
-                {/* {Array.isArray(signIn.failMsg) ? signIn.failMsg.map(msg => {
-                    <>
-                        msg <br />
-                    </>
-                }) : {signIn.failMsg}} */}
-            </div>}
+            {Array.isArray(signIn.failMsg) ?
+                (<div className="signin_err_msg">
+                    {signIn.failMsg.map(msg => <>
+                        {msg} <br />
+                    </>)}
+                </div>) :
+                (<div className="signin_err_msg">
+                    {signIn.failMsg}
+                </div>)}
             <div>
                 <Button
                     name="sign-in"
