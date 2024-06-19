@@ -10,3 +10,23 @@
     width: 100%;
     box-sizing: border-box; /* 패딩과 보더를 포함한 너비를 설정합니다. */
 }
+
+.signin_err_msg {
+    text-align: left;
+    font-size: 12px;
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.copy-right {
+    font-size: 12px;
+    color: grey;
+    margin: 0px;
+}
+
+.git-page {
+    font-size: 12px;
+    color: grey;
+    margin: 0px;
+}

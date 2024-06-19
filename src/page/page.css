@@ -1,0 +1,26 @@
+.page_grd {
+    display: grid;
+    grid-template-columns: 1.2fr 6fr;
+    height: 100vh;
+}
+
+.side_b {
+    background-color: whitesmoke;
+
+    /* padding: 15px; */
+}
+
+.side_ul {
+    padding-left: 0px;
+    list-style-type: none;
+}
+
+.side_li {
+    padding-top: 10px;
+    border-bottom: 1px solid black;
+    font-size: 14px;
+}
+
+.main_b {
+    padding: 15px;
+}
