@@ -8,7 +8,7 @@ export default function VacationPage() {
         cnSideMainLayout="page_grd"
         cnAside="side_b"
         cnMain="main_b"
-        header={<Header />}
+        header={<Header menu="vacation"/>}
         sidebar={<VacationSidebar />}>
         <div>메인 페이지</div>
     </Page>

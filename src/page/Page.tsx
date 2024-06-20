@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from "react";
+import '../component/layout/header.css'
 
 type PageProps = {
     header: ReactNode;
@@ -7,6 +8,7 @@ type PageProps = {
     cnSideMainLayout?: string;
     cnAside?: string;
     cnMain?: string;
+    cnHeader?: string;
 }
 
 export default function Page({
@@ -15,10 +17,11 @@ export default function Page({
     children,
     cnSideMainLayout = '',
     cnAside = '',
-    cnMain = '' }: PageProps) {
+    cnMain = '',
+    cnHeader = 'common_hd' }: PageProps) {
     return (
         <Fragment>
-            <header>{header}</header>
+            <header className={cnHeader}>{header}</header>
             <div className={cnSideMainLayout}>
                 <aside className={cnAside}>{sidebar}</aside>
                 <main className={cnMain}>{children}</main>

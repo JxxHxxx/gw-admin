@@ -7,7 +7,7 @@ export default function ConfirmPage() {
         cnSideMainLayout="page_grd"
         cnAside="side_b"
         cnMain="main_b"
-        header={<Header />}
+        header={<Header menu="confirm"/>}
         sidebar={<ConfirmSidebar />}>
         <div>결재 페이지</div>
     </Page>

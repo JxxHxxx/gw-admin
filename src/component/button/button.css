@@ -12,3 +12,7 @@
 .bb:hover {
     background-color: #f0f0f0; /* hover 상태에서의 배경색 */
 }
+/* 동그라미 버튼 */
+.br {
+    border-radius: 50%;
+}

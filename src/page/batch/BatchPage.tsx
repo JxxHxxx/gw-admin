@@ -8,7 +8,7 @@ export default function BatchPage() {
         cnSideMainLayout="page_grd"
         cnAside="side_b"
         cnMain="main_b"
-        header={<Header />}
+        header={<Header menu="batch"/>}
         sidebar={<BatchSidebar />}>
         <div>배치 관리 페이지</div>
     </Page>
