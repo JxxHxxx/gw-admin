@@ -44,12 +44,11 @@ export default function MessageHistContent() {
     }
 
     return <Fragment>
-        {/* <PaginationButtons pageNums={[1, 2, 3, 4, 5]} selectedNum={1} showOnePageButtonAmount={5} /> */}
         <Button className={"bs"} name={"<<"} onClick={handleCLickPreviousPageButton} />
         {button.pageIdx.map(idx => <Button
             className={button.selectedIdx === idx ? "bs_selected" : "bs"}
             name={idx}
             onClick={() => handleCLickPageButton(idx)} />)}
-        <Button className={"bs"} name={">>"} onClick={handleCLickNextPageButton} /> 
-        </Fragment>
+        <Button className={"bs"} name={">>"} onClick={handleCLickNextPageButton} />
+    </Fragment>
 }
