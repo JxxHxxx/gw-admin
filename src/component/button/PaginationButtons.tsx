@@ -1,37 +1,61 @@
 import { Fragment } from "react/jsx-runtime";
 import Button from "./Button";
+import { useState } from "react";
 
 interface PaginationButtonsProp {
     pageNums: number[];
     selectedNum: number;
     showOnePageButtonAmount: number;
-    handleClickPageNumButton: () => void;
+}
+
+interface paginationState {
+    pageNumsState: number[];
+    selectedNumState: number;
 }
 
 export default function PaginationButtons({
     pageNums = [],
     selectedNum = 0,
-    showOnePageButtonAmount = 0,
-    handleClickPageNumButton = () => { } }: PaginationButtonsProp) {
-    
-    
+    showOnePageButtonAmount = 0 }: PaginationButtonsProp) {
+
+    const [pagination, setPagination] = useState<paginationState>({
+        pageNumsState: pageNums,
+        selectedNumState: selectedNum,
+    });
 
     const handleNextButtons = () => {
-        selectedNum = selectedNum - showOnePageButtonAmount
-        pageNums = pageNums.map(num => num + showOnePageButtonAmount);
+        setPagination((prev) => ({
+            ...prev,
+            selectedNumState: prev.selectedNumState + showOnePageButtonAmount,
+            pageNumsState: prev.pageNumsState.map(num => num + showOnePageButtonAmount)
+        }))
     }
 
     const handlePreviousButtons = () => {
-        selectedNum = selectedNum - showOnePageButtonAmount
-        pageNums = pageNums.map(num => num - showOnePageButtonAmount);
+        if(pagination.selectedNumState - showOnePageButtonAmount <= 0) {
+            return;
+        }
+
+        setPagination((prev) => ({
+            ...prev,
+            selectedNumState: prev.selectedNumState - showOnePageButtonAmount,
+            pageNumsState: prev.pageNumsState.map(num => num - showOnePageButtonAmount)
+        }))
     }
+    const handleClickPageNumButton = (nowNum:number) => {
+        setPagination((prev) => ({
+            ...prev,
+            selectedNumState: nowNum
+        }))
+    }
+
 
     return <Fragment>
         <Button className={"bs"} name={"<"} onClick={handlePreviousButtons} />
-        {pageNums.map(nowNum => <Button
-            className={nowNum === selectedNum ? "bs_selected" : "bs"}
+        {pagination.pageNumsState.map(nowNum => <Button
+            className={nowNum === pagination.selectedNumState ? "bs_selected" : "bs"}
             name={nowNum}
-            onClick={handleClickPageNumButton} />)}
+            onClick={() => handleClickPageNumButton(nowNum)} />)}
         <Button className={"bs"} name={">"} onClick={handleNextButtons} />
     </Fragment>
 }
