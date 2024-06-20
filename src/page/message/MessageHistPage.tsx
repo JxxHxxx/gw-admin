@@ -2,6 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import Page from "../Page";
 import Header from "../../component/layout/Header";
 import MessageSidebar from "./MessageSidebar";
+import MessageHistContent from "./history/MessageHistContent";
 
 export default function MessageHistPage() {
     return <Page
@@ -10,6 +11,6 @@ export default function MessageHistPage() {
         cnMain="main_b"
         header={<Header menu="message" />}
         sidebar={<MessageSidebar />}>
-        <div>메시지 이력 페이지</div>
+        <MessageHistContent />
     </Page>
 }
