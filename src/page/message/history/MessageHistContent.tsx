@@ -27,7 +27,7 @@ export default function MessageHistContent() {
             ...prev,
             pageable: {
                 ...prev,
-                pageNumber: pageNumber_,
+                pageNumber: pageNumber_ - 1,
             }
         }))
     }
@@ -57,7 +57,8 @@ export default function MessageHistContent() {
 
         </>)}
         <PaginationButtons
-            selectedNumCallback={(num: number) => updatePageNumber(num)}
+            sendSelectedNumCallback={(pageNumber: number) => updatePageNumber(pageNumber)}
+            totalPages={messageQReuslt.totalPages}
             pageNums={Array.from({ length: 5 }, (_, index) => val + index)}
             selectedNum={selectedNum}
             showOnePageButtonAmount={5} />

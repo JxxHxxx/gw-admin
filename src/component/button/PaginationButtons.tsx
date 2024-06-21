@@ -4,9 +4,10 @@ import { useState } from "react";
 
 interface PaginationButtonsProp {
     pageNums: number[];
+    totalPages: number;
     selectedNum: number;
     showOnePageButtonAmount: number;
-    selectedNumCallback: (nowNum:number) => any;
+    sendSelectedNumCallback: (nowNum: number) => any;
 }
 
 interface paginationState {
@@ -16,9 +17,10 @@ interface paginationState {
 
 export default function PaginationButtons({
     pageNums = [],
+    totalPages = 0,
     selectedNum = 0,
     showOnePageButtonAmount = 0,
-    selectedNumCallback}: PaginationButtonsProp) {
+    sendSelectedNumCallback }: PaginationButtonsProp) {
 
     const [pagination, setPagination] = useState<paginationState>({
         pageNumsState: pageNums,
@@ -26,15 +28,20 @@ export default function PaginationButtons({
     });
 
     const handleNextButtons = () => {
+        if (pagination.selectedNumState + showOnePageButtonAmount > totalPages) {
+            return
+        }
         setPagination((prev) => ({
             ...prev,
             selectedNumState: prev.selectedNumState + showOnePageButtonAmount,
             pageNumsState: prev.pageNumsState.map(num => num + showOnePageButtonAmount)
         }))
+
+        sendSelectedNumCallback(pagination.selectedNumState + showOnePageButtonAmount);
     }
 
     const handlePreviousButtons = () => {
-        if(pagination.selectedNumState - showOnePageButtonAmount <= 0) {
+        if (pagination.selectedNumState - showOnePageButtonAmount <= 0) {
             return;
         }
 
@@ -43,22 +50,26 @@ export default function PaginationButtons({
             selectedNumState: prev.selectedNumState - showOnePageButtonAmount,
             pageNumsState: prev.pageNumsState.map(num => num - showOnePageButtonAmount)
         }))
+
+        sendSelectedNumCallback(pagination.selectedNumState - showOnePageButtonAmount);
     }
-    const handleClickPageNumButton = (nowNum:number) => {
+    const handleClickPageNumButton = (nowNum: number) => {
         setPagination((prev) => ({
             ...prev,
             selectedNumState: nowNum
         }))
-        selectedNumCallback(nowNum)
+        sendSelectedNumCallback(nowNum);
     }
 
 
     return <Fragment>
         <Button className={"bs"} name={"<"} onClick={handlePreviousButtons} />
-        {pagination.pageNumsState.map(nowNum => <Button
-            className={nowNum === pagination.selectedNumState ? "bs_selected" : "bs"}
-            name={nowNum}
-            onClick={() => handleClickPageNumButton(nowNum)} />)}
+        {pagination.pageNumsState
+            .filter(nowNum => nowNum <= totalPages)
+            .map(nowNum => <Button
+                className={nowNum === pagination.selectedNumState ? "bs_selected" : "bs"}
+                name={nowNum}
+                onClick={() => handleClickPageNumButton(nowNum)} />)}
         <Button className={"bs"} name={">"} onClick={handleNextButtons} />
     </Fragment>
 }
