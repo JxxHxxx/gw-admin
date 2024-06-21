@@ -6,6 +6,7 @@ interface PaginationButtonsProp {
     pageNums: number[];
     selectedNum: number;
     showOnePageButtonAmount: number;
+    selectedNumCallback: (nowNum:number) => any;
 }
 
 interface paginationState {
@@ -16,7 +17,8 @@ interface paginationState {
 export default function PaginationButtons({
     pageNums = [],
     selectedNum = 0,
-    showOnePageButtonAmount = 0 }: PaginationButtonsProp) {
+    showOnePageButtonAmount = 0,
+    selectedNumCallback}: PaginationButtonsProp) {
 
     const [pagination, setPagination] = useState<paginationState>({
         pageNumsState: pageNums,
@@ -47,6 +49,7 @@ export default function PaginationButtons({
             ...prev,
             selectedNumState: nowNum
         }))
+        selectedNumCallback(nowNum)
     }
 
 
