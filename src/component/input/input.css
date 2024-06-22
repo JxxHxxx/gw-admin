@@ -2,3 +2,9 @@
     max-width: 400px;
     height: 40px;
 }
+
+.bi_msg { 
+    width: 130px;
+    height: 30px;
+    margin-right: 5px;
+}

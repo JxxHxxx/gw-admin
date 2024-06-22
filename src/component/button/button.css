@@ -55,3 +55,19 @@
     border: 1px solid rgb(0, 40, 94);
     color: rgb(0, 40, 94);
 }
+
+.bb_msg {
+    border-radius: 8px;
+    border: 1px solid #ecedee;
+    padding: 0.4em 1.0em;
+    font-size: 1em;
+    font-weight: 300;
+    font-family: inherit;
+    background-color: white;
+    cursor: pointer;
+}
+
+.bb_msg:hover {
+    background-color: #f0f0f0;
+    /* hover 상태에서의 배경색 */
+}
