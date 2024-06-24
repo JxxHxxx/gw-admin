@@ -27,7 +27,7 @@ export default function PaginationButtons({
         pageNumsState: pageNums,
         selectedNumState: selectedNum,
     });
-    // '>' 버튼을 눌렀을 때 이벤트 
+    // '>>' 버튼을 눌렀을 때 이벤트 
     const handleNextButton = () => {
         if (pagination.selectedNumState + showOnePageButtonAmount > totalPages) {
             return
@@ -64,13 +64,15 @@ export default function PaginationButtons({
 
 
     return <Fragment>
-        <Button className={"bs"} name={"<"} onClick={handlePreviousButton} />
+        <Button className={"bs"} name={"<<"} onClick={handlePreviousButton} />
+        <Button className={"bs"} name={"<"} />
         {pagination.pageNumsState
             .filter(nowNum => nowNum <= totalPages)
             .map(nowNum => <Button
                 className={nowNum === pagination.selectedNumState ? "bs_selected" : "bs"}
                 name={nowNum}
                 onClick={() => handleClickPageNumButton(nowNum)} />)}
-        <Button className={"bs"} name={">"} onClick={handleNextButton} />
+        <Button className={"bs"} name={">"} />
+        <Button className={"bs"} name={">>"} onClick={handleNextButton} />
     </Fragment>
 }
