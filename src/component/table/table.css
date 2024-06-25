@@ -13,9 +13,10 @@
 .table_bs tbody td {
     padding: 10px;
     border: 1px solid black;
-    background-color: azure;
+    background-color: white;
 }
 
-.table_bs tbody td:hover {
-    background-color: white;
+.table_bs tbody tr:hover td {
+    background-color: gainsboro;
+    cursor: pointer;
 }
