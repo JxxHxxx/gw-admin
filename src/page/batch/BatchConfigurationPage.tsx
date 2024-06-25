@@ -5,6 +5,7 @@ import Table from "../../component/table/Table";
 import Page from "../Page";
 import BatchSidebar from "./BatchSidebar";
 import '../../component/table/table.css';
+import { useState } from "react";
 import JobConfigModal from "./JobConfigModal";
 
 const tmpData = [
@@ -26,18 +27,13 @@ const tmpData = [
 ]
 
 export default function BatchConfigurationPage() {
-    const handleOnClick = () => {
-        const params = {
-            jobName: "vacation.start.job",
-            properties: {
-                'run.id': "ADMIN20200624-001",
-                processDate: "2024-06-23 00:00:00"
-            }
-        }
-        runBatchJob(params);
-    }
-    const handleOnclick = () => {
-        alert('test')
+    const [jobModal, setJobModal] = useState(false);
+
+    const [data, setData] = useState();
+
+    const handleOnclick = (idx: number) => {
+        setJobModal(true)
+        setData(tmpData[idx]);
     }
     return <Page
         cnSideMainLayout="page_grd"
@@ -47,14 +43,13 @@ export default function BatchConfigurationPage() {
         sidebar={<BatchSidebar />}>
         <h3>배치 구성 페이지</h3>
         <Table columns={['잡 아이디', '잡 이름 ', '사용 여부', '실행 유형', '시간']}
-            rows={tmpData && tmpData.map(data => (<tr style={{ 'fontSize': '13px' }} onClick={handleOnclick}>
+            rows={tmpData && tmpData.map((data, index) => (<tr key={index} style={{ 'fontSize': '13px' }} onClick={() => handleOnclick(index)}>
                 <td>{data.jobName}</td>
                 <td>{data.jobDescription}</td>
                 <td>{data.used}</td>
                 <td>{data.executionType}</td>
                 <td>{data.time}</td>
             </tr>))} />
-        <Button name="실행" onClick={handleOnClick} />
-        <JobConfigModal />
+        {jobModal && <JobConfigModal modalIsOpen={jobModal} setIsOpen={setJobModal} data={data}/>}
     </Page>
 }

@@ -11,9 +11,9 @@ const createAxiosInstance = (baseURL = '') => {
 
 const instance = createAxiosInstance('http://localhost:8070')
 
-export const runBatchJob = function (params:object) {
+export const runBatchJob = function (requestBody: object) {
 
-    return instance.post(`/batch/job/run`, { params })
-    .then((res) => res)
-    .catch((err) => err)
+    return instance.post(`/batch/job/run`, requestBody)
+        .then((res) => res)
+        .catch((err) => err)
 }
