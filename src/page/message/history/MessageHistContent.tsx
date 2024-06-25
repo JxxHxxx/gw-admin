@@ -18,7 +18,8 @@ interface Pagination {
 }
 
 interface MessageHistSearchCond {
-    endDate?: string
+    endDate: string,
+    endDateCorrectFlag: boolean
 }
 
 export default function MessageHistContent() {
@@ -29,13 +30,36 @@ export default function MessageHistContent() {
     });
 
     const [searchCond, setSearchCond] = useState<MessageHistSearchCond>({
-        endDate: ''
+        endDate: '',
+        endDateCorrectFlag: true
     });
 
+    const formatDateString = (dateStr: string): string => {
+        const trimDateStr = dateStr.trim();
+        if (trimDateStr.length === 0) {
+            return '';
+        }
+        else {
+            const year = trimDateStr.substring(0, 4);
+            const month = trimDateStr.substring(4, 6);
+            const day = trimDateStr.substring(6, 8);
+            return `${year}-${month}-${day}`
+        }
+    }
+
     const fetchMessageQResult = async () => {
+        const searchDate = formatDateString(searchCond.endDate);
+        if (!(searchDate.length === 10 || searchDate.length === 0)) {
+            setSearchCond((prev) => ({
+                ...prev,
+                endDateCorrectFlag: false
+            }))
+            return;
+        }
+
         const params = {
-            startDate: searchCond.endDate,
-            endDate: searchCond.endDate,
+            startDate: searchDate,
+            endDate: searchDate,
             size: showOnePageMessageResultAmount,
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
@@ -62,9 +86,12 @@ export default function MessageHistContent() {
     }
 
     const handleOnchangeEndDateInput = (event: any) => {
-        setSearchCond(() => ({
+        setSearchCond((prev) => ({
+            ...prev,
+            endDateCorrectFlag: true,
             endDate: event.target.value
         }))
+
     }
 
     useEffect(() => {
@@ -72,11 +99,11 @@ export default function MessageHistContent() {
     }, [qHistoryPagination.pageNumber])
 
     return <Fragment>
-        <Input className="bi_msg"
-            minLegnth={10}
-            maxLength={10}
+        <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
+            minLegnth={8}
+            maxLength={8}
             onChange={handleOnchangeEndDateInput}
-            placeholder="처리 일자를 입력하세요" />
+            placeholder="처리 일자를 입력하세요 ex) 20240625" />
         <Button
             className={"bb_msg"}
             onClick={handleOnClickSearchRequest}

@@ -4,7 +4,25 @@
 }
 
 .bi_msg { 
-    width: 160px;
-    height: 30px;
+    width: 200px;
+    height: 34px;
     margin-right: 5px;
+    border : 0.8px solid;
+}
+
+.bi_msg_warning { 
+    width: 200px;
+    height: 34px;
+    margin-right: 5px;
+    border : 0.8px solid red;
+}
+
+.bi_msg_warning:focus,
+.bi_msg:focus {
+    outline: none;
+}
+
+.bi_msg_warning::placeholder,
+.bi_msg::placeholder {
+    font-size: 11px;
 }
