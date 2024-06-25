@@ -3,76 +3,148 @@ import Button from "./Button";
 import { useState } from "react";
 
 interface PaginationButtonsProp {
-    pageNums: number[];
-    totalPages: number;
-    selectedNum: number;
-    showOnePageButtonAmount: number;
-    sendSelectedNumCallback: (nowNum: number) => void;
+    totalPages: number; // 총 페이지 수
+    numOfBtnsToShow: number; // 한 섹션에 보여줄 버튼의 개수
+    sendSelectedBtnNumToParent: (nowNum: number) => void; // 상위 컴포넌트로 현재 버튼 넘버를 보내주기 위한 콜백 함수
 }
 
-interface paginationState {
-    pageNumsState: number[];
-    selectedNumState: number;
+interface Pagination {
+    startBtnNum: number;
+    selectedBtnNum: number;
 }
 
 export default function PaginationButtons({
-    pageNums = [], // 현재 페이지에서 보여줄 버튼 번호들
-    totalPages = 0, // 총 페이지
-    selectedNum = 0, // 현재 선택한 버튼의 번호
-    showOnePageButtonAmount = 0, // 한 페이지에 보여줄 버튼의 양
-    sendSelectedNumCallback // 콜백함수, 현재 선택한 버튼의 번호를 상위 컴포넌트로 전이
+    totalPages = 0,
+    numOfBtnsToShow = 0,
+    sendSelectedBtnNumToParent
 }: PaginationButtonsProp) {
 
-    const [pagination, setPagination] = useState<paginationState>({
-        pageNumsState: pageNums,
-        selectedNumState: selectedNum,
+    const [pagination, setPagination] = useState<Pagination>({
+        startBtnNum: 1,
+        selectedBtnNum: 1,
     });
-    // '>>' 버튼을 눌렀을 때 이벤트 
-    const handleNextButton = () => {
-        if (pagination.selectedNumState + showOnePageButtonAmount > totalPages) {
-            return
-        }
-        setPagination((prev) => ({
-            ...prev,
-            selectedNumState: prev.selectedNumState + showOnePageButtonAmount,
-            pageNumsState: prev.pageNumsState.map(num => num + showOnePageButtonAmount)
-        }))
-
-        sendSelectedNumCallback(pagination.selectedNumState + showOnePageButtonAmount);
-    }
-    // '<' 버튼을 눌렀을 때 이벤트 
-    const handlePreviousButton = () => {
-        if (pagination.selectedNumState - showOnePageButtonAmount <= 0) {
+    // '>' 버튼 클릭 이벤트
+    const handleNextBtn = () => {
+        if (pagination.selectedBtnNum >= totalPages) {
+            alert('마지막 페이지 입니다')
             return;
         }
+        else if (pagination.selectedBtnNum === pagination.startBtnNum + numOfBtnsToShow - 1) {
+            setPagination((prev) => ({
+                ...prev,
+                startBtnNum: prev.startBtnNum + numOfBtnsToShow,
+                selectedBtnNum: prev.startBtnNum + numOfBtnsToShow
+            }))
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+            return;
+        }
+        else {
+            setPagination((prev) => ({
+                ...prev,
+                selectedBtnNum: prev.selectedBtnNum + 1
+            }))
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+        }
+    }
+    // '>>' 버튼 클릭 이벤트 
+    const handleNextSectionBtn = () => {
+        if (pagination.selectedBtnNum >= totalPages) {
+            alert('마지막 페이지 입니다')
+            return;
+        }
+        else if (pagination.selectedBtnNum < totalPages && pagination.startBtnNum + numOfBtnsToShow >= totalPages) {
+            setPagination((prev) => ({
+                ...prev,
+                selectedBtnNum: totalPages,
+            }))
+            sendSelectedBtnNumToParent(totalPages);
+            return;
+        }
+        else {
+            setPagination((prev) => ({
+                ...prev,
+                startBtnNum: prev.startBtnNum + numOfBtnsToShow,
+                selectedBtnNum: prev.startBtnNum + numOfBtnsToShow,
+            }))
+            sendSelectedBtnNumToParent(pagination.startBtnNum + numOfBtnsToShow);
+        }
+    }
+    // '<' 버튼 클릭 이벤트
+    const handlePreviousBtn = () => {
+        if (pagination.selectedBtnNum <= 1) {
+            alert('첫번째 페이지 입니다');
+            return;
+        }
+        else if (pagination.selectedBtnNum === pagination.startBtnNum) {
+            setPagination((prev) => ({
+                ...prev,
+                startBtnNum: prev.startBtnNum - numOfBtnsToShow,
+                selectedBtnNum: prev.startBtnNum - 1,
+            }))
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+        }
+        else {
+            setPagination((prev) => ({
+                ...prev,
+                selectedBtnNum: prev.selectedBtnNum - 1,
+            }))
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+        }
+    }
+    // '<<' 버튼 클릭 이벤트 
+    const handlePreviousSectionBtn = () => {
+        // pagination.selectedBtnNum <= numOfBtnsToShow
+        if (pagination.selectedBtnNum <= 1) {
+            alert('첫번째 페이지 입니다');
+            return;
+        }
+        else if (pagination.selectedBtnNum > 1 && pagination.selectedBtnNum <= numOfBtnsToShow) {
+            setPagination((prev) => ({
+                ...prev,
+                selectedBtnNum: 1,
+            }))
 
-        setPagination((prev) => ({
-            ...prev,
-            selectedNumState: prev.selectedNumState - showOnePageButtonAmount,
-            pageNumsState: prev.pageNumsState.map(num => num - showOnePageButtonAmount)
-        }))
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum - numOfBtnsToShow);
+        }
+        else {
+            setPagination((prev) => ({
+                ...prev,
+                startBtnNum: prev.startBtnNum - numOfBtnsToShow,
+                selectedBtnNum: prev.startBtnNum - numOfBtnsToShow,
+            }))
 
-        sendSelectedNumCallback(pagination.selectedNumState - showOnePageButtonAmount);
+            sendSelectedBtnNumToParent(pagination.startBtnNum - numOfBtnsToShow);
+        }
+
     }
     const handleClickPageNumButton = (nowNum: number) => {
         setPagination((prev) => ({
             ...prev,
-            selectedNumState: nowNum
+            selectedBtnNum: nowNum
         }))
-        sendSelectedNumCallback(nowNum);
+        sendSelectedBtnNumToParent(nowNum);
     }
 
+    const renderButtons = () => {
+        const renderResult: any[] = [];
+        for (let nowBtnNum = pagination.startBtnNum; nowBtnNum < pagination.startBtnNum + numOfBtnsToShow; nowBtnNum++) {
+            renderResult.push(<Button
+                className={nowBtnNum === pagination.selectedBtnNum ? "bs_selected" : "bs"}
+                name={nowBtnNum}
+                onClick={() => handleClickPageNumButton(nowBtnNum)} />)
+
+            if (nowBtnNum >= totalPages) {
+                break;
+            }
+        }
+        return renderResult;
+    }
 
     return <Fragment>
-        <Button className={"bs"} name={"<<"} onClick={handlePreviousButton} />
-        <Button className={"bs"} name={"<"} />
-        {pagination.pageNumsState
-            .filter(nowNum => nowNum <= totalPages)
-            .map(nowNum => <Button
-                className={nowNum === pagination.selectedNumState ? "bs_selected" : "bs"}
-                name={nowNum}
-                onClick={() => handleClickPageNumButton(nowNum)} />)}
-        <Button className={"bs"} name={">"} />
-        <Button className={"bs"} name={">>"} onClick={handleNextButton} />
+        <Button className={"bs"} name={"<<"} onClick={handlePreviousSectionBtn} />
+        <Button className={"bs"} name={"<"} onClick={handlePreviousBtn} />
+        {renderButtons()}
+        <Button className={"bs"} name={">"} onClick={handleNextBtn} />
+        <Button className={"bs"} name={">>"} onClick={handleNextSectionBtn} />
     </Fragment>
 }
