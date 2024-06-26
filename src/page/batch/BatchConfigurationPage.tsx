@@ -6,7 +6,7 @@ import Page from "../Page";
 import BatchSidebar from "./BatchSidebar";
 import '../../component/table/table.css';
 import { useState } from "react";
-import JobConfigModal from "./JobConfigModal";
+import JobConfigModal, { JobInfo } from "./JobConfigModal";
 
 const tmpData = [
     {
@@ -14,14 +14,14 @@ const tmpData = [
         'jobDescription': '연차 시작 처리 배치',
         'used': 'Y',
         'executionType': '시간',
-        'time': '00:00'
+        'executeTime': '00:00'
     },
     {
         'jobName': 'vacation.end.job',
         'jobDescription': '연차 종료 처리 배치',
         'used': 'Y',
         'executionType': '시간',
-        'time': '00:10'
+        'executeTime': '00:10'
     }
 
 ]
@@ -29,11 +29,11 @@ const tmpData = [
 export default function BatchConfigurationPage() {
     const [jobModal, setJobModal] = useState(false);
 
-    const [data, setData] = useState();
+    const [jobInfo, setJobInfo] = useState<JobInfo>();
 
     const handleOnclick = (idx: number) => {
         setJobModal(true)
-        setData(tmpData[idx]);
+        setJobInfo(tmpData[idx]);
     }
     return <Page
         cnSideMainLayout="page_grd"
@@ -42,14 +42,18 @@ export default function BatchConfigurationPage() {
         header={<Header menu="batch" />}
         sidebar={<BatchSidebar />}>
         <h3>배치 구성 페이지</h3>
+        <p style={{'fontSize': '12px', color:'gray'}}>Job을 클릭해서 실행/수정하세요</p><br/>  
         <Table columns={['잡 아이디', '잡 이름 ', '사용 여부', '실행 유형', '시간']}
-            rows={tmpData && tmpData.map((data, index) => (<tr key={index} style={{ 'fontSize': '13px' }} onClick={() => handleOnclick(index)}>
-                <td>{data.jobName}</td>
-                <td>{data.jobDescription}</td>
-                <td>{data.used}</td>
-                <td>{data.executionType}</td>
-                <td>{data.time}</td>
+            rows={tmpData && tmpData.map((info, index) => (<tr key={index} style={{ 'fontSize': '13px' }} onClick={() => handleOnclick(index)}>
+                <td>{info.jobName}</td>
+                <td>{info.jobDescription}</td>
+                <td>{info.used}</td>
+                <td>{info.executionType}</td>
+                <td>{info.executeTime}</td>
             </tr>))} />
-        {jobModal && <JobConfigModal modalIsOpen={jobModal} setIsOpen={setJobModal} data={data}/>}
+        {jobModal && <JobConfigModal 
+        modalIsOpen={jobModal} 
+        setIsOpen={setJobModal} 
+        jobInfo={jobInfo}/>}
     </Page>
 }

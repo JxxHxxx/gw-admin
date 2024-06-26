@@ -1,7 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
 
 interface ButtonProps {
-    className: string;
+    className?: string;
     name?: string | number;
     onClick: () => void;
 }
