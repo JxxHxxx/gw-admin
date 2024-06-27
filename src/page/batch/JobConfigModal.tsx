@@ -27,7 +27,7 @@ interface JobConfigModalProps {
 
 interface JobParamState {
     jobName: string;
-    'run.id': string;
+    'run.id'?: string;
 }
 
 const RUN_ID_PREFIX: string = 'ADMIN' + format(new Date(), 'yyyyMMdd') + '-';
