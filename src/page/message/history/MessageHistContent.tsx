@@ -1,5 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 
+import Modal from 'react-modal';
 import PaginationButtons from "../../../component/button/PaginationButtons";
 import { getMessageQResult } from "../../../api/MessageApi";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import Table from "../../../component/table/Table";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
+import '../../../component/text/text.css';
 
 const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
@@ -31,7 +33,7 @@ export default function MessageHistContent() {
 
     const [searchCond, setSearchCond] = useState<MessageHistSearchCond>({
         endDate: '',
-        endDateCorrectFlag: true
+        endDateCorrectFlag: true,
     });
 
     const formatDateString = (dateStr: string): string => {
@@ -64,7 +66,7 @@ export default function MessageHistContent() {
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
         const response = await getMessageQResult(params);
-        
+
         if (response.data !== undefined) {
             setQHistoryPagination((prev: Pagination) => ({
                 ...prev,
@@ -72,7 +74,7 @@ export default function MessageHistContent() {
                 totalPages: response.data.totalPages,
                 content: response.data.content
             }));
-        } 
+        }
     }
 
     const updatePageNumber = (btnNum: number) => {
@@ -82,7 +84,8 @@ export default function MessageHistContent() {
         }))
     }
 
-    const handleOnClickSearchRequest = () => {
+    const handleOnClickSearchRequest = (event) => {
+        event.preventDefault();
         fetchMessageQResult();
     }
 
@@ -100,33 +103,42 @@ export default function MessageHistContent() {
     }, [qHistoryPagination.pageNumber])
 
     return <Fragment>
-        <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
-            minLegnth={8}
-            maxLength={8}
-            onChange={handleOnchangeEndDateInput}
-            placeholder="처리 일자를 입력하세요 ex) 20240625" />
-        <Button
-            className={"bb_msg"}
-            onClick={handleOnClickSearchRequest}
-            name={"검색"} />
+        <form>
+            <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
+                minLegnth={8}
+                maxLength={8}
+                onChange={handleOnchangeEndDateInput}
+                placeholder="처리 일자를 입력하세요 ex) 20240625" />
+            <Button
+                className={"bb_msg"}
+                onClick={handleOnClickSearchRequest}
+                name={"검색"} />
+        </form>
         <div style={{ 'margin': '10px' }}></div>
-        <Table columns={['PK', '목적지', '의뢰자 ID', '의뢰자 명', '처리 유형', '처리 시작 시간', '처리 종료 시간', '처리 상태']}
-            rows={<>
-                {qHistoryPagination.content && qHistoryPagination.content.map((content: any) => <>
-                    <tr key={content.pk}>
-                        <td>{content.pk}</td>
-                        <td>{content.messageDestination}</td>
-                        <td>{content.body.requester_id}</td>
-                        <td>{content.body.requester_name}</td>
-                        <td>{content.messageProcessType}</td>
-                        <td>{content.processStartTime}</td>
-                        <td>{content.processEndTime}</td>
-                        <td>{content.messageProcessStatus}</td>
-                    </tr>
-                </>)}</>} />
-        <PaginationButtons
-            sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
-            totalPages={qHistoryPagination.totalPages}
-            numOfBtnsToShow={showOnePageButtonAmount} />
+        {qHistoryPagination.content.length > 0
+            ? <>
+                <Table columns={['PK', '목적지', '의뢰자 ID', '의뢰자 명', '처리 유형', '처리 시작 시간', '처리 종료 시간', '처리 상태']}
+                    rows={<>
+                        {qHistoryPagination.content.map((content: any) => <>
+                            <tr key={content.pk}>
+                                <td>{content.pk}</td>
+                                <td>{content.messageDestination}</td>
+                                <td>{content.body.requester_id}</td>
+                                <td>{content.body.requester_name}</td>
+                                <td>{content.messageProcessType}</td>
+                                <td>{content.processStartTime}</td>
+                                <td>{content.processEndTime}</td>
+                                <td>{content.messageProcessStatus}</td>
+                            </tr>
+                        </>)}</>} />
+                <PaginationButtons
+                    sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
+                    totalPages={qHistoryPagination.totalPages}
+                    numOfBtnsToShow={showOnePageButtonAmount} />
+            </>
+            : <p className='fade-in-text'
+                style={{ 'fontSize': '14px', 'color': 'gray' }}>
+                검색 조건에 해당 하는 결과가 존재하지 않습니다. <br/>
+                다시 입력해주세요</p>}
     </Fragment>
 }

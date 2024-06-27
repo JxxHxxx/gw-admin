@@ -27,6 +27,7 @@ interface JobConfigModalProps {
 
 interface JobParamState {
     jobName: string;
+    placeHolder: string;
     'run.id'?: string;
 }
 
@@ -40,7 +41,8 @@ export default function JobConfigModal({
     console.log(format('2024-06-27', 'yyyy-MM-dd 00:00:00'))
 
     const [jobParams, setJobParams] = useState<JobParamState>({
-        jobName: selectedJob.jobName
+        jobName: selectedJob.jobName,
+        placeHolder: selectedJob.placeHolder
     });
 
     function closeModal() {
@@ -68,7 +70,6 @@ export default function JobConfigModal({
                 runBatchJob(requestBody);
             }
             catch (error) {
-
             }
         }
 
@@ -124,7 +125,7 @@ export default function JobConfigModal({
                             <td style={{ 'border': '1px solid black' }}>
                                 <Input readOnly={param.parameterKey === 'jobName' ? true : false}
                                     defaultValue={param.parameterKey === 'jobName' ? selectedJob[param.parameterKey] : ''}
-                                    placeholder={param.paramDescription}
+                                    placeholder={param.placeHolder}
                                     onChange={(event) => handleOnChangeJobParam(event, param.parameterKey)} />
                             </td>
                         </tr>

@@ -6,6 +6,7 @@ import BatchSidebar from "./BatchSidebar";
 import '../../component/table/table.css';
 import { useEffect, useState } from "react";
 import JobConfigModal from "./JobConfigModal";
+import Button from "../../component/button/Button";
 
 export interface jobState {
     jobName: string;
@@ -13,6 +14,7 @@ export interface jobState {
     used: boolean;
     executionType: string;
     executionTime: string;
+    placeHolder: string;
     jobParams: jobParam[];
 }
 
@@ -48,6 +50,10 @@ export default function BatchConfigurationPage() {
         header={<Header menu="batch" />}
         sidebar={<BatchSidebar />}>
         <h3>배치 구성 페이지</h3>
+        <div style={{'borderTop': '1px solid black', 'padding': '10px'}}>
+            <Button name="배치 등록"/>
+        </div>
+        <div style={{'borderTop': '1px solid black'}}></div>
         <p style={{ 'fontSize': '12px', color: 'gray' }}>Job을 클릭해서 실행/수정하세요</p><br />
         <Table columns={['잡 아이디', '잡 이름 ', '사용 여부', '실행 유형', '시간']}
             rows={jobs && jobs.map((info, index) => (<tr key={index} style={{ 'fontSize': '13px' }} onClick={() => handleOnclick(index)}>
