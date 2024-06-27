@@ -64,6 +64,7 @@ export default function MessageHistContent() {
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
         const response = await getMessageQResult(params);
+        
         if (response.data !== undefined) {
             setQHistoryPagination((prev: Pagination) => ({
                 ...prev,
@@ -71,7 +72,7 @@ export default function MessageHistContent() {
                 totalPages: response.data.totalPages,
                 content: response.data.content
             }));
-        }
+        } 
     }
 
     const updatePageNumber = (btnNum: number) => {

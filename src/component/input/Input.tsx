@@ -7,6 +7,8 @@ interface InputProps {
     type?: string;
     minLegnth?: number;
     maxLength?: number;
+    readOnly?: boolean;
+    defaultValue?: string | number;
 }
 
 export default function Input({
@@ -15,7 +17,9 @@ export default function Input({
     placeholder = '',
     type = 'text',
     minLegnth = 0,
-    maxLength = 100
+    maxLength = 100,
+    readOnly = false,
+    defaultValue
 }: InputProps) {
     return <Fragment>
         <input
@@ -24,6 +28,8 @@ export default function Input({
             placeholder={placeholder}
             minLength={minLegnth}
             maxLength={maxLength}
-            type={type} />
+            readOnly={readOnly}
+            type={type}
+            defaultValue={defaultValue} />
     </Fragment>
 }

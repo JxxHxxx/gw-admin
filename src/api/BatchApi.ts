@@ -17,3 +17,9 @@ export const runBatchJob = function (requestBody: object) {
         .then((res) => res)
         .catch((err) => err)
 }
+
+export const getBatchJobs = function () {
+    return instance.get(`/admin/batch/jobs`)
+    .then((res) => res)
+    .catch((err) => err)
+}
