@@ -1,6 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
 
-import Modal from 'react-modal';
 import PaginationButtons from "../../../component/button/PaginationButtons";
 import { getMessageQResult } from "../../../api/MessageApi";
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
+import { format, parse } from "date-fns";
 
 const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
@@ -24,6 +24,7 @@ interface MessageHistSearchCond {
     endDateCorrectFlag: boolean
 }
 
+const nowDate = format(new Date(), 'yyyy-MM-dd');
 export default function MessageHistContent() {
     const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
         pageNumber: 0,
@@ -32,36 +33,14 @@ export default function MessageHistContent() {
     });
 
     const [searchCond, setSearchCond] = useState<MessageHistSearchCond>({
-        endDate: '',
+        endDate: nowDate,
         endDateCorrectFlag: true,
     });
 
-    const formatDateString = (dateStr: string): string => {
-        const trimDateStr = dateStr.trim();
-        if (trimDateStr.length === 0) {
-            return '';
-        }
-        else {
-            const year = trimDateStr.substring(0, 4);
-            const month = trimDateStr.substring(4, 6);
-            const day = trimDateStr.substring(6, 8);
-            return `${year}-${month}-${day}`
-        }
-    }
-
     const fetchMessageQResult = async () => {
-        const searchDate = formatDateString(searchCond.endDate);
-        if (!(searchDate.length === 10 || searchDate.length === 0)) {
-            setSearchCond((prev) => ({
-                ...prev,
-                endDateCorrectFlag: false
-            }))
-            return;
-        }
-
         const params = {
-            startDate: searchDate,
-            endDate: searchDate,
+            startDate: searchCond.endDate,
+            endDate: searchCond.endDate,
             size: showOnePageMessageResultAmount,
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
@@ -84,8 +63,13 @@ export default function MessageHistContent() {
         }))
     }
 
+    // 검색 버튼 클릭 이벤트
     const handleOnClickSearchRequest = (event) => {
         event.preventDefault();
+        setQHistoryPagination((prev) => ({
+            ...prev,
+            pageNumber: 0
+        }))
         fetchMessageQResult();
     }
 
@@ -138,7 +122,7 @@ export default function MessageHistContent() {
             </>
             : <p className='fade-in-text'
                 style={{ 'fontSize': '14px', 'color': 'gray' }}>
-                검색 조건에 해당 하는 결과가 존재하지 않습니다. <br/>
-                다시 입력해주세요</p>}
+                메시지 큐 결과가 존재하지 않습니다. <br />
+                처리 일자를 다시 입력해주세요</p>}
     </Fragment>
 }

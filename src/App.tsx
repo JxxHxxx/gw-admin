@@ -8,6 +8,7 @@ import '../src/page/page.css'
 import MessageHistPage from './page/message/MessageHistPage'
 import MessageRetryPage from './page/message/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/BatchConfigurationPage'
+import Modal from 'react-modal';
 
 function App() {
   const router = createBrowserRouter([
@@ -49,9 +50,10 @@ function App() {
       path: '/confirm',
       element: <ConfirmPage />
     },
-
-
   ])
+
+  Modal.setAppElement('#root');
+  
   return (
     <>
       <RouterProvider router={router} />
