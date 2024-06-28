@@ -1,6 +1,6 @@
-import Header from "../../component/layout/Header";
-import Page from "../Page";
-import MessageSidebar from "./MessageSidebar";
+import Header from "../../../component/layout/Header";
+import Page from "../../Page";
+import MessageSidebar from "../MessageSidebar";
 
 
 export default function MessageRetryPage() {

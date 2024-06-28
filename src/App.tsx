@@ -6,7 +6,7 @@ import BatchPage from './page/batch/BatchPage'
 import ConfirmPage from './page/confirm/ConfirmPage'
 import '../src/page/page.css'
 import MessageHistPage from './page/message/MessageHistPage'
-import MessageRetryPage from './page/message/MessageRetryPage'
+import MessageRetryPage from './page/message/resync/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
 import BatchHistPage from './page/batch/history/BatchHistPage'

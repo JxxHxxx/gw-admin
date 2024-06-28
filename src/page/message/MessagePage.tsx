@@ -1,6 +1,7 @@
 import Header from "../../component/layout/Header";
 import Page from "../Page";
 import MessageSidebar from "./MessageSidebar";
+import MessageHistContent from "./history/MessageHistContent";
 
 
 export default function MessagePage() {
@@ -10,6 +11,6 @@ export default function MessagePage() {
         cnMain="main_b"
         header={<Header menu="message"/>}
         sidebar={<MessageSidebar />}>
-        <div>메시지Q 관리 페이지</div>
+        <MessageHistContent />
     </Page>
 }
