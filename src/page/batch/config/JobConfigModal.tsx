@@ -1,9 +1,9 @@
 import Modal from 'react-modal';
-import { runBatchJob } from '../../api/BatchApi';
-import Button from '../../component/button/Button';
+import { runBatchJob } from '../../../api/BatchApi';
+import Button from '../../../component/button/Button';
 import { useState } from 'react';
-import { format } from 'date-fns';
-import Input from '../../component/input/Input';
+import { format, parse } from 'date-fns';
+import Input from '../../../component/input/Input';
 import { jobState } from './BatchConfigurationPage';
 
 const customStyles = {
@@ -38,11 +38,10 @@ export default function JobConfigModal({
     setIsOpen,
     selectedJob }: JobConfigModalProps) {
 
-    console.log(format('2024-06-27', 'yyyy-MM-dd 00:00:00'))
-
     const [jobParams, setJobParams] = useState<JobParamState>({
         jobName: selectedJob.jobName,
-        placeHolder: selectedJob.placeHolder
+        placeHolder: selectedJob.placeHolder,
+        'run.id': '',
     });
 
     function closeModal() {
@@ -60,6 +59,9 @@ export default function JobConfigModal({
         if (selectedJob === undefined) {
             alert('잡에 대한 정보가 존재하지 않습니다')
             return;
+        } else if (jobParams['run.id'] === undefined || jobParams['run.id'] === '') {
+            alert('run.id' + '를 입력해주세요');
+            return;
         }
         else {
             try {
@@ -72,7 +74,6 @@ export default function JobConfigModal({
             catch (error) {
             }
         }
-
     }
 
     return (
@@ -126,6 +127,7 @@ export default function JobConfigModal({
                                 <Input readOnly={param.parameterKey === 'jobName' ? true : false}
                                     defaultValue={param.parameterKey === 'jobName' ? selectedJob[param.parameterKey] : ''}
                                     placeholder={param.placeHolder}
+                                    type={param.parameterKey.includes('Date') ? 'date' : 'text'}
                                     onChange={(event) => handleOnChangeJobParam(event, param.parameterKey)} />
                             </td>
                         </tr>

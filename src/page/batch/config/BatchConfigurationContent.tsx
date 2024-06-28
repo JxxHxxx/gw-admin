@@ -1,12 +1,8 @@
-import { getBatchJobs } from "../../api/BatchApi";
-import Header from "../../component/layout/Header";
-import Table from "../../component/table/Table";
-import Page from "../Page";
-import BatchSidebar from "./BatchSidebar";
-import '../../component/table/table.css';
 import { useEffect, useState } from "react";
+import { getBatchJobs } from "../../../api/BatchApi";
+import Button from "../../../component/button/Button";
+import Table from "../../../component/table/Table";
 import JobConfigModal from "./JobConfigModal";
-import Button from "../../component/button/Button";
 
 export interface jobState {
     jobName: string;
@@ -21,12 +17,23 @@ export interface jobState {
 interface jobParam {
     parameterKey: string;
     required: boolean;
-    paramDescription:string;
+    placeHolder: string;
+    paramDescription: string;
 }
 
-export default function BatchConfigurationPage() {
+export default function BatchConfigurationContent() {
     const [jobModal, setJobModal] = useState(false);
-    const [selectedJob, setSelectedJob] = useState<jobState>();
+
+    const [selectedJob, setSelectedJob] = useState<jobState>({
+        jobName: '',
+        jobDescription: '',
+        used: false,
+        executionType: '',
+        executionTime: '',
+        placeHolder: '',
+        jobParams: []
+    });
+
     const [jobs, setJobs] = useState<Array<jobState>>([]);
 
     const handleOnclick = (idx: number) => {
@@ -43,17 +50,13 @@ export default function BatchConfigurationPage() {
         requestToServerForRender();
     }, [])
 
-    return <Page
-        cnSideMainLayout="page_grd"
-        cnAside="side_b"
-        cnMain="main_b"
-        header={<Header menu="batch" />}
-        sidebar={<BatchSidebar />}>
+    return <>
         <h3>배치 구성 페이지</h3>
-        <div style={{'borderTop': '1px solid black', 'padding': '10px'}}>
-            <Button name="배치 등록"/>
+        <div style={{ 'borderTop': '1px solid black', 'padding': '10px' }}>
+            <Button name="배치 등록(미개발)"
+                onClick={() => { }} />
         </div>
-        <div style={{'borderTop': '1px solid black'}}></div>
+        <div style={{ 'borderTop': '1px solid black' }}></div>
         <p style={{ 'fontSize': '12px', color: 'gray' }}>Job을 클릭해서 실행/수정하세요</p><br />
         <Table columns={['잡 아이디', '잡 이름 ', '사용 여부', '실행 유형', '시간']}
             rows={jobs && jobs.map((info, index) => (<tr key={index} style={{ 'fontSize': '13px' }} onClick={() => handleOnclick(index)}>
@@ -67,5 +70,5 @@ export default function BatchConfigurationPage() {
             modalIsOpen={jobModal}
             setIsOpen={setJobModal}
             selectedJob={selectedJob} />}
-    </Page>
+    </>
 }

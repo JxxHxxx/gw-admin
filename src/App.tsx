@@ -7,8 +7,9 @@ import ConfirmPage from './page/confirm/ConfirmPage'
 import '../src/page/page.css'
 import MessageHistPage from './page/message/MessageHistPage'
 import MessageRetryPage from './page/message/MessageRetryPage'
-import BatchConfigurationPage from './page/batch/BatchConfigurationPage'
+import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
+import BatchHistPage from './page/batch/history/BatchHistPage'
 
 function App() {
   const router = createBrowserRouter([
@@ -41,6 +42,10 @@ function App() {
     {
       path: '/batch/run',
       element: <BatchConfigurationPage />
+    },
+    {
+      path: '/batch/hist',
+      element: <BatchHistPage />
     },
     {
       path: '/vacation',

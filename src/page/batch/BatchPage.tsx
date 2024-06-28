@@ -1,5 +1,6 @@
 import Header from "../../component/layout/Header";
 import Page from "../Page";
+import BatchConfigurationContent from "./config/BatchConfigurationContent";
 import BatchSidebar from "./BatchSidebar";
 
 
@@ -10,6 +11,6 @@ export default function BatchPage() {
         cnMain="main_b"
         header={<Header menu="batch"/>}
         sidebar={<BatchSidebar />}>
-        <div>배치 관리 페이지</div>
+        <BatchConfigurationContent />
     </Page>
 }
