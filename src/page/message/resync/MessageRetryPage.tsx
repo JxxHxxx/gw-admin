@@ -1,6 +1,7 @@
 import Header from "../../../component/layout/Header";
 import Page from "../../Page";
 import MessageSidebar from "../MessageSidebar";
+import MessageRetryContent from "./MessageRetryContent";
 
 
 export default function MessageRetryPage() {
@@ -10,6 +11,6 @@ export default function MessageRetryPage() {
         cnMain="main_b"
         header={<Header menu="message" />}
         sidebar={<MessageSidebar />}>
-        <div>메시지 재동기 처리</div>
+        <MessageRetryContent />
     </Page>
 }
