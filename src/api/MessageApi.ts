@@ -24,3 +24,9 @@ export const getFailMessageQResult = function (params?: object) {
         .then((res) => res)
         .catch((err) => err)
 }
+
+export const retryMessageQ = function (messageQResultPk:number) {
+    return instance.patch(`/message-q-results/${messageQResultPk}/retry`)
+        .then((res) => res)
+        .catch((err) => err)
+}

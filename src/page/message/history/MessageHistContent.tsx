@@ -88,6 +88,7 @@ export default function MessageHistContent() {
     }, [qHistoryPagination.pageNumber])
 
     return <Fragment>
+        <h2>메시지 처리 이력</h2>
         <form>
             <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
                 minLegnth={8}

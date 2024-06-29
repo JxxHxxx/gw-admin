@@ -7,6 +7,7 @@ import Button from "../../../component/button/Button";
 import PaginationButtons from "../../../component/button/PaginationButtons";
 import { format } from "date-fns";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
+import MessageReSyncModal from "./MessageReSyncModal";
 
 interface Pagination {
     pageNumber: number, // 페이지 인덱스 = 페이지 버튼 - 1
@@ -39,6 +40,8 @@ export default function MessageRetryContent() {
     });
 
     const [failMessageQResult, setFailMessageQResult] = useState([]);
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     // 검색 버튼 클릭 이벤트
     const handleOnClickSearchRequest = (event) => {
@@ -83,6 +86,13 @@ export default function MessageRetryContent() {
         }))
     }
 
+    const [selectedMsgQResultPk, setSelectedMsgQResultPk] = useState();
+
+    const onClickTableRow = (msgQResultPk:number) => {
+        setModalOpen(true);
+        setSelectedMsgQResultPk(msgQResultPk)
+    }
+
     useEffect(() => {
         requestFailMessageQResult();
     }, [])
@@ -114,7 +124,8 @@ export default function MessageRetryContent() {
                     '처리 상태',
                     '처리 시작일시',
                     '처리 종료일시']}
-                    rows={failMessageQResult.map(mqr => <tr>
+                    rows={failMessageQResult.map(mqr => <tr
+                        onClick={() => onClickTableRow(mqr.pk)}>
                         <td>{mqr.pk}</td>
                         <td>{mqr.originalMessagePk}</td>
                         <td>{mqr.body.company_id}</td>
@@ -126,6 +137,7 @@ export default function MessageRetryContent() {
                         <td>{mqr.processStartTime}</td>
                         <td>{mqr.processEndTime}</td>
                     </tr>)} />
+                <MessageReSyncModal modalOpen={modalOpen} setModalOpen={setModalOpen} messageQResultPk={selectedMsgQResultPk}/>
                 <PaginationButtons
                     sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
                     totalPages={qHistoryPagination.totalPages}
