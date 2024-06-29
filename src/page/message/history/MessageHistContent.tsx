@@ -8,7 +8,8 @@ import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
+import EmptyMsg from "../../../component/text/EmptyMsg";
 
 const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
@@ -120,9 +121,7 @@ export default function MessageHistContent() {
                     totalPages={qHistoryPagination.totalPages}
                     numOfBtnsToShow={showOnePageButtonAmount} />
             </>
-            : <p className='fade-in-text'
-                style={{ 'fontSize': '14px', 'color': 'gray' }}>
-                메시지 큐 결과가 존재하지 않습니다. <br />
-                처리 일자를 다시 입력해주세요</p>}
+            : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
+        }
     </Fragment>
 }
