@@ -9,6 +9,7 @@ import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
 import { format } from "date-fns";
+import EmptyMsg from "../../../component/text/EmptyMsg";
 
 const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
@@ -80,10 +81,11 @@ export default function MessageHistContent() {
     }, [qHistoryPagination.pageNumber])
 
     return <Fragment>
-        <form onSubmit={handleOnClickSearchRequest}>
+        <h2>메시지 처리 이력</h2>
+        <form>
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
-                minLegnth={10}
-                maxLength={10}
+                minLegnth={8}
+                maxLength={8}
                 onChange={handleOnchangeEndDateInput}
                 placeholder="처리 일자를 입력하세요 ex) 20240625" />
             <Button
@@ -113,9 +115,7 @@ export default function MessageHistContent() {
                     totalPages={qHistoryPagination.totalPages}
                     numOfBtnsToShow={showOnePageButtonAmount} />
             </>
-            : <p className='fade-in-text'
-                style={{ 'fontSize': '14px', 'color': 'gray' }}>
-                메시지 큐 결과가 존재하지 않습니다. <br />
-                처리 일자를 다시 입력해주세요</p>}
+            : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
+        }
     </Fragment>
 }
