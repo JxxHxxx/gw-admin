@@ -3,6 +3,7 @@ import { Fragment } from "react/jsx-runtime";
 interface InputProps {
     className?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown?:() => void;
     placeholder?: string;
     type?: string;
     minLegnth?: number;
@@ -14,6 +15,7 @@ interface InputProps {
 export default function Input({
     className = '',
     onChange = () => { },
+    onKeyDown= () => {},
     placeholder = '',
     type = 'text',
     minLegnth = 0,
@@ -25,6 +27,7 @@ export default function Input({
         <input
             className={className}
             onChange={onChange}
+            onKeyDown={onKeyDown}
             placeholder={placeholder}
             minLength={minLegnth}
             maxLength={maxLength}

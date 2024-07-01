@@ -2,13 +2,13 @@ import { Fragment } from "react/jsx-runtime";
 
 import PaginationButtons from "../../../component/button/PaginationButtons";
 import { getMessageQResult } from "../../../api/MessageApi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Table from "../../../component/table/Table";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 
 const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
@@ -26,21 +26,19 @@ interface MessageHistSearchCond {
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 export default function MessageHistContent() {
+    console.log('render');
     const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
         pageNumber: 0,
         totalPages: 0,
         content: []
     });
 
-    const [searchCond, setSearchCond] = useState<MessageHistSearchCond>({
-        endDate: nowDate,
-        endDateCorrectFlag: true,
-    });
+    const searchCondRef = useRef<String>(nowDate);
 
     const fetchMessageQResult = async () => {
         const params = {
-            startDate: searchCond.endDate,
-            endDate: searchCond.endDate,
+            startDate: searchCondRef.current,
+            endDate: searchCondRef.current,
             size: showOnePageMessageResultAmount,
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
@@ -74,12 +72,7 @@ export default function MessageHistContent() {
     }
 
     const handleOnchangeEndDateInput = (event: any) => {
-        setSearchCond((prev) => ({
-            ...prev,
-            endDateCorrectFlag: true,
-            endDate: event.target.value
-        }))
-
+        searchCondRef.current = event.target.value;
     }
 
     useEffect(() => {
@@ -87,10 +80,10 @@ export default function MessageHistContent() {
     }, [qHistoryPagination.pageNumber])
 
     return <Fragment>
-        <form>
-            <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
-                minLegnth={8}
-                maxLength={8}
+        <form onSubmit={handleOnClickSearchRequest}>
+            <Input className={true ? "bi_msg" : "bi_msg_warning"}
+                minLegnth={10}
+                maxLength={10}
                 onChange={handleOnchangeEndDateInput}
                 placeholder="처리 일자를 입력하세요 ex) 20240625" />
             <Button

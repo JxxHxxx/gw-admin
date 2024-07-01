@@ -22,7 +22,7 @@ export default function MessageRetryContent() {
         requestFailMessageQResult();
     }, [])
     return <>
-        <h2>메시지 처리 실패 이력</h2>
+        <h2>메시지 재동기 처리</h2>
         <Table columns={['MQ RESULT PK',
             'Original MQ PK',
             '요청자 그룹',
