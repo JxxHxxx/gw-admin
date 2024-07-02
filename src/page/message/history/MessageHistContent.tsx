@@ -27,7 +27,6 @@ interface MessageHistSearchCond {
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 export default function MessageHistContent() {
-    console.log('render');
     const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
         pageNumber: 0,
         totalPages: 0,
@@ -84,9 +83,9 @@ export default function MessageHistContent() {
         <h2>메시지 처리 이력</h2>
         <form>
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
-                minLegnth={8}
-                maxLength={8}
-                onChange={handleOnchangeEndDateInput}
+                minLegnth={10}
+                maxLength={10}
+                onChange={handleOnchangeEndDateInput}   
                 placeholder="처리 일자를 입력하세요 ex) 20240625" />
             <Button
                 className={"bb_msg"}

@@ -14,7 +14,7 @@ export default function Table({ columns, rows }: TableProps) {
         <table className="table_bs">
             <thead>
                 <tr style={{'fontSize': '13px'}}>
-                    {columns && columns.map((col) => <td>{col}</td>)}
+                    {columns && columns.map((col) => <td key={col}>{col}</td>)}
                 </tr>
             </thead>
             <tbody>
