@@ -10,22 +10,11 @@ import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
 import { format } from "date-fns";
 import EmptyMsg from "../../../component/text/EmptyMsg";
+import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE, Pagination } from "../../../domain/pagination/Pagination";
 
-const showOnePageMessageResultAmount: number = 5; // 한 페이지에 보여줄 이력의 갯수
-const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
-
-interface Pagination {
-    pageNumber: number, // 페이지 인덱스 = 페이지 버튼 - 1
-    totalPages: number, // 총 페이지 수
-    content: object[] // 페이지에 표현할 데이터
-}
-
-interface MessageHistSearchCond {
-    endDate: string,
-    endDateCorrectFlag: boolean
-}
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
+
 export default function MessageHistContent() {
     const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
         pageNumber: 0,
@@ -39,7 +28,7 @@ export default function MessageHistContent() {
         const params = {
             startDate: searchCondRef.current,
             endDate: searchCondRef.current,
-            size: showOnePageMessageResultAmount,
+            size: ONE_PAGES_CONTENT_SIZE,
             page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
         const response = await getMessageQResult(params);
@@ -62,7 +51,7 @@ export default function MessageHistContent() {
     }
 
     // 검색 버튼 클릭 이벤트
-    const handleOnClickSearchRequest = (event) => {
+    const handleRequestSearchResult = (event: any) => {
         event.preventDefault();
         setQHistoryPagination((prev) => ({
             ...prev,
@@ -71,7 +60,7 @@ export default function MessageHistContent() {
         fetchMessageQResult();
     }
 
-    const handleOnchangeEndDateInput = (event: any) => {
+    const handleOnchangeEndDateCond = (event: any) => {
         searchCondRef.current = event.target.value;
     }
 
@@ -81,15 +70,15 @@ export default function MessageHistContent() {
 
     return <Fragment>
         <h2>메시지 처리 이력</h2>
-        <form>
+        <form onSubmit={handleRequestSearchResult}>
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
-                minLegnth={10}
+                minLegnth={8}
                 maxLength={10}
-                onChange={handleOnchangeEndDateInput}   
+                onChange={handleOnchangeEndDateCond}   
                 placeholder="처리 일자를 입력하세요 ex) 20240625" />
             <Button
                 className={"bb_msg"}
-                onClick={handleOnClickSearchRequest}
+                onClick={handleRequestSearchResult}
                 name={"검색"} />
         </form>
         <div style={{ 'margin': '10px' }}></div>
@@ -112,7 +101,7 @@ export default function MessageHistContent() {
                 <PaginationButtons
                     sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
                     totalPages={qHistoryPagination.totalPages}
-                    numOfBtnsToShow={showOnePageButtonAmount} />
+                    numOfBtnsToShow={BUTTON_SIZE} />
             </>
             : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
         }

@@ -8,6 +8,7 @@ import PaginationButtons from "../../../component/button/PaginationButtons";
 import { format } from "date-fns";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import MessageReSyncModal from "./MessageReSyncModal";
+import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE, ONE_PAGES_CONTENT_SIZE_20 } from "../../../domain/pagination/Pagination";
 
 interface Pagination {
     pageNumber: number, // 페이지 인덱스 = 페이지 버튼 - 1
@@ -20,8 +21,7 @@ interface MessageHistSearchCond {
     startDate: string,
     endDateCorrectFlag: boolean
 }
-
-const showOnePageMessageResultAmount: number = 20; // 한 페이지에 보여줄 이력의 갯수
+ // 한 페이지에 보여줄 이력의 갯수
 const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
@@ -72,7 +72,7 @@ export default function MessageRetryContent() {
             startDate: searchCond.startDate,
             endDate: searchCond.endDate,
             page: 0,
-            size: showOnePageMessageResultAmount
+            size: ONE_PAGES_CONTENT_SIZE_20
         }
 
         const response = await getFailMessageQResult(params);
@@ -141,7 +141,7 @@ export default function MessageRetryContent() {
                 <PaginationButtons
                     sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
                     totalPages={qHistoryPagination.totalPages}
-                    numOfBtnsToShow={showOnePageButtonAmount} />
+                    numOfBtnsToShow={BUTTON_SIZE} />
             </>
             :
             <>
