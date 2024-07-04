@@ -76,8 +76,6 @@ export default function MessageHistContent() {
                 content: response.data.content
             }));
         }
-        // init
-        resetPagination();
     }
 
     const handleOnchangeEndDateCond = (event: any) => {
@@ -122,7 +120,7 @@ export default function MessageHistContent() {
                     sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
                     totalPages={qHistoryPagination.totalPages}
                     numOfBtnsToShow={BUTTON_SIZE}
-                    resetPagination={resetPagination} />
+                     />
             </>
             : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
         }
