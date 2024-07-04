@@ -1,6 +1,7 @@
 import Header from "../../../component/layout/Header";
 import Page from "../../Page";
 import BatchSidebar from "../BatchSidebar";
+import BatchHistContent from "./BatchHistContent";
 
 
 export default function BatchHistPage() {
@@ -11,6 +12,6 @@ export default function BatchHistPage() {
         cnMain="main_b"
         header={<Header menu="batch" />}
         sidebar={<BatchSidebar />}>
-            <></>
+            <BatchHistContent />
     </Page>
 }

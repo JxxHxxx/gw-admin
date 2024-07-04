@@ -19,7 +19,8 @@ export default function MessageHistContent() {
     const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
         pageNumber: 0,
         totalPages: 0,
-        content: []
+        content: [],
+        page: 0
     });
 
     const searchCondRef = useRef<String>(nowDate);
@@ -49,15 +50,34 @@ export default function MessageHistContent() {
             pageNumber: convertBtnNumToPageNum(btnNum)
         }))
     }
-
-    // 검색 버튼 클릭 이벤트
-    const handleRequestSearchResult = (event: any) => {
+    
+    // 검색 버튼 클릭 이벤트 => 모든 정보 초기화 후
+    const handleRequestSearchResult = async (event: any) => {
         event.preventDefault();
         setQHistoryPagination((prev) => ({
             ...prev,
-            pageNumber: 0
+            pageNumber: 0,
+            page: 0
         }))
-        fetchMessageQResult();
+
+        const params = {
+            startDate: searchCondRef.current,
+            endDate: searchCondRef.current,
+            size: ONE_PAGES_CONTENT_SIZE,
+            page: 0 // 현재 페이지 + 1 = 버튼 숫자
+        }
+        const response = await getMessageQResult(params);
+
+        if (response.data !== undefined) {
+            setQHistoryPagination((prev: Pagination) => ({
+                ...prev,
+                pageNumber: 0,
+                totalPages: response.data.totalPages,
+                content: response.data.content
+            }));
+        }
+        // init
+        resetPagination();
     }
 
     const handleOnchangeEndDateCond = (event: any) => {
@@ -74,7 +94,7 @@ export default function MessageHistContent() {
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
                 minLegnth={8}
                 maxLength={10}
-                onChange={handleOnchangeEndDateCond}   
+                onChange={handleOnchangeEndDateCond}
                 placeholder="처리 일자를 입력하세요 ex) 20240625" />
             <Button
                 className={"bb_msg"}
@@ -101,7 +121,8 @@ export default function MessageHistContent() {
                 <PaginationButtons
                     sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
                     totalPages={qHistoryPagination.totalPages}
-                    numOfBtnsToShow={BUTTON_SIZE} />
+                    numOfBtnsToShow={BUTTON_SIZE}
+                    resetPagination={resetPagination} />
             </>
             : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
         }

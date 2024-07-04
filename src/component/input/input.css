@@ -26,3 +26,9 @@
 .bi_msg::placeholder {
     font-size: 11px;
 }
+
+
+.test:not(.has-value):before {
+    content: attr(data-placeholder);
+    width: 100%;
+}

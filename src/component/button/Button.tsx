@@ -11,6 +11,7 @@ interface ButtonProps {
 export default function Button({
     className = '',
     name = '',
+    ref,
     type = 'button',
     style = {},
     onClick = () => { }
@@ -18,6 +19,7 @@ export default function Button({
 }: ButtonProps) {
     return <Fragment>
         <button
+            ref={ref}
             style={style}
             type={type}
             className={className}

@@ -20,6 +20,12 @@ export const runBatchJob = function (requestBody: object) {
 
 export const getBatchJobs = function () {
     return instance.get(`/admin/batch/jobs`)
-    .then((res) => res)
-    .catch((err) => err)
+        .then((res) => res)
+        .catch((err) => err)
+}
+
+export const getBatcJobHistory = function (params?: object) {
+    return instance.get(`/admin/batch/jobs-hist`, { params })
+        .then((res) => res)
+        .catch((err) => err)
 }

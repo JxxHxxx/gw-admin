@@ -1,6 +1,6 @@
 
-export const convertBtnNumToPageNum = (btnNum: number) => {
-    if (btnNum > 0) {
-        return btnNum - 1;
+export const convertBtnNumToPageNum = (btnNumVal: number) => {
+    if (btnNumVal > 0) {
+        return btnNumVal - 1;
     }
 }

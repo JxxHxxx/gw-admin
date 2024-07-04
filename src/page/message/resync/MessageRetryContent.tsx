@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { getFailMessageQResult } from "../../../api/MessageApi";
 import Table from "../../../component/table/Table";
 import EmptyMsg from "../../../component/text/EmptyMsg";
@@ -8,12 +8,13 @@ import PaginationButtons from "../../../component/button/PaginationButtons";
 import { format } from "date-fns";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import MessageReSyncModal from "./MessageReSyncModal";
-import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE, ONE_PAGES_CONTENT_SIZE_20 } from "../../../domain/pagination/Pagination";
+import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE_20 } from "../../../domain/pagination/Pagination";
+import PeriodInput from "../../../component/input/PeriodInput";
 
 interface Pagination {
-    pageNumber: number, // 페이지 인덱스 = 페이지 버튼 - 1
-    totalPages: number, // 총 페이지 수
-    content: object[] // 페이지에 표현할 데이터
+    pageNumber: number,
+    totalPages: number,
+    content: object[]
 }
 
 interface MessageHistSearchCond {
@@ -21,8 +22,6 @@ interface MessageHistSearchCond {
     startDate: string,
     endDateCorrectFlag: boolean
 }
- // 한 페이지에 보여줄 이력의 갯수
-const showOnePageButtonAmount: number = 5; // 페이지에서 보여줄 버튼의 갯수
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 
@@ -42,9 +41,9 @@ export default function MessageRetryContent() {
     const [failMessageQResult, setFailMessageQResult] = useState([]);
 
     const [modalOpen, setModalOpen] = useState(false);
+    const searchButtonRef = useRef<HTMLButtonElement>(null); // useRef 생성
 
-    // 검색 버튼 클릭 이벤트
-    const handleOnClickSearchRequest = (event) => {
+    const handleOnClickSearchRequest = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         setQHistoryPagination((prev) => ({
             ...prev,
@@ -53,14 +52,14 @@ export default function MessageRetryContent() {
         requestFailMessageQResult();
     }
 
-    const handleOnchangeStartDateInput = (event: any) => {
+    const handleOnchangeStartDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchCond((prev) => ({
             ...prev,
             startDate: event.target.value
         }))
     }
 
-    const handleOnchangeEndDateInput = (event: any) => {
+    const handleOnchangeEndDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchCond((prev) => ({
             ...prev,
             endDate: event.target.value
@@ -86,9 +85,9 @@ export default function MessageRetryContent() {
         }))
     }
 
-    const [selectedMsgQResultPk, setSelectedMsgQResultPk] = useState();
+    const [selectedMsgQResultPk, setSelectedMsgQResultPk] = useState<number | undefined>();
 
-    const onClickTableRow = (msgQResultPk:number) => {
+    const onClickTableRow = (msgQResultPk: number) => {
         setModalOpen(true);
         setSelectedMsgQResultPk(msgQResultPk)
     }
@@ -96,58 +95,66 @@ export default function MessageRetryContent() {
     useEffect(() => {
         requestFailMessageQResult();
     }, [])
-    return <>
-        <h2>메시지 처리 실패 이력</h2>
-        <form>
-            <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
-                type="date"
-                defaultValue={nowDate}
-                onChange={handleOnchangeStartDateInput} />
-            <Input className={searchCond.endDateCorrectFlag ? "bi_msg" : "bi_msg_warning"}
-                type="date"
-                defaultValue={nowDate}
-                onChange={handleOnchangeEndDateInput} />
-            <Button
-                className={"bb_msg"}
-                onClick={handleOnClickSearchRequest}
-                name={"검색"} />
-        </form>
-        {failMessageQResult.length > 0 ?
-            <>
-                <Table columns={['MQ RESULT PK',
-                    'Original MQ PK',
-                    '요청자 그룹',
-                    '요청자 ID',
-                    '요청자',
-                    '결재 문서 유형',
-                    '목적지',
-                    '처리 상태',
-                    '처리 시작일시',
-                    '처리 종료일시']}
-                    rows={failMessageQResult.map(mqr => <tr
-                        onClick={() => onClickTableRow(mqr.pk)}>
-                        <td>{mqr.pk}</td>
-                        <td>{mqr.originalMessagePk}</td>
-                        <td>{mqr.body.company_id}</td>
-                        <td>{mqr.body.requester_id}</td>
-                        <td>{mqr.body.requester_name}</td>
-                        <td>{mqr.body.document_type}</td>
-                        <td>{mqr.messageDestination}</td>
-                        <td>{mqr.messageProcessStatus}</td>
-                        <td>{mqr.processStartTime}</td>
-                        <td>{mqr.processEndTime}</td>
-                    </tr>)} />
-                <MessageReSyncModal modalOpen={modalOpen} setModalOpen={setModalOpen} messageQResultPk={selectedMsgQResultPk}/>
-                <PaginationButtons
-                    sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
-                    totalPages={qHistoryPagination.totalPages}
-                    numOfBtnsToShow={BUTTON_SIZE} />
-            </>
-            :
-            <>
-                <EmptyMsg msg={['메시지 큐 실패 이력이 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
-            </>
-        }
 
-    </>
+    useEffect(() => {
+        // 검색 버튼에 포커스 설정
+        if (searchButtonRef.current) {
+            searchButtonRef.current.focus();
+        }
+    }, [])
+
+    return (
+        <>
+            <h3>메시지 처리 실패 이력</h3>
+            <form>
+                <PeriodInput
+                    onChangeStartDate={handleOnchangeStartDateInput}
+                    onChangeEndDate={handleOnchangeEndDateInput}
+                />
+                <Button
+                    ref={searchButtonRef} // ref 연결
+                    className={"bb_msg"}
+                    onClick={handleOnClickSearchRequest}
+                    name={"검색"}
+                />
+            </form>
+            {failMessageQResult.length > 0 ?
+                <>
+                    <Table columns={['MQ RESULT PK',
+                        'Original MQ PK',
+                        '요청자 그룹',
+                        '요청자 ID',
+                        '요청자',
+                        '결재 문서 유형',
+                        '목적지',
+                        '처리 상태',
+                        '처리 시작일시',
+                        '처리 종료일시']}
+                        rows={failMessageQResult.map(mqr => (
+                            <tr key={mqr.pk} onClick={() => onClickTableRow(mqr.pk)}>
+                                <td>{mqr.pk}</td>
+                                <td>{mqr.originalMessagePk}</td>
+                                <td>{mqr.body.company_id}</td>
+                                <td>{mqr.body.requester_id}</td>
+                                <td>{mqr.body.requester_name}</td>
+                                <td>{mqr.body.document_type}</td>
+                                <td>{mqr.messageDestination}</td>
+                                <td>{mqr.messageProcessStatus}</td>
+                                <td>{mqr.processStartTime}</td>
+                                <td>{mqr.processEndTime}</td>
+                            </tr>
+                        ))}
+                    />
+                    <MessageReSyncModal modalOpen={modalOpen} setModalOpen={setModalOpen} messageQResultPk={selectedMsgQResultPk} />
+                    <PaginationButtons
+                        sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
+                        totalPages={qHistoryPagination.totalPages}
+                        numOfBtnsToShow={BUTTON_SIZE}
+                    />
+                </>
+                :
+                <EmptyMsg msg={['메시지 큐 실패 이력이 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
+            }
+        </>
+    );
 }

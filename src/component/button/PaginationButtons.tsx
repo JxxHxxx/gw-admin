@@ -1,6 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
 import Button from "./Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { BUTTON_SIZE } from "../../domain/pagination/Pagination";
 
 interface PaginationButtonsProp {
     totalPages: number; // 총 페이지 수
@@ -15,7 +16,7 @@ interface Pagination {
 
 export default function PaginationButtons({
     totalPages = 0,
-    numOfBtnsToShow = 0,
+    numOfBtnsToShow = BUTTON_SIZE,
     sendSelectedBtnNumToParent
 }: PaginationButtonsProp) {
 
@@ -23,6 +24,7 @@ export default function PaginationButtons({
         startBtnNum: 1,
         selectedBtnNum: 1,
     });
+
     // '>' 버튼 클릭 이벤트
     const handleNextBtn = () => {
         if (pagination.selectedBtnNum >= totalPages) {
@@ -35,7 +37,7 @@ export default function PaginationButtons({
                 startBtnNum: prev.startBtnNum + numOfBtnsToShow,
                 selectedBtnNum: prev.startBtnNum + numOfBtnsToShow
             }))
-            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum + 1);
             return;
         }
         else {
@@ -43,7 +45,7 @@ export default function PaginationButtons({
                 ...prev,
                 selectedBtnNum: prev.selectedBtnNum + 1
             }))
-            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum + 1);
         }
     }
     // '>>' 버튼 클릭 이벤트 
@@ -81,14 +83,14 @@ export default function PaginationButtons({
                 startBtnNum: prev.startBtnNum - numOfBtnsToShow,
                 selectedBtnNum: prev.startBtnNum - 1,
             }))
-            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum - 1);
         }
         else {
             setPagination((prev) => ({
                 ...prev,
                 selectedBtnNum: prev.selectedBtnNum - 1,
             }))
-            sendSelectedBtnNumToParent(pagination.selectedBtnNum);
+            sendSelectedBtnNumToParent(pagination.selectedBtnNum - 1);
         }
     }
     // '<<' 버튼 클릭 이벤트 

@@ -51,7 +51,7 @@ export default function BatchConfigurationContent() {
     }, [])
 
     return <>
-        <h3>배치 구성 페이지</h3>
+        <h3 style={{'marginBottom': '0px'}}>배치 구성 페이지</h3>
         <div style={{ 'borderTop': '1px solid black', 'padding': '10px' }}>
             <Button name="배치 등록(미개발)"
                 onClick={() => { }} />
