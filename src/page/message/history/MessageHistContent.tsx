@@ -1,26 +1,27 @@
 import { Fragment } from "react/jsx-runtime";
 
-import PaginationButtons from "../../../component/button/PaginationButtons";
 import { getMessageQResult } from "../../../api/MessageApi";
 import { useEffect, useRef, useState } from "react";
-import Table from "../../../component/table/Table";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import '../../../component/text/text.css';
 import { format } from "date-fns";
 import EmptyMsg from "../../../component/text/EmptyMsg";
-import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE, Pagination } from "../../../domain/pagination/Pagination";
-
+import { MessageRetryContext } from "../../../context/PaginationContext";
+import { ONE_PAGES_CONTENT_SIZE, PaginationContextProp } from "../../../component/pagination/Paginaton";
+import Pagination from "../../../component/pagination/Paginaton";
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 
 export default function MessageHistContent() {
-    const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
-        pageNumber: 0,
-        totalPages: 0,
+    const [msgHistoryPgn, setMsgHistoryPgn] = useState<PaginationContextProp>({
+        pageable: {
+            pageNumber: 0
+        },
+        totalpage : 0,
         content: [],
-        page: 0
+        
     });
 
     const searchCondRef = useRef<String>(nowDate);
@@ -30,36 +31,28 @@ export default function MessageHistContent() {
             startDate: searchCondRef.current,
             endDate: searchCondRef.current,
             size: ONE_PAGES_CONTENT_SIZE,
-            page: qHistoryPagination.pageNumber // 현재 페이지 + 1 = 버튼 숫자
+            page: msgHistoryPgn.pageable.pageNumber // 현재 페이지 + 1 = 버튼 숫자
         }
         const response = await getMessageQResult(params);
 
         if (response.data !== undefined) {
-            setQHistoryPagination((prev: Pagination) => ({
-                ...prev,
-                pageNumber: response.data.pageable.pageNumber,
-                totalPages: response.data.totalPages,
-                content: response.data.content
-            }));
+            setMsgHistoryPgn(response.data);
         }
     }
 
     const updatePageNumber = (btnNum: number) => {
-        setQHistoryPagination((prev: any) => ({
+        setMsgHistoryPgn((prev: any) => ({
             ...prev,
-            pageNumber: convertBtnNumToPageNum(btnNum)
+            pageable: {
+                ...prev.pageable,
+                pageNumber: convertBtnNumToPageNum(btnNum)
+            }
         }))
     }
-    
+
     // 검색 버튼 클릭 이벤트 => 모든 정보 초기화 후
     const handleRequestSearchResult = async (event: any) => {
         event.preventDefault();
-        setQHistoryPagination((prev) => ({
-            ...prev,
-            pageNumber: 0,
-            page: 0
-        }))
-
         const params = {
             startDate: searchCondRef.current,
             endDate: searchCondRef.current,
@@ -69,12 +62,7 @@ export default function MessageHistContent() {
         const response = await getMessageQResult(params);
 
         if (response.data !== undefined) {
-            setQHistoryPagination((prev: Pagination) => ({
-                ...prev,
-                pageNumber: 0,
-                totalPages: response.data.totalPages,
-                content: response.data.content
-            }));
+            setMsgHistoryPgn(response.data);
         }
     }
 
@@ -84,7 +72,7 @@ export default function MessageHistContent() {
 
     useEffect(() => {
         fetchMessageQResult();
-    }, [qHistoryPagination.pageNumber])
+    }, [msgHistoryPgn.pageable.pageNumber])
 
     return <Fragment>
         <h2>메시지 처리 이력</h2>
@@ -100,11 +88,14 @@ export default function MessageHistContent() {
                 name={"검색"} />
         </form>
         <div style={{ 'margin': '10px' }}></div>
-        {qHistoryPagination.content.length > 0
-            ? <>
-                <Table columns={['PK', '목적지', '의뢰자 ID', '의뢰자 명', '처리 유형', '처리 시작 시간', '처리 종료 시간', '처리 상태']}
+        <MessageRetryContext.Provider value={msgHistoryPgn}>
+            {msgHistoryPgn.content.length > 0
+                ? <Pagination
+                    paginationContext={MessageRetryContext}
+                    sendToBtnNumber={(btnNum: number) => updatePageNumber(btnNum)}
+                    columns={['PK', '목적지', '의뢰자 ID', '의뢰자 명', '처리 유형', '처리 시작 시간', '처리 종료 시간', '처리 상태']}
                     rows={<>
-                        {qHistoryPagination.content.map((content: any) => <>
+                        {msgHistoryPgn.content.map((content: any) => <>
                             <tr key={content.pk}>
                                 <td>{content.pk}</td>
                                 <td>{content.messageDestination}</td>
@@ -116,13 +107,9 @@ export default function MessageHistContent() {
                                 <td>{content.messageProcessStatus}</td>
                             </tr>
                         </>)}</>} />
-                <PaginationButtons
-                    sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
-                    totalPages={qHistoryPagination.totalPages}
-                    numOfBtnsToShow={BUTTON_SIZE}
-                     />
-            </>
-            : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
-        }
+
+                : <EmptyMsg msg={['메시지 큐 결과가 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
+            }
+        </MessageRetryContext.Provider>
     </Fragment>
 }

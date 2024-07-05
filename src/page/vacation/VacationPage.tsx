@@ -1,4 +1,5 @@
 import Header from "../../component/layout/Header";
+import Pagination from "../../component/pagination/Paginaton";
 import Page from "../Page";
 import VacationSidebar from "./VacationSidebar";
 
@@ -10,6 +11,6 @@ export default function VacationPage() {
         cnMain="main_b"
         header={<Header menu="vacation"/>}
         sidebar={<VacationSidebar />}>
-        <div>메인 페이지</div>
+        <Pagination />
     </Page>
 }

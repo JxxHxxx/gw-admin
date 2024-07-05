@@ -1,15 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getFailMessageQResult } from "../../../api/MessageApi";
-import Table from "../../../component/table/Table";
 import EmptyMsg from "../../../component/text/EmptyMsg";
-import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
-import PaginationButtons from "../../../component/button/PaginationButtons";
 import { format } from "date-fns";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import MessageReSyncModal from "./MessageReSyncModal";
-import { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE_20 } from "../../../domain/pagination/Pagination";
 import PeriodInput from "../../../component/input/PeriodInput";
+import { MessageRetryContext } from "../../../context/PaginationContext";
+import Pagination, { ONE_PAGES_CONTENT_SIZE_1, PaginationContextProp } from "../../../component/pagination/Paginaton";
+
+interface MessageSyncProp {
+    pk: number,
+    originalMessagePk: number,
+    messageDestination:string,
+    messageProcessStatus:string,
+    processStartTime:string,
+    processEndTime:string,
+    body: object
+}
 
 interface Pagination {
     pageNumber: number,
@@ -32,22 +40,25 @@ export default function MessageRetryContent() {
         endDateCorrectFlag: true,
     });
 
-    const [qHistoryPagination, setQHistoryPagination] = useState<Pagination>({
-        pageNumber: 0,
-        totalPages: 0,
-        content: []
+    const [qHistPgn, setQHistPgn] = useState<PaginationContextProp<MessageSyncProp>>({
+        content: [],
+        pageable: {
+            pageNumber: 0
+        },
+        totalPages: 0
     });
-
-    const [failMessageQResult, setFailMessageQResult] = useState([]);
 
     const [modalOpen, setModalOpen] = useState(false);
     const searchButtonRef = useRef<HTMLButtonElement>(null); // useRef 생성
 
     const handleOnClickSearchRequest = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
-        setQHistoryPagination((prev) => ({
+        setQHistPgn((prev) => ({
             ...prev,
-            pageNumber: 0
+            pageable: {
+                ...prev.pageable,
+                pageNumber: 0
+            }
         }))
         requestFailMessageQResult();
     }
@@ -70,18 +81,21 @@ export default function MessageRetryContent() {
         const params = {
             startDate: searchCond.startDate,
             endDate: searchCond.endDate,
-            page: 0,
-            size: ONE_PAGES_CONTENT_SIZE_20
+            page: qHistPgn.pageable.pageNumber,
+            size: ONE_PAGES_CONTENT_SIZE_1
         }
 
         const response = await getFailMessageQResult(params);
-        setFailMessageQResult(response.data.content);
+        setQHistPgn(response.data);
     }
 
     const updatePageNumber = (btnNum: number) => {
-        setQHistoryPagination((prev: any) => ({
+        setQHistPgn((prev: any) => ({
             ...prev,
-            pageNumber: convertBtnNumToPageNum(btnNum)
+            pageable: {
+                ...prev.pageable,
+                pageNumber: convertBtnNumToPageNum(btnNum)
+            }
         }))
     }
 
@@ -94,14 +108,7 @@ export default function MessageRetryContent() {
 
     useEffect(() => {
         requestFailMessageQResult();
-    }, [])
-
-    useEffect(() => {
-        // 검색 버튼에 포커스 설정
-        if (searchButtonRef.current) {
-            searchButtonRef.current.focus();
-        }
-    }, [])
+    }, [qHistPgn.pageable.pageNumber])
 
     return (
         <>
@@ -118,19 +125,14 @@ export default function MessageRetryContent() {
                     name={"검색"}
                 />
             </form>
-            {failMessageQResult.length > 0 ?
-                <>
-                    <Table columns={['MQ RESULT PK',
-                        'Original MQ PK',
-                        '요청자 그룹',
-                        '요청자 ID',
-                        '요청자',
-                        '결재 문서 유형',
-                        '목적지',
-                        '처리 상태',
-                        '처리 시작일시',
-                        '처리 종료일시']}
-                        rows={failMessageQResult.map(mqr => (
+            <MessageRetryContext.Provider
+                value={qHistPgn}>
+                {qHistPgn.content.length > 0 ?
+                    <Pagination
+                        paginationContext={MessageRetryContext}
+                        sendToBtnNumber={(btnNum: number) => (updatePageNumber(btnNum))}
+                        columns={['MQ RESULT PK', 'Original MQ PK', '요청자 그룹', '요청자 ID', '요청자', '결재 문서 유형', '목적지', '처리 상태', '처리 시작일시', '처리 종료일시']}
+                        rows={qHistPgn.content.map(mqr => (
                             <tr key={mqr.pk} onClick={() => onClickTableRow(mqr.pk)}>
                                 <td>{mqr.pk}</td>
                                 <td>{mqr.originalMessagePk}</td>
@@ -143,18 +145,11 @@ export default function MessageRetryContent() {
                                 <td>{mqr.processStartTime}</td>
                                 <td>{mqr.processEndTime}</td>
                             </tr>
-                        ))}
-                    />
-                    <MessageReSyncModal modalOpen={modalOpen} setModalOpen={setModalOpen} messageQResultPk={selectedMsgQResultPk} />
-                    <PaginationButtons
-                        sendSelectedBtnNumToParent={(pageNumber: number) => updatePageNumber(pageNumber)}
-                        totalPages={qHistoryPagination.totalPages}
-                        numOfBtnsToShow={BUTTON_SIZE}
-                    />
-                </>
-                :
-                <EmptyMsg msg={['메시지 큐 실패 이력이 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
-            }
+                        ))}>
+                        <MessageReSyncModal modalOpen={modalOpen} setModalOpen={setModalOpen} messageQResultPk={selectedMsgQResultPk} />
+                    </Pagination>
+                    : <EmptyMsg msg={['메시지 큐 실패 이력이 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />}
+            </MessageRetryContext.Provider>
         </>
     );
 }

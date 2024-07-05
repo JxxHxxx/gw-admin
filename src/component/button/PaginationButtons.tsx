@@ -1,7 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
 import Button from "./Button";
 import { useEffect, useState } from "react";
-import { BUTTON_SIZE } from "../../domain/pagination/Pagination";
+import { BUTTON_SIZE } from "../pagination/Paginaton";
 
 interface PaginationButtonsProp {
     totalPages: number; // 총 페이지 수
