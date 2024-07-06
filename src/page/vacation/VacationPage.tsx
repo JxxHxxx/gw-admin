@@ -11,6 +11,6 @@ export default function VacationPage() {
         cnMain="main_b"
         header={<Header menu="vacation"/>}
         sidebar={<VacationSidebar />}>
-        <Pagination />
+        {/* <Pagination /> */}
     </Page>
 }

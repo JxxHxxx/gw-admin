@@ -55,7 +55,7 @@ export default function JobConfigModal({
         }))
     }
 
-    const handleOnClickRunJob = () => {
+    const handleOnClickRunJob = async () => {
         if (selectedJob === undefined) {
             alert('잡에 대한 정보가 존재하지 않습니다')
             return;
@@ -69,9 +69,19 @@ export default function JobConfigModal({
                     jobName: selectedJob.jobName,
                     properties: jobParams
                 }
-                runBatchJob(requestBody);
+                const result = await runBatchJob(requestBody);
+                if (result.status === 200) {
+                    alert('배치를 실행합니다. 배치 잡 이력페이지에서 배치 실행 상태를 확인하세요')
+                }
+                else {
+                    const {errCode, message} = result.response.data;
+                    alert(' message: ' + message + '\n errCode:' + errCode);
+                }
+
+
             }
             catch (error) {
+
             }
         }
     }
