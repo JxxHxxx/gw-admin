@@ -32,3 +32,13 @@
     content: attr(data-placeholder);
     width: 100%;
 }
+
+.input_wh300 {
+    width: 300px;
+    height: 35px;
+}
+
+.input_wh200 {
+    width: 200px;
+    height: 35px;
+}

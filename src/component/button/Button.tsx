@@ -9,7 +9,7 @@ interface ButtonProps {
 }
 
 export default function Button({
-    className = '',
+    className = 'bb',
     name = '',
     ref,
     type = 'button',

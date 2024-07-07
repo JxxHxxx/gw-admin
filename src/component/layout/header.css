@@ -10,3 +10,8 @@
 .not_present_menu {
     /* none */
 }
+
+.present_menu_bkline {
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}

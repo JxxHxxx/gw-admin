@@ -24,7 +24,7 @@ export default function MessageHistContent() {
         
     });
 
-    const searchCondRef = useRef<String>(nowDate);
+    const searchCondRef = useRef<string>(nowDate);
 
     const fetchMessageQResult = async () => {
         const params = {

@@ -7,6 +7,7 @@ import EmptyMsg from "../../../component/text/EmptyMsg";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import Pagination, {ONE_PAGES_CONTENT_SIZE } from "../../../component/pagination/Paginaton";
 import { BatchJobExecutionHistContext } from "../../../context/PaginationContext";
+import ThinBlockLine from "../../../component/util/ThinBlockLine";
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 
@@ -76,7 +77,7 @@ export default function BatchHistContent() {
 
     return <>
         <h3 style={{ 'marginBottom': '0px' }}>배치 실행 이력 조회</h3>
-        <div style={{ 'marginBottom': '18px', 'borderTop': '1px solid black' }}></div>
+        <ThinBlockLine />
         <form>
             <PeriodInput
                 onChangeStartDate={(event) => handleDateChange(event, 'startDate')}
