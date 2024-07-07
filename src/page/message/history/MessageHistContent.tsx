@@ -24,7 +24,7 @@ export default function MessageHistContent() {
         
     });
 
-    const searchCondRef = useRef<String>(nowDate);
+    const searchCondRef = useRef<string>(nowDate);
 
     const fetchMessageQResult = async () => {
         const params = {
@@ -75,7 +75,7 @@ export default function MessageHistContent() {
     }, [msgHistoryPgn.pageable.pageNumber])
 
     return <Fragment>
-        <h2>메시지 처리 이력</h2>
+        <h3>메시지 처리 이력</h3>
         <form onSubmit={handleRequestSearchResult}>
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
                 minLegnth={8}
@@ -102,8 +102,8 @@ export default function MessageHistContent() {
                                 <td>{content.body.requester_id}</td>
                                 <td>{content.body.requester_name}</td>
                                 <td>{content.messageProcessType}</td>
-                                <td>{content.processStartTime}</td>
-                                <td>{content.processEndTime}</td>
+                                <td>{format(content.processStartTime, 'yyyy-MM-dd HH:mm:ss')}</td>
+                                <td>{format(content.processEndTime, 'yyyy-MM-dd HH:mm:ss')}</td>
                                 <td>{content.messageProcessStatus}</td>
                             </tr>
                         </>)}</>} />

@@ -3,6 +3,7 @@ import { Fragment } from "react/jsx-runtime";
 interface InputProps {
     className?: string;
     id?:string;
+    name?:string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onKeyDown?:() => void;
     placeholder?: string;
@@ -16,6 +17,7 @@ interface InputProps {
 export default function Input({
     className = '',
     id = '',
+    name = '',
     onChange = () => { },
     onKeyDown= () => {},
     placeholder = '',
@@ -29,6 +31,7 @@ export default function Input({
         <input
             className={className}
             id={id}
+            name={name}
             onChange={onChange}
             onKeyDown={onKeyDown}
             placeholder={placeholder}

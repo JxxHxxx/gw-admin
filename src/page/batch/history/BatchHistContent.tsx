@@ -5,8 +5,9 @@ import PeriodInput from "../../../component/input/PeriodInput";
 import Button from "../../../component/button/Button";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
-import Pagination, { BUTTON_SIZE, ONE_PAGES_CONTENT_SIZE } from "../../../component/pagination/Paginaton";
+import Pagination, {ONE_PAGES_CONTENT_SIZE } from "../../../component/pagination/Paginaton";
 import { BatchJobExecutionHistContext } from "../../../context/PaginationContext";
+import ThinBlockLine from "../../../component/util/ThinBlockLine";
 
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 
@@ -72,7 +73,7 @@ export default function BatchHistContent() {
 
     return <>
         <h3 style={{ 'marginBottom': '0px' }}>배치 실행 이력 조회</h3>
-        <div style={{ 'marginBottom': '18px', 'borderTop': '1px solid black' }}></div>
+        <ThinBlockLine />
         <form>
             <PeriodInput
                 onChangeStartDate={(event) => handleDateChange(event, 'startDate')}
@@ -94,8 +95,8 @@ export default function BatchHistContent() {
                             <td>{hist.jobName}</td>
                             <td>{hist.jobExecutionId}</td>
                             <td>{hist.jobInstanceId}</td>
-                            <td>{format(hist.startTime, 'yyyy-mm-dd hh:mm:ss')}</td>
-                            <td>{format(hist.endTime, 'yyyy-mm-dd hh:mm:ss')}</td>
+                            <td>{format(hist.startTime, 'yyyy-MM-dd HH:mm:ss')}</td>
+                            <td>{format(hist.endTime, 'yyyy-MM-dd HH:mm:ss')}</td>
                             <td>{hist.status}</td>
                             <td>{hist.exitCode}</td>
                         </tr>))}>

@@ -12,10 +12,10 @@ import Pagination, { ONE_PAGES_CONTENT_SIZE_1, PaginationContextProp } from "../
 interface MessageSyncProp {
     pk: number,
     originalMessagePk: number,
-    messageDestination:string,
-    messageProcessStatus:string,
-    processStartTime:string,
-    processEndTime:string,
+    messageDestination: string,
+    messageProcessStatus: string,
+    processStartTime: string,
+    processEndTime: string,
     body: object
 }
 
@@ -100,7 +100,7 @@ export default function MessageRetryContent() {
 
     return (
         <>
-            <h3>메시지 처리 실패 이력</h3>
+            <h3>재동기 처리</h3>
             <form>
                 <PeriodInput
                     onChangeStartDate={handleOnchangeStartDateInput}

@@ -2,14 +2,15 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import LoginPage from './page/login/LoginPage'
 import MessagePage from './page/message/MessagePage'
 import VacationPage from './page/vacation/VacationPage'
-import BatchPage from './page/batch/BatchPage'
-import ConfirmPage from './page/confirm/ConfirmPage'
+import ConfirmPage from './page/confirm/document/ConfirmPage'
 import '../src/page/page.css'
 import MessageHistPage from './page/message/MessageHistPage'
 import MessageRetryPage from './page/message/resync/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
 import BatchHistPage from './page/batch/history/BatchHistPage'
+import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC } from './constant/link/UrlConstant'
+import ApprovalLinePage from './page/confirm/approvalLine/ApprovalLinePage'
 
 function App() {
   const router = createBrowserRouter([
@@ -22,29 +23,21 @@ function App() {
       element: <VacationPage />
     },
     {
-      path: '/message',
-      element: <MessagePage />,
-    },
-    {
-      path: '/message/hist',
+      path: URL_MESSAGE_HIST,
       element: <MessageHistPage />
     }
     ,
     {
-      path: '/message/retry',
+      path: URL_MESSAGE_RESYNC,
       element: <MessageRetryPage />
     }
     ,
     {
-      path: '/batch',
-      element: <BatchPage />
-    },
-    {
-      path: '/batch/run',
+      path: URL_BATCH_CONFIGURATION,
       element: <BatchConfigurationPage />
     },
     {
-      path: '/batch/hist',
+      path: URL_BATCH_EXECUTION_HIST,
       element: <BatchHistPage />
     },
     {
@@ -52,8 +45,12 @@ function App() {
       element: <VacationPage />
     },
     {
-      path: '/confirm',
+      path: URL_CONFIRM_DOCUMENTS,
       element: <ConfirmPage />
+    },
+    {
+      path: URL_APPROVAL_LINE,
+      element: <ApprovalLinePage />
     },
   ])
 
