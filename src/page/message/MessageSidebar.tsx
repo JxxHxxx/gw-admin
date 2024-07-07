@@ -9,11 +9,11 @@ export default function MessageSidebar() {
 
     return <Fragment>
         <ListGroup className="side_ul">
-            <Link style={{ 'textDecoration': 'none' }} to={URL_MESSAGE_HIST}>
-                <List className="side_li" content="메시지 처리 이력" />
-            </Link>
             <Link style={{ 'textDecoration': 'none' }} to={URL_MESSAGE_RESYNC}>
                 <List className="side_li" content="재동기 처리" />
+            </Link>
+            <Link style={{ 'textDecoration': 'none' }} to={URL_MESSAGE_HIST}>
+                <List className="side_li" content="메시지 처리 이력" />
             </Link>
         </ListGroup>
     </Fragment>

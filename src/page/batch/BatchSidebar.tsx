@@ -8,14 +8,12 @@ import { URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST } from "../../constan
 export default function BatchSidebar() {
     return <Fragment>
         <ListGroup className="side_ul">
-            <Link style={{ 'textDecoration': 'none' }} to={URL_BATCH_EXECUTION_HIST}>
-                <List className="side_li" content="배치 실행 이력" />
-            </Link>
-
             <Link style={{ 'textDecoration': 'none' }} to={URL_BATCH_CONFIGURATION}>
                 <List className="side_li" content="배치 관리" />
             </Link>
-
+            <Link style={{ 'textDecoration': 'none' }} to={URL_BATCH_EXECUTION_HIST}>
+                <List className="side_li" content="배치 실행 이력" />
+            </Link>
         </ListGroup>
     </Fragment>
 }
