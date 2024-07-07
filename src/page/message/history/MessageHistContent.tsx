@@ -75,7 +75,7 @@ export default function MessageHistContent() {
     }, [msgHistoryPgn.pageable.pageNumber])
 
     return <Fragment>
-        <h2>메시지 처리 이력</h2>
+        <h3>메시지 처리 이력</h3>
         <form onSubmit={handleRequestSearchResult}>
             <Input className={true ? "bi_msg" : "bi_msg_warning"}
                 minLegnth={8}

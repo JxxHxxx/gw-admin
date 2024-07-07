@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 
 import '../layout/header.css';
+import { URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_MESSAGE_RESYNC } from "../../constant/link/UrlConstant";
 
 interface HeaderProp {
     menu?: string
@@ -30,17 +31,17 @@ export default function Header({ menu = '' }: HeaderProp) {
             </li>
             <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
                 <span className={menu === 'confirm' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                    nav('/confirm')
+                    nav(URL_CONFIRM_DOCUMENTS)
                 }}>결재 관리</span>
             </li>
             <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
                 <span className={menu === 'batch' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                    nav('/batch')
+                    nav(URL_BATCH_EXECUTION_HIST)
                 }}>배치 관리</span>
             </li>
             <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
                 <span className={menu === 'message' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                    nav('/message')
+                    nav(URL_MESSAGE_RESYNC)
                 }}>메시지 관리</span>
             </li>
         </ul>

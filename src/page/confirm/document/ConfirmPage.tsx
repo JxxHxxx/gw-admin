@@ -1,6 +1,6 @@
-import Header from "../../component/layout/Header";
-import Page from "../Page";
-import ConfirmSidebar from "./ConfirmSidebar";
+import Header from "../../../component/layout/Header";
+import Page from "../../Page";
+import ConfirmSidebar from "../ConfirmSidebar";
 
 export default function ConfirmPage() {
     return <Page
