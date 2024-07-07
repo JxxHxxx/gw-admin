@@ -55,10 +55,6 @@ export default function BatchHistContent() {
         }))
     }
 
-    const handleRequestSearch = () => {
-        requestGetBatchJobHistory(0);
-    }
-
     const updatePageNumber = (btnNum: number) => {
         setJobExecPgn((prev: any) => ({
             ...prev,
@@ -84,7 +80,7 @@ export default function BatchHistContent() {
             <Button
                 className={'bb'}
                 name={'검색'}
-                onClick={handleRequestSearch} />
+                onClick={() => requestGetBatchJobHistory(0)} />
         </form>
         <div style={{ 'margin': '10px' }}></div>
         <BatchJobExecutionHistContext.Provider value={jobExecPgn} >
