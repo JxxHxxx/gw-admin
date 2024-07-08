@@ -13,7 +13,7 @@ const instance = createAxiosInstance('http://localhost:8000')
 
 export const searchConfirmDocuments = function (params?: object) {
 
-    return instance.get(`/api/confirm-documents/fetch-approval-lines`, {params})
+    return instance.get(`/api/confirm-documents`, {params})
         .then((res) => res)
         .catch((err) => err)
 }

@@ -12,6 +12,7 @@ interface InputProps {
     maxLength?: number;
     readOnly?: boolean;
     defaultValue?: string | number;
+    disabled?:boolean;
 }
 
 export default function Input({
@@ -25,10 +26,11 @@ export default function Input({
     minLegnth = 0,
     maxLength = 100,
     readOnly = false,
-    defaultValue
+    defaultValue,
+    disabled = false
 }: InputProps) {
     return <Fragment>
-        <input
+        {disabled ? <input
             className={className}
             id={id}
             name={name}
@@ -39,6 +41,21 @@ export default function Input({
             maxLength={maxLength}
             readOnly={readOnly}
             type={type}
-            defaultValue={defaultValue} />
+            defaultValue={defaultValue} 
+            disabled
+            /> : 
+            <input
+            className={className}
+            id={id}
+            name={name}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            placeholder={placeholder}
+            minLength={minLegnth}
+            maxLength={maxLength}
+            readOnly={readOnly}
+            type={type}
+            defaultValue={defaultValue} 
+            />}
     </Fragment>
 }
