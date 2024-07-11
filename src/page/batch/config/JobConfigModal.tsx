@@ -96,7 +96,7 @@ export default function JobConfigModal({
             >
                 <h2 style={{ 'borderBottom': '1px solid black' }}>{selectedJob.jobDescription}</h2>
 
-                <p>기본정보</p>
+                <p>스케줄링 정보</p>
                 <table className='table_bs'>
                     <tr>
                         <th style={{ 'border': '1px solid black' }}>실행 Bean</th>
