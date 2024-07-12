@@ -37,8 +37,6 @@ export default function BatchConfigurationContent() {
         jobParams: []
     });
 
-
-
     const [jobs, setJobs] = useState<Array<jobState>>([]);
 
     const handleOnClickJobRow = async (jobName_: string) => {
@@ -81,13 +79,13 @@ export default function BatchConfigurationContent() {
 
     }
 
-    const requestToServerForRender = async () => {
+    const requestBatchJobTiggers = async () => {
         const { data } = await getAllBatchJobTriggers();
         setJobs(data);
     };
 
     useEffect(() => {
-        requestToServerForRender();
+        requestBatchJobTiggers();
     }, [])
 
     return <>
@@ -110,7 +108,6 @@ export default function BatchConfigurationContent() {
         {jobModal && <JobConfigModal
             modalIsOpen={jobModal}
             setIsOpen={setJobModal}
-            // schedulingInfo={} 
             selectedJob={selectedJob} />}
     </>
 }
