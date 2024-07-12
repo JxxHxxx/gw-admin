@@ -18,8 +18,8 @@ export const runBatchJob = function (requestBody: object) {
         .catch((err) => err)
 }
 
-export const getBatchJobParams = function () {
-    return instance.get(`/admin/batch/jobs`)
+export const getBatchJobParams = function (jobName:string) {
+    return instance.get(`/admin/batch/jobs/${jobName}/parameters`)
     .then((res) => res)
     .catch((err) => err)
 }
