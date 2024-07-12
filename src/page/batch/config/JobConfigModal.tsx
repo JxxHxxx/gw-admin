@@ -3,9 +3,11 @@ import { runBatchJob } from '../../../api/BatchApi';
 import Button from '../../../component/button/Button';
 import { useState } from 'react';
 import Input from '../../../component/input/Input';
-import { jobState } from './BatchConfigurationPage';
 import { format } from 'date-fns';
 import EmptyMsg from '../../../component/text/EmptyMsg';
+import RadioDuo from '../../../component/input/RadioDuo';
+import Tuple from '../../../component/table/Tuple';
+import TupleGroup from '../../../component/table/TupleGroup';
 
 const customStyles = {
     content: {
@@ -76,8 +78,6 @@ export default function JobConfigModal({
                     const { errCode, message } = result.response.data;
                     alert(' message: ' + message + '\n errCode:' + errCode);
                 }
-
-
             }
             catch (error) {
 
@@ -97,41 +97,32 @@ export default function JobConfigModal({
 
                 <p>스케줄러 정보</p>
                 {selectedJob.schedulingUsed
-                    ? <table className='table_bs'>
-                        <tr>
-                            <th style={{ 'border': '1px solid black' }}>spring Bean Name</th>
-                            <td style={{ 'border': '1px solid black' }}>
-                                <input style={{ 'border': 'none', 'fontSize': '15px' }}
-                                    type='text'
-                                    defaultValue={selectedJob.jobName}
-                                    readOnly />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style={{ 'border': '1px solid black', 'textAlign': 'left' }}>다음 실행 시간</th>
-                            <td style={{ 'border': '1px solid black' }}>
-                                <input style={{ 'border': 'none', 'fontSize': '15px' }}
-                                    type='text'
-                                    defaultValue={selectedJob.nextFireTime ? format(selectedJob.nextFireTime, 'yyyy-MM-dd HH:mm:ss') : ''}
-                                    readOnly />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style={{ 'border': '1px solid black', 'textAlign': 'left' }}>스케줄링 여부</th>
-                            <td style={{ 'border': '1px solid black' }}>
-                                <input type='radio' checked={selectedJob.schedulingUsed} />
-                                <span>사용</span>
-                                <input type='radio' checked={!selectedJob.schedulingUsed} />
-                                <span>사용안함</span>
-                            </td>
-                        </tr>
-                    </table>
+                    ? <TupleGroup>
+                        <Tuple tupleKey='spring Bean Name'>
+                            <Input className='input_batch_config_element'
+                                type='text'
+                                defaultValue={selectedJob.jobName}
+                                readOnly />
+                        </Tuple>
+                        <Tuple tupleKey='다음 실행 시간'>
+                            <Input className='input_batch_config_element'
+                                type='text'
+                                defaultValue={selectedJob.nextFireTime ? format(selectedJob.nextFireTime, 'yyyy-MM-dd HH:mm:ss') : ''}
+                                readOnly />
+                        </Tuple>
+                        <Tuple tupleKey='스케줄링 여부'>
+                            <RadioDuo
+                                radio1Name='사용'
+                                radio2Name='사용안함'
+                                checked={selectedJob.schedulingUsed} />
+                        </Tuple>
+                    </TupleGroup>
                     : <EmptyMsg msg={['스케줄링 되어 있지 않은 배치 잡입니다.', '수동 실행만 가능합니다.']} />}
 
                 <p>수동 실행을 위한 파라미터</p>
                 <table>
                     {selectedJob.jobParams && selectedJob.jobParams.map((param: jobState) =>
-                        <tr>
+                        <tr key={param.parameterKey}>
                             <th style={{ 'border': '1px solid black', 'textAlign': 'left', 'fontWeight': 'normal' }}>
                                 {param.parameterKey}
                             </th>
