@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { searchConfirmDocuments } from "../../../api/ConfirmApi";
+import { findConfirmDocumentByConfirmDocumentId, searchConfirmDocuments } from "../../../api/ConfirmApi";
 import ThinBlockLine from "../../../component/util/ThinBlockLine";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
@@ -15,6 +15,8 @@ interface SearchCondState {
     confirmDocumentId: string;
     requester: Requester;
     approver: Approver;
+    startDate: string;
+    endDate: string;
     companyId: string;
     departmentId: string;
 }
@@ -44,8 +46,9 @@ interface ConfirmDocumentState {
 
 }
 
-const WHITE_SPACE = ''
+
 const animatedComponents = makeAnimated();
+const nowDate = format(new Date(), 'yyyy-MM-dd');
 
 export default function ConfirmDocumentContent() {
 
@@ -67,7 +70,9 @@ export default function ConfirmDocumentContent() {
             selected: ''
         },
         companyId: '',
-        departmentId: ''
+        departmentId: '',
+        startDate: '',
+        endDate: ''
     })
     // 검색 결과 결재 문서 state
     const [confirmDocuments, setConfirmDocuments] = useState<ConfirmDocumentState>([
@@ -75,31 +80,37 @@ export default function ConfirmDocumentContent() {
 
     const requestSearchConfirmDocuments = async (event: any) => {
         event.preventDefault();
-        const { confirmDocumentId, companyId, departmentId } = searchCond;
+        const { confirmDocumentId, companyId, departmentId, startDate, endDate } = searchCond;
 
         const { requesterId, requesterName } = searchCond.requester;
         const { approvalId, approvalName } = searchCond.approver;
 
         let params;
-        if (confirmDocumentId.trim() !== WHITE_SPACE) {
-            params = {
-                'confirmDocumentId': confirmDocumentId
+        if (SEARCH_TYPE.ID === searchType.type) {
+            if (confirmDocumentId === '') {
+                alert('결재 문서 ID를 입력하세요')
+                return;
             }
+            const response = await findConfirmDocumentByConfirmDocumentId(confirmDocumentId);
+            setConfirmDocuments(response.data.data);
+
         }
-        else {
+        else if (SEARCH_TYPE.ETC === searchType.type) {
             params = {
+                'startDate': startDate,
+                'endDate': endDate,
                 'requesterName': requesterName,
                 'requesterId': requesterId,
-                'compnayId': companyId,
+                'companyId': companyId,
                 'departmentId': departmentId,
                 'approvalId': approvalId,
                 'approvalName': approvalName
             }
+            const response = await searchConfirmDocuments(params);
+            setConfirmDocuments(response.data.data);
         }
 
-        const response = await searchConfirmDocuments(params);
 
-        setConfirmDocuments(response.data.data);
     }
 
     // fieldName 은 requester/approver 둘 중 하나 
@@ -114,6 +125,14 @@ export default function ConfirmDocumentContent() {
         }))
     }
 
+    const handleCreateTimeCond = (fieldName: string, event: any) => {
+        setSearchCond((prev) => ({
+            ...prev,
+            [fieldName]: event.target.value
+        }))
+    }
+
+    // 검색 유형을 변경했을 때 SearchCond 를 초기화 하기 위한 작업
     const handleChangeSearchType = (type: SEARCH_TYPE) => {
         setSearchType(() => ({
             type: type
@@ -132,7 +151,9 @@ export default function ConfirmDocumentContent() {
                 selected: ''
             },
             companyId: '',
-            departmentId: ''
+            departmentId: '',
+            startDate: nowDate,
+            endDate: nowDate
         })
     }
 
@@ -201,8 +222,10 @@ export default function ConfirmDocumentContent() {
                             <span style={{ 'borderBottom': '1px solid black' }}>문서 생성일</span>
                         </div>
                         <PeriodInput
-                            onChangeStartDate={() => alert('미구현')}
-                            onChangeEndDate={() => alert('미구현')} />
+                            startDatedefaultValue={searchCond.startDate}
+                            endDatedefaultValue={searchCond.endDate}
+                            onChangeStartDate={(event) => handleCreateTimeCond('startDate', event)}
+                            onChangeEndDate={(event) => handleCreateTimeCond('endDate', event)} />
                     </InLineBlockWrapper>
                     <InLineBlockWrapper marginRight="20px">
                         <div style={{ 'marginBottom': '5px' }}>

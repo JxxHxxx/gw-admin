@@ -6,6 +6,8 @@ const nowDate = format(new Date(), 'yyyy-MM-dd');
 interface PeriodProp {
     startDateLabel?: string,
     endDateLabel?: string,
+    startDatedefaultValue?: string,
+    endDatedefaultValue?: string,
     onChangeStartDate: (event: React.ChangeEvent<HTMLInputElement>) => void,
     onChangeEndDate: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -13,6 +15,8 @@ interface PeriodProp {
 export default function PeriodInput({
     startDateLabel = '시작일자',
     endDateLabel = '종료일자',
+    startDatedefaultValue = '',
+    endDatedefaultValue = '',
     onChangeStartDate,
     onChangeEndDate
 }: PeriodProp) {
@@ -27,7 +31,7 @@ export default function PeriodInput({
                 id="startDate"
                 className="bi_msg"
                 type="date"
-                defaultValue={nowDate}
+                defaultValue={startDatedefaultValue ? startDatedefaultValue : nowDate}
                 onChange={onChangeStartDate} />
 
         </div>
@@ -40,7 +44,7 @@ export default function PeriodInput({
                 id="endDate"
                 className="bi_msg"
                 type="date"
-                defaultValue={nowDate}
+                defaultValue={endDatedefaultValue ? endDatedefaultValue : nowDate}
                 onChange={onChangeEndDate} />
         </div>
     </>
