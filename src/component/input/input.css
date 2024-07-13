@@ -42,3 +42,18 @@
     width: 200px;
     height: 35px;
 }
+
+.input_wh200_thin {
+    width: 200px;
+    height: 33px;
+}
+
+.input_wh150_thin {
+    width: 150px;
+    height: 33px;
+}
+
+.input_batch_config_element {
+    border: none;
+    font-size: 15px;
+}

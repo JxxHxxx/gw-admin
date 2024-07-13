@@ -51,18 +51,6 @@ export default function MessageRetryContent() {
     const [modalOpen, setModalOpen] = useState(false);
     const searchButtonRef = useRef<HTMLButtonElement>(null); // useRef 생성
 
-    const handleOnClickSearchRequest = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-        setQHistPgn((prev) => ({
-            ...prev,
-            pageable: {
-                ...prev.pageable,
-                pageNumber: 0
-            }
-        }))
-        requestFailMessageQResult();
-    }
-
     const handleOnchangeStartDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchCond((prev) => ({
             ...prev,
@@ -77,11 +65,11 @@ export default function MessageRetryContent() {
         }))
     }
 
-    const requestFailMessageQResult = async () => {
+    const requestFailMessageQResult = async (pageNumber:number) => {
         const params = {
             startDate: searchCond.startDate,
             endDate: searchCond.endDate,
-            page: qHistPgn.pageable.pageNumber,
+            page: pageNumber,
             size: ONE_PAGES_CONTENT_SIZE_1
         }
 
@@ -107,7 +95,7 @@ export default function MessageRetryContent() {
     }
 
     useEffect(() => {
-        requestFailMessageQResult();
+        requestFailMessageQResult(qHistPgn.pageable.pageNumber);
     }, [qHistPgn.pageable.pageNumber])
 
     return (
@@ -121,7 +109,7 @@ export default function MessageRetryContent() {
                 <Button
                     ref={searchButtonRef} // ref 연결
                     className={"bb_msg"}
-                    onClick={handleOnClickSearchRequest}
+                    onClick={() => requestFailMessageQResult(0)}
                     name={"검색"}
                 />
             </form>

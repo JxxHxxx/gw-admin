@@ -2,9 +2,12 @@ import Modal from 'react-modal';
 import { runBatchJob } from '../../../api/BatchApi';
 import Button from '../../../component/button/Button';
 import { useState } from 'react';
-import { format, parse } from 'date-fns';
 import Input from '../../../component/input/Input';
-import { jobState } from './BatchConfigurationPage';
+import { format } from 'date-fns';
+import EmptyMsg from '../../../component/text/EmptyMsg';
+import RadioDuo from '../../../component/input/RadioDuo';
+import Tuple from '../../../component/table/Tuple';
+import TupleGroup from '../../../component/table/TupleGroup';
 
 const customStyles = {
     content: {
@@ -30,8 +33,6 @@ interface JobParamState {
     placeHolder: string;
     'run.id'?: string;
 }
-
-const RUN_ID_PREFIX: string = 'ADMIN' + format(new Date(), 'yyyyMMdd') + '-';
 
 export default function JobConfigModal({
     modalIsOpen,
@@ -74,11 +75,9 @@ export default function JobConfigModal({
                     alert('배치를 실행합니다. 배치 잡 이력페이지에서 배치 실행 상태를 확인하세요')
                 }
                 else {
-                    const {errCode, message} = result.response.data;
+                    const { errCode, message } = result.response.data;
                     alert(' message: ' + message + '\n errCode:' + errCode);
                 }
-
-
             }
             catch (error) {
 
@@ -92,44 +91,38 @@ export default function JobConfigModal({
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={customStyles}
-                contentLabel="Example Modal"
+                contentLabel="Batch Config Modal"
             >
                 <h2 style={{ 'borderBottom': '1px solid black' }}>{selectedJob.jobDescription}</h2>
 
-                <p>기본정보</p>
-                <table className='table_bs'>
-                    <tr>
-                        <th style={{ 'border': '1px solid black' }}>실행 Bean</th>
-                        <td style={{ 'border': '1px solid black' }}>
-                            <input style={{ 'border': 'none', 'fontSize': '15px' }}
+                <p>스케줄러 정보</p>
+                {selectedJob.schedulingUsed
+                    ? <TupleGroup>
+                        <Tuple tupleKey='spring Bean Name'>
+                            <Input className='input_batch_config_element'
                                 type='text'
                                 defaultValue={selectedJob.jobName}
                                 readOnly />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style={{ 'border': '1px solid black', 'textAlign': 'left' }}>실행 시간</th>
-                        <td style={{ 'border': '1px solid black' }}>
-                            <input style={{ 'border': 'none', 'fontSize': '15px' }}
+                        </Tuple>
+                        <Tuple tupleKey='다음 실행 시간'>
+                            <Input className='input_batch_config_element'
                                 type='text'
-                                defaultValue={selectedJob.executionTime}
+                                defaultValue={selectedJob.nextFireTime ? format(selectedJob.nextFireTime, 'yyyy-MM-dd HH:mm:ss') : ''}
                                 readOnly />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style={{ 'border': '1px solid black', 'textAlign': 'left' }}>사용 여부</th>
-                        <td style={{ 'border': '1px solid black' }}>
-                            <input type='radio' />
-                            <span>사용</span>
-                            <input type='radio' />
-                            <span>사용안함</span>
-                        </td>
-                    </tr>
-                </table>
+                        </Tuple>
+                        <Tuple tupleKey='스케줄링 여부'>
+                            <RadioDuo
+                                radio1Name='사용'
+                                radio2Name='사용안함'
+                                checked={selectedJob.schedulingUsed} />
+                        </Tuple>
+                    </TupleGroup>
+                    : <EmptyMsg msg={['스케줄링 되어 있지 않은 배치 잡입니다.', '수동 실행만 가능합니다.']} />}
+
                 <p>수동 실행을 위한 파라미터</p>
                 <table>
-                    {selectedJob.jobParams.map(param =>
-                        <tr>
+                    {selectedJob.jobParams && selectedJob.jobParams.map((param: jobState) =>
+                        <tr key={param.parameterKey}>
                             <th style={{ 'border': '1px solid black', 'textAlign': 'left', 'fontWeight': 'normal' }}>
                                 {param.parameterKey}
                             </th>
@@ -152,7 +145,6 @@ export default function JobConfigModal({
                     className='modal_close_btn'
                     name={"닫기"}
                     onClick={closeModal} />
-
             </Modal>
         </div>
     );
