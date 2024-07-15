@@ -13,14 +13,29 @@ const instance = createAxiosInstance('http://localhost:8000')
 
 export const searchConfirmDocuments = function (params?: object) {
 
-    return instance.get(`/api/confirm-documents/search`, {params})
+    return instance.get(`/api/confirm-documents/search`, { params })
         .then((res) => res)
         .catch((err) => err)
 }
 
-export const findConfirmDocumentByConfirmDocumentId = function (confirmDocumentId:string) {
+export const findConfirmDocumentByConfirmDocumentId = function (confirmDocumentId: string) {
 
     return instance.get(`/api/confirm-documents/${confirmDocumentId}`)
+        .then((res) => res)
+        .catch((err) => err)
+}
+
+export const getConfirmDocumentContent = function (contentPk: number) {
+    return instance.get(`/api/confirm-documents/contents/${contentPk}`)
+        .then((res) => res)
+        .catch((err) => err)
+}
+
+export const getConfirmDocumentFormElements = function (confirmDocumentFormId: string) {
+    const params = {
+        companyId: 'COM'
+    }
+    return instance.get(`/api/confirm-document-forms/${confirmDocumentFormId}/elements`, { params })
         .then((res) => res)
         .catch((err) => err)
 }
