@@ -9,8 +9,9 @@ import MessageRetryPage from './page/message/resync/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
 import BatchHistPage from './page/batch/history/BatchHistPage'
-import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC } from './constant/link/UrlConstant'
+import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_CONFIRM_DOCUMENTS_CREATE, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC } from './constant/link/UrlConstant'
 import ApprovalLinePage from './page/confirm/approvalLine/ApprovalLinePage'
+import CreateConfirmFormPage from './page/confirm/createForm/CreateConfirmFormPage'
 
 function App() {
   const router = createBrowserRouter([
@@ -49,13 +50,17 @@ function App() {
       element: <ConfirmPage />
     },
     {
+      path: URL_CONFIRM_DOCUMENTS_CREATE,
+      element: <CreateConfirmFormPage />
+    },
+    {
       path: URL_APPROVAL_LINE,
       element: <ApprovalLinePage />
     },
   ])
 
   Modal.setAppElement('#root');
-  
+
   return (
     <>
       <RouterProvider router={router} />
