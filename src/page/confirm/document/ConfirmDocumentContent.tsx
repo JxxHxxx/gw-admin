@@ -10,6 +10,7 @@ import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
 import { format } from "date-fns";
 import { CONFRIM_STATUS } from "../../../util/convert/ConfirmStatusConverter";
 import PeriodInput from "../../../component/input/PeriodInput";
+import ConfirmDocumentModal from "./ConfirmDocumentModal";
 
 interface SearchCondState {
     confirmDocumentId: string;
@@ -77,6 +78,13 @@ export default function ConfirmDocumentContent() {
     // 검색 결과 결재 문서 state
     const [confirmDocuments, setConfirmDocuments] = useState<ConfirmDocumentState>([
     ]);
+
+    // 결재 문서 상세 내역 모달을 위해 필요한 상태
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [selectedDocument, setselectedDocument] = useState({
+        contentPk : 0,
+        documentType: ''
+    });
 
     const requestSearchConfirmDocuments = async (event: any) => {
         event.preventDefault();
@@ -173,6 +181,16 @@ export default function ConfirmDocumentContent() {
             'confirmDocumentId': event.target.value
         }))
     }
+
+    const handleOnClickConfrimDocumentRow = (contentPk: number, documentType:string) => {
+        setIsOpen(true);
+        setselectedDocument(() => ({
+            contentPk : contentPk,
+            documentType : documentType
+        }));
+
+    }
+
     return <>
         <h3 style={{ 'marginBottom': '0px' }}>결재 문서 관리 페이지</h3>
         <ThinBlockLine />
@@ -337,18 +355,9 @@ export default function ConfirmDocumentContent() {
         <h3 style={{ 'marginBottom': '0px' }}>조회 결과</h3>
         <ThinBlockLine />
         <Table
-            columns={[
-                '결재 문서 ID',
-                '회사 코드',
-                '부서 코드',
-                '부서 명',
-                '기안자 ID',
-                '기안자',
-                '문서 유형',
-                '결재 상태',
-                '문서 생성 시간']}
+            columns={['결재 문서 ID', '회사 코드', '부서 코드', '부서 명', '기안자 ID', '기안자', '문서 유형', '결재 상태', '문서 생성 시간']}
             rows={confirmDocuments.map(cd =>
-                <tr key={cd.pk}>
+                <tr key={cd.pk} onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
                     <td>{cd.confirmDocumentId}</td>
                     <td>{cd.companyId}</td>
                     <td>{cd.departmentId}</td>
@@ -360,5 +369,9 @@ export default function ConfirmDocumentContent() {
                     <td>{format(cd.createTime, 'yyyy-MM-dd HH:mm:dd')}</td>
                 </tr>)}
         />
+        {modalIsOpen && <ConfirmDocumentModal
+            modalIsOpen={modalIsOpen}
+            setIsOpen={setIsOpen}
+            selectedDocument={selectedDocument} />}
     </>
 }
