@@ -1,17 +1,30 @@
 .common_hd {
     margin-top: 50px;
-    
+
 }
 
 .present_menu {
     border-bottom: 1px solid white;
 }
 
+.mr_20 {
+    margin-right: 20px;
+}
+
 .not_present_menu {
     /* none */
 }
 
-.present_menu_bkline {
+.ptr {
+    cursor: pointer;
+}
+/* 현재 메뉴 X */
+.nptm {
+    /* none */
+}
+
+/* 현재 메뉴 */
+.ptm {
     border-bottom: 1px solid black;
     font-weight: bold;
 }

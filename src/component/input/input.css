@@ -4,7 +4,7 @@
 }
 
 .bi_msg {
-    width: 200px;
+    width: 150px;
     height: 34px;
     margin-right: 5px;
     border: 0.8px solid;
@@ -63,10 +63,12 @@
     font-size: 15px;
 }
 
-.i_gray {
-    /* background-color: #f9f9f9; */
+.ip_bgc {
     background-color: var(--main-color-lightly);
     border: 1px solid var(--main-color-border);
+}
+
+.ip_br {
     border-radius: 5px;
 }
 

@@ -70,7 +70,7 @@ export default function ConfirmFormConfig() {
             }}>
                 <form
                     onSubmit={handleSearchConfirmForm}>
-                    <Input className='input_wh350 i_gray' placeholder="양식 제목 검색" />
+                    <Input className='input_wh350 ip_bgc ip_br' placeholder="양식 제목 검색" />
                 </form>
             </div>
             <div style={{ margin: '30px' }} ></div>

@@ -1,20 +1,19 @@
+import { ReactNode } from "react";
 import { Fragment } from "react/jsx-runtime";
+import './list.css'
 
-interface ListProps {
+interface ListGroupProps {
+    children?: ReactNode;
     className?: string;
-    content?: string;
-    onClick?: () => void;
 }
 
 export default function List({
-    className = '',
-    content = '',
-    onClick = () => { } }: ListProps) {
+    children,
+    className = '' }: ListGroupProps) {
+
     return <Fragment>
-        <li
-            className={className}
-            onClick={onClick}>
-            {content}
-        </li>
+        <ul className={className}>
+            {children}
+        </ul>
     </Fragment>
 }

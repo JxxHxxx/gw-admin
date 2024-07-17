@@ -1,18 +1,18 @@
 import { Fragment } from "react/jsx-runtime";
-import ListGroup from "../list/ListGroup";
 import List from "../list/List";
+import ListItem from "../list/ListItem";
 
 
 export default function Sidebar() {
 
     return <Fragment>
-        <ListGroup className="side_ul">
-            <List className="side_li"
+        <List className="side_ul">
+            <ListItem className="side_li"
             content="메뉴1"/>
-            <List className="side_li"
+            <ListItem className="side_li"
             content="메뉴2"/>
-            <List className="side_li"
+            <ListItem className="side_li"
             content="메뉴3"/>
-        </ListGroup>
+        </List>
     </Fragment>
 }

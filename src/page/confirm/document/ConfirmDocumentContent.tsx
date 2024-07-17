@@ -11,6 +11,10 @@ import { format } from "date-fns";
 import { CONFRIM_STATUS } from "../../../util/convert/ConfirmStatusConverter";
 import PeriodInput from "../../../component/input/PeriodInput";
 import ConfirmDocumentModal from "./ConfirmDocumentModal";
+import EmptyMsg from "../../../component/text/EmptyMsg";
+import List from "../../../component/list/List";
+import ListItem from "../../../component/list/ListItem";
+import ListItemV2 from "../../../component/list/ListItemV2";
 
 interface SearchCondState {
     confirmDocumentId: string;
@@ -43,16 +47,11 @@ interface SearchTypeState {
     type: SEARCH_TYPE
 }
 
-interface ConfirmDocumentState {
-
-}
-
 
 const animatedComponents = makeAnimated();
 const nowDate = format(new Date(), 'yyyy-MM-dd');
 
 export default function ConfirmDocumentContent() {
-
     // 검색 유형 state
     const [searchType, setSearchType] = useState<SearchTypeState>({
         type: SEARCH_TYPE.ID
@@ -76,13 +75,13 @@ export default function ConfirmDocumentContent() {
         endDate: ''
     })
     // 검색 결과 결재 문서 state
-    const [confirmDocuments, setConfirmDocuments] = useState<ConfirmDocumentState>([
+    const [confirmDocuments, setConfirmDocuments] = useState<object[]>([
     ]);
 
     // 결재 문서 상세 내역 모달을 위해 필요한 상태
     const [modalIsOpen, setIsOpen] = useState(false);
     const [selectedDocument, setselectedDocument] = useState({
-        contentPk : 0,
+        contentPk: 0,
         documentType: ''
     });
 
@@ -182,196 +181,200 @@ export default function ConfirmDocumentContent() {
         }))
     }
 
-    const handleOnClickConfrimDocumentRow = (contentPk: number, documentType:string) => {
+    const handleOnClickConfrimDocumentRow = (contentPk: number, documentType: string) => {
         setIsOpen(true);
         setselectedDocument(() => ({
-            contentPk : contentPk,
-            documentType : documentType
+            contentPk: contentPk,
+            documentType: documentType
         }));
 
     }
 
     return <>
-        <h3 style={{ 'marginBottom': '0px' }}>결재 문서 관리 페이지</h3>
-        <ThinBlockLine />
-        <ul style={{
-            'padding': '0px',
-            'display': 'flex',
-            'listStyleType': 'none',
-            'height': '45px',
-            'alignItems': 'center', // 세로축 정렬
-            'justifyContent': 'left', // 가로축 정렬
-            'fontSize': '15px',
-        }}>
-            <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-                <span
-                    className={searchType.type === SEARCH_TYPE.ID ? 'present_menu_bkline' : 'not_present_menu'}
-                    onClick={() => handleChangeSearchType(SEARCH_TYPE.ID)}
-                >결재 문서 ID 검색</span>
-            </li>
-            <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-                <span className={searchType.type === SEARCH_TYPE.ETC ? 'present_menu_bkline' : 'not_present_menu'}
-                    onClick={() => handleChangeSearchType(SEARCH_TYPE.ETC)}
-                >그 외 조건 검색</span>
-            </li>
-        </ul>
-        <div></div>
-        {searchType.type === SEARCH_TYPE.ID ?
-            <>
-                <form onSubmit={requestSearchConfirmDocuments}>
-                    <InLineBlockWrapper marginRight="20px">
-                        <label htmlFor='cdi_input' id="cdi_input">
-                            결재 문서 ID
-                            <div>
-                                <Input id="cdi_input" className='input_wh300' placeholder="결재 문서ID를 입력해주세요"
-                                    onChange={handleChangeConfirmDocumentIdInput} />
+        <div id="cfd_container_900" style={{ width: '900px', border: '1px dashed red' }}>
+            <span id="cfd_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>결재 문서 관리</span>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <List className="list">
+                    <ListItemV2
+                        className={searchType.type === SEARCH_TYPE.ID ? 'mr_20 ptm' : 'mr_20 nptm'}
+                        onClick={() => handleChangeSearchType(SEARCH_TYPE.ID)}>
+                        <span>결재 문서 ID 검색</span>
+                    </ListItemV2>
+                    <ListItemV2
+                        className={searchType.type === SEARCH_TYPE.ETC ? 'mr_20 ptm' : 'mr_20 nptm'}
+                        onClick={() => handleChangeSearchType(SEARCH_TYPE.ETC)}>
+                        <span>그 외 조건 검색</span>
+                    </ListItemV2>
+                </List>
+            </div>
+            <ThinBlockLine />
+            {searchType.type === SEARCH_TYPE.ID ?
+                <>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <form onSubmit={requestSearchConfirmDocuments}>
+                            <label htmlFor='cdi_input' id="cdi_input" style={{ fontSize: '12px' }}>
+                                결재 문서 ID
+                                <div>
+                                    <Input id="cdi_input" className='input_wh300 ip_bgc' placeholder="결재 문서ID를 입력해주세요"
+                                        onChange={handleChangeConfirmDocumentIdInput} />
+                                </div>
+                            </label>
+                        </form>
+                    </div>
+                </>
+                : <>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <form onSubmit={requestSearchConfirmDocuments}>
+                            <InLineBlockWrapper>
+                                <div>
+                                    <span style={{ 'borderBottom': '1px solid black' }}>문서 생성일</span>
+                                </div>
+                                <PeriodInput
+                                    startDatedefaultValue={searchCond.startDate}
+                                    endDatedefaultValue={searchCond.endDate}
+                                    onChangeStartDate={(event) => handleCreateTimeCond('startDate', event)}
+                                    onChangeEndDate={(event) => handleCreateTimeCond('endDate', event)} />
+                            </InLineBlockWrapper>
+                            <InLineBlockWrapper marginRight="20px">
+                                <div style={{ 'marginBottom': '5px' }}>
+                                    <span style={{ 'borderBottom': '1px solid black' }}>고객사 정보</span>
+                                </div>
+                                <Select
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            width: 250,
+
+                                        }),
+                                    }}
+                                    id="requester"
+                                    placeholder='회사 코드'
+                                    components={animatedComponents}
+                                    onChange={() => alert('미구현')}
+                                    options={[
+                                        { value: 'SPY', label: '스파이의료센터' },
+                                        { value: 'JXX', label: '제이주식회사' },
+                                        { value: 'BNG', label: '바바베이커리' }
+                                    ]} />
+                            </InLineBlockWrapper>
+                            <InLineBlockWrapper>
+                                <Select
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            width: 250,
+
+                                        }),
+                                    }}
+                                    id="requester"
+                                    placeholder='부서를 선택해주세요'
+                                    components={animatedComponents}
+                                    onChange={() => alert('미구현')}
+                                    options={[
+                                        { value: 'SPY00001', label: '스파이부서1' },
+                                        { value: 'SPY00002', label: '스파이부서2' },
+                                        { value: 'SPY00003', label: '스파이부서3' }
+                                    ]} />
+                            </InLineBlockWrapper>
+                            <div></div>
+                            <InLineBlockWrapper>
+                                <div style={{ 'marginBottom': '5px' }}>
+                                    <span style={{ 'borderBottom': '1px solid black' }}>기안자 정보</span>
+                                </div>
+                                <Select
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            width: 150,
+
+                                        }),
+                                    }}
+                                    id="requester"
+                                    placeholder='기안자 정보'
+                                    components={animatedComponents}
+                                    onChange={(event) => handlechoiceOptions('requester', event)}
+                                    options={[
+                                        { value: 'requesterName', label: '이름' },
+                                        { value: 'requesterId', label: 'ID' },
+                                    ]} />
+                            </InLineBlockWrapper>
+                            <InLineBlockWrapper marginRight="70px">
+                                <Input id="requester"
+                                    className='input_wh150_thin'
+                                    disabled={searchCond.requester.selected === '' ? true : false}
+                                    name={searchCond.requester.selected}
+                                    onChange={handleSelectInput} />
+                            </InLineBlockWrapper>
+                            <InLineBlockWrapper>
+                                <div style={{ 'marginBottom': '5px' }}>
+                                    <span style={{ 'borderBottom': '1px solid black' }}>결재자 정보</span>
+                                </div>
+                                <Select
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            width: 150,
+
+                                        }),
+                                    }}
+                                    id="requester"
+                                    placeholder='결재자 정보'
+                                    components={animatedComponents}
+                                    onChange={(event) => handlechoiceOptions('approver', event)}
+                                    options={[
+                                        { value: 'approvalName', label: '이름' },
+                                        { value: 'approvalId', label: 'ID' },
+                                    ]} />
+                            </InLineBlockWrapper>
+                            <InLineBlockWrapper>
+                                <Input id="approver"
+                                    className='input_wh150_thin'
+                                    disabled={searchCond.approver.selected === '' ? true : false}
+                                    name={searchCond.approver.selected}
+                                    onChange={handleSelectInput} />
+                            </InLineBlockWrapper>
+                            <div style={{ 'marginTop': '20px' }}>
+                                <Button onClick={requestSearchConfirmDocuments} name='결재 문서 조회' />
                             </div>
-                        </label>
-                    </InLineBlockWrapper>
-                    <div style={{ 'marginTop': '20px' }}>
-                        <Button onClick={requestSearchConfirmDocuments} name='결재 문서 조회2' />
+                        </form>
                     </div>
-                </form>
-            </>
-            : <>
-                <form onSubmit={requestSearchConfirmDocuments}>
-                    <InLineBlockWrapper>
-                        <div>
-                            <span style={{ 'borderBottom': '1px solid black' }}>문서 생성일</span>
-                        </div>
-                        <PeriodInput
-                            startDatedefaultValue={searchCond.startDate}
-                            endDatedefaultValue={searchCond.endDate}
-                            onChangeStartDate={(event) => handleCreateTimeCond('startDate', event)}
-                            onChangeEndDate={(event) => handleCreateTimeCond('endDate', event)} />
-                    </InLineBlockWrapper>
-                    <InLineBlockWrapper marginRight="20px">
-                        <div style={{ 'marginBottom': '5px' }}>
-                            <span style={{ 'borderBottom': '1px solid black' }}>고객사 정보</span>
-                        </div>
-                        <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: 250,
+                </>}
+            <div style={{ 'marginTop': '20px' }}></div>
 
-                                }),
-                            }}
-                            id="requester"
-                            placeholder='회사 코드'
-                            components={animatedComponents}
-                            onChange={() => alert('미구현')}
-                            options={[
-                                { value: 'SPY', label: '스파이의료센터' },
-                                { value: 'JXX', label: '제이주식회사' },
-                                { value: 'BNG', label: '바바베이커리' }
-                            ]} />
-                    </InLineBlockWrapper>
-                    <InLineBlockWrapper>
-                        <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: 250,
-
-                                }),
-                            }}
-                            id="requester"
-                            placeholder='부서를 선택해주세요'
-                            components={animatedComponents}
-                            onChange={() => alert('미구현')}
-                            options={[
-                                { value: 'SPY00001', label: '스파이부서1' },
-                                { value: 'SPY00002', label: '스파이부서2' },
-                                { value: 'SPY00003', label: '스파이부서3' }
-                            ]} />
-                    </InLineBlockWrapper>
-                    <div></div>
-                    <InLineBlockWrapper>
-                        <div style={{ 'marginBottom': '5px' }}>
-                            <span style={{ 'borderBottom': '1px solid black' }}>기안자 정보</span>
-                        </div>
-                        <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: 150,
-
-                                }),
-                            }}
-                            id="requester"
-                            placeholder='기안자 정보'
-                            components={animatedComponents}
-                            onChange={(event) => handlechoiceOptions('requester', event)}
-                            options={[
-                                { value: 'requesterName', label: '이름' },
-                                { value: 'requesterId', label: 'ID' },
-                            ]} />
-                    </InLineBlockWrapper>
-                    <InLineBlockWrapper marginRight="70px">
-                        <Input id="requester"
-                            className='input_wh150_thin'
-                            disabled={searchCond.requester.selected === '' ? true : false}
-                            name={searchCond.requester.selected}
-                            onChange={handleSelectInput} />
-                    </InLineBlockWrapper>
-                    <InLineBlockWrapper>
-                        <div style={{ 'marginBottom': '5px' }}>
-                            <span style={{ 'borderBottom': '1px solid black' }}>결재자 정보</span>
-                        </div>
-                        <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: 150,
-
-                                }),
-                            }}
-                            id="requester"
-                            placeholder='결재자 정보'
-                            components={animatedComponents}
-                            onChange={(event) => handlechoiceOptions('approver', event)}
-                            options={[
-                                { value: 'approvalName', label: '이름' },
-                                { value: 'approvalId', label: 'ID' },
-                            ]} />
-                    </InLineBlockWrapper>
-                    <InLineBlockWrapper>
-                        <Input id="approver"
-                            className='input_wh150_thin'
-                            disabled={searchCond.approver.selected === '' ? true : false}
-                            name={searchCond.approver.selected}
-                            onChange={handleSelectInput} />
-                    </InLineBlockWrapper>
-                    <div style={{ 'marginTop': '20px' }}>
-                        <Button onClick={requestSearchConfirmDocuments} name='결재 문서 조회' />
-                    </div>
-                </form>
-            </>}
-        <div style={{ 'marginTop': '20px' }}></div>
-        <ThinBlockLine />
-
-        <div style={{ 'padding': '10px' }}></div>
-        <h3 style={{ 'marginBottom': '0px' }}>조회 결과</h3>
-        <ThinBlockLine />
-        <Table
-            columns={['결재 문서 ID', '회사 코드', '부서 코드', '부서 명', '기안자 ID', '기안자', '문서 유형', '결재 상태', '문서 생성 시간']}
-            rows={confirmDocuments.map(cd =>
-                <tr key={cd.pk} onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
-                    <td>{cd.confirmDocumentId}</td>
-                    <td>{cd.companyId}</td>
-                    <td>{cd.departmentId}</td>
-                    <td>{cd.departmentName}</td>
-                    <td>{cd.requesterId}</td>
-                    <td>{cd.requesterName}</td>
-                    <td>{cd.documentType}</td>
-                    <td>{CONFRIM_STATUS[cd.confirmStatus]}</td>
-                    <td>{format(cd.createTime, 'yyyy-MM-dd HH:mm:dd')}</td>
-                </tr>)}
-        />
-        {modalIsOpen && <ConfirmDocumentModal
-            modalIsOpen={modalIsOpen}
-            setIsOpen={setIsOpen}
-            selectedDocument={selectedDocument} />}
+            <div style={{ 'padding': '10px' }}></div>
+            <h3 style={{ 'marginBottom': '0px' }}>조회 결과</h3>
+            <ThinBlockLine />
+            {confirmDocuments.length > 0 ? <Table
+                columns={['결재 문서 ID', '회사 코드', '부서 코드', '부서 명', '기안자 ID', '기안자', '문서 유형', '결재 상태', '문서 생성 시간']}
+                rows={confirmDocuments.map(cd =>
+                    <tr key={cd.pk} onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
+                        <td>{cd.confirmDocumentId}</td>
+                        <td>{cd.companyId}</td>
+                        <td>{cd.departmentId}</td>
+                        <td>{cd.departmentName}</td>
+                        <td>{cd.requesterId}</td>
+                        <td>{cd.requesterName}</td>
+                        <td>{cd.documentType}</td>
+                        <td>{CONFRIM_STATUS[cd.confirmStatus]}</td>
+                        <td>{format(cd.createTime, 'yyyy-MM-dd HH:mm:dd')}</td>
+                    </tr>)}
+            /> : <EmptyMsg msg={['조건에 해당 하는 결재 문서가 존재하지 않습니다.']} />}
+            {modalIsOpen && <ConfirmDocumentModal
+                modalIsOpen={modalIsOpen}
+                setIsOpen={setIsOpen}
+                selectedDocument={selectedDocument} />}
+        </div>
     </>
 }

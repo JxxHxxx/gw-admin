@@ -1,0 +1,15 @@
+
+.list {
+    padding: 0px;
+    list-style-type: none;
+    font-size: 15px;
+    height: 45px;
+    align-items: center;
+    display: flex;
+    justify-content: left;
+}
+
+.list_item {
+    margin-right: 20px;
+    cursor: pointer;
+}
