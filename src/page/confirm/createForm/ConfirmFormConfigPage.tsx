@@ -1,10 +1,11 @@
 import Header from "../../../component/layout/Header";
 import Page from "../../Page";
 import ConfirmSidebar from "../ConfirmSidebar";
-import CreateConfirmForm from "./CreateConfirmForm";
+import ConfirmFormConfig from "./ConfirmFormConfig";
+import FormCreate from "./FormCreate";
 
 
-export default function CreateConfirmFormPage() {
+export default function ConfirmFormConfigPage() {
 
     return <Page
         cnSideMainLayout="page_grd"
@@ -12,6 +13,6 @@ export default function CreateConfirmFormPage() {
         cnMain="main_b"
         header={<Header menu="confirm" />}
         sidebar={<ConfirmSidebar />}>
-        <CreateConfirmForm />
+        <ConfirmFormConfig />
     </Page>
 }

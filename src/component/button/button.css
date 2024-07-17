@@ -88,5 +88,22 @@
 }
 
 .modal_close_btn:hover {
-   filter: brightness(90%);
+    filter: brightness(90%);
+}
+
+.bt_cfc {
+    justify-content: flex-end;
+}
+
+.cfc {
+    background-color: white;
+    border: 1px solid rgb(216, 216, 216);
+    padding: 4px 4px 6px 4px;
+    border-radius: 5px;
+}
+
+.bs:hover {
+    background-color: var(--main-color-lightly);
+    color: var(--main-color);
+    font-weight: bold;
 }

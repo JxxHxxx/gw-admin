@@ -1,20 +1,20 @@
-.bi { 
+.bi {
     max-width: 400px;
     height: 40px;
 }
 
-.bi_msg { 
+.bi_msg {
     width: 200px;
     height: 34px;
     margin-right: 5px;
-    border : 0.8px solid;
+    border: 0.8px solid;
 }
 
-.bi_msg_warning { 
+.bi_msg_warning {
     width: 200px;
     height: 34px;
     margin-right: 5px;
-    border : 0.8px solid red;
+    border: 0.8px solid red;
 }
 
 .bi_msg_warning:focus,
@@ -38,6 +38,11 @@
     height: 35px;
 }
 
+.input_wh350 {
+    width: 350px;
+    height: 35px;
+}
+
 .input_wh200 {
     width: 200px;
     height: 35px;
@@ -56,4 +61,15 @@
 .input_batch_config_element {
     border: none;
     font-size: 15px;
+}
+
+.i_gray {
+    /* background-color: #f9f9f9; */
+    background-color: var(--main-color-lightly);
+    border: 1px solid var(--main-color-border);
+    border-radius: 5px;
+}
+
+.i_gray::placeholder {
+    font-weight: 600;
 }

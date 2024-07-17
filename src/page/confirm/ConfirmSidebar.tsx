@@ -16,7 +16,7 @@ export default function ConfirmSidebar() {
             </Link>
             <Link style={{ 'textDecoration': 'none' }} to={URL_CONFIRM_DOCUMENTS_CREATE}>
                 <List className="side_li"
-                    content="결재 문서 만들기" />
+                    content="양식 관리" />
             </Link>
         </ListGroup>
     </Fragment>

@@ -1,0 +1,43 @@
+.card_container_b {
+    list-style-type: none;
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-left: 0px;
+    padding-right: 10px;
+}
+
+.card_container_b::-webkit-scrollbar {
+    width: 10px;
+}
+
+.card_container_b::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 10px;
+}
+
+.card_container_b::-webkit-scrollbar-track {
+    background: var(--main-color-lightly)
+}
+
+.card_item {
+    width: 400px;
+    padding: 10px;
+    border: 1px solid rgb(216, 216, 216);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.flex_card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card_item:hover {
+    background-color: var(--main-color-lightly);
+}
+
+.fimore_icons:hover {
+    color: gray;
+}
