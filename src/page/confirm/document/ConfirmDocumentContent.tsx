@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { findConfirmDocumentByConfirmDocumentId, searchConfirmDocuments } from "../../../api/ConfirmApi";
 import ThinBlockLine from "../../../component/util/ThinBlockLine";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import Table from "../../../component/table/Table";
 import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
 import { format } from "date-fns";
-import { CONFRIM_STATUS } from "../../../util/convert/ConfirmStatusConverter";
 import PeriodInput from "../../../component/input/PeriodInput";
-import ConfirmDocumentModal from "./ConfirmDocumentModal";
-import EmptyMsg from "../../../component/text/EmptyMsg";
 import List from "../../../component/list/List";
-import ListItem from "../../../component/list/ListItem";
 import ListItemV2 from "../../../component/list/ListItemV2";
+import { getCompanyCode, getDepartmentCode } from "../../../api/OrganizationApi";
+import ConfirmDocumentSearchResult from "./ConfirmDocumentSearchResult";
 
 interface SearchCondState {
     confirmDocumentId: string;
@@ -47,6 +44,16 @@ interface SearchTypeState {
     type: SEARCH_TYPE
 }
 
+interface Customers {
+    companyId: string,
+    companyName: string
+}
+
+interface selectOption {
+    value: string;
+    label: string;
+}
+
 
 const animatedComponents = makeAnimated();
 const nowDate = format(new Date(), 'yyyy-MM-dd');
@@ -77,13 +84,19 @@ export default function ConfirmDocumentContent() {
     // 검색 결과 결재 문서 state
     const [confirmDocuments, setConfirmDocuments] = useState<object[]>([
     ]);
+    // 회사 코드 정보
+    const [companyCodes, setCompanyCodes] = useState<Customers[]>([{ companyId: '', companyName: '' }]);
+    const [departmentCodes, setDepartmentCodes] = useState([{ departmentId: '' }]);
 
-    // 결재 문서 상세 내역 모달을 위해 필요한 상태
-    const [modalIsOpen, setIsOpen] = useState(false);
-    const [selectedDocument, setselectedDocument] = useState({
-        contentPk: 0,
-        documentType: ''
-    });
+    const requestCustomerInformation = async () => {
+        const response = await getCompanyCode();
+        setCompanyCodes(response.data);
+    }
+
+    const updateDepartmentCode = async (companyId: string) => {
+        const response = await getDepartmentCode(companyId);
+        setDepartmentCodes(response.data);
+    }
 
     const requestSearchConfirmDocuments = async (event: any) => {
         event.preventDefault();
@@ -116,8 +129,6 @@ export default function ConfirmDocumentContent() {
             const response = await searchConfirmDocuments(params);
             setConfirmDocuments(response.data.data);
         }
-
-
     }
 
     // fieldName 은 requester/approver 둘 중 하나 
@@ -181,14 +192,30 @@ export default function ConfirmDocumentContent() {
         }))
     }
 
-    const handleOnClickConfrimDocumentRow = (contentPk: number, documentType: string) => {
-        setIsOpen(true);
-        setselectedDocument(() => ({
-            contentPk: contentPk,
-            documentType: documentType
-        }));
-
+    const handleSelectCompany = (option: selectOption) => {
+        setSearchCond((prev) => ({
+            ...prev,
+            companyId: option.value
+        }))
+        updateDepartmentCode(option.value)
     }
+
+    const handleSelectDeparment = (option: selectOption) => {
+        setSearchCond((prev) => ({
+            ...prev,
+            departmentId: option.value
+        }))
+    }
+
+    useEffect(() => {
+        requestCustomerInformation();
+    }, []);
+
+    // 고객사 정보 - 회사명 selectOptions 랜더링 함수
+    const compnayOptions = () => companyCodes.map(c => ({ value: c.companyId, label: c.companyName }));
+
+    // 고객사 정보 - 부서명 selectOpions 랜더링 함수
+    const departmenetCodeOptions = () => departmentCodes.map(dc => ({ value: dc.departmentId, label: dc.departmentName }));
 
     return <>
         <div id="cfd_container_900" style={{ width: '900px', border: '1px dashed red' }}>
@@ -200,12 +227,12 @@ export default function ConfirmDocumentContent() {
             }}>
                 <List className="list">
                     <ListItemV2
-                        className={searchType.type === SEARCH_TYPE.ID ? 'mr_20 ptm' : 'mr_20 nptm'}
+                        className={searchType.type === SEARCH_TYPE.ID ? 'mr_20 ptm ptr' : 'mr_20 nptm ptr'}
                         onClick={() => handleChangeSearchType(SEARCH_TYPE.ID)}>
                         <span>결재 문서 ID 검색</span>
                     </ListItemV2>
                     <ListItemV2
-                        className={searchType.type === SEARCH_TYPE.ETC ? 'mr_20 ptm' : 'mr_20 nptm'}
+                        className={searchType.type === SEARCH_TYPE.ETC ? 'mr_20 ptm ptr' : 'mr_20 nptm ptr'}
                         onClick={() => handleChangeSearchType(SEARCH_TYPE.ETC)}>
                         <span>그 외 조건 검색</span>
                     </ListItemV2>
@@ -247,46 +274,40 @@ export default function ConfirmDocumentContent() {
                                     onChangeStartDate={(event) => handleCreateTimeCond('startDate', event)}
                                     onChangeEndDate={(event) => handleCreateTimeCond('endDate', event)} />
                             </InLineBlockWrapper>
-                            <InLineBlockWrapper marginRight="20px">
-                                <div style={{ 'marginBottom': '5px' }}>
+                            <InLineBlockWrapper id='ci_bwr' marginRight="5px">
+                                <div>
                                     <span style={{ 'borderBottom': '1px solid black' }}>고객사 정보</span>
                                 </div>
+                                <label htmlFor="cpy_name" style={{ 'fontSize': '12px' }}>회사명</label>
                                 <Select
                                     styles={{
                                         control: (base) => ({
                                             ...base,
-                                            width: 250,
-
+                                            width: 200,
+                                            fontSize: '12px'
                                         }),
                                     }}
-                                    id="requester"
-                                    placeholder='회사 코드'
+                                    id="cpy_name"
+                                    placeholder='고객사'
                                     components={animatedComponents}
-                                    onChange={() => alert('미구현')}
-                                    options={[
-                                        { value: 'SPY', label: '스파이의료센터' },
-                                        { value: 'JXX', label: '제이주식회사' },
-                                        { value: 'BNG', label: '바바베이커리' }
-                                    ]} />
+                                    onChange={handleSelectCompany}
+                                    options={compnayOptions()} />
                             </InLineBlockWrapper>
                             <InLineBlockWrapper>
+                                <label htmlFor="dpm_name" style={{ 'fontSize': '12px' }}>부서명</label>
                                 <Select
                                     styles={{
                                         control: (base) => ({
                                             ...base,
-                                            width: 250,
-
+                                            width: 200,
+                                            fontSize: '12px'
                                         }),
                                     }}
-                                    id="requester"
+                                    id="dpm_name"
                                     placeholder='부서를 선택해주세요'
                                     components={animatedComponents}
-                                    onChange={() => alert('미구현')}
-                                    options={[
-                                        { value: 'SPY00001', label: '스파이부서1' },
-                                        { value: 'SPY00002', label: '스파이부서2' },
-                                        { value: 'SPY00003', label: '스파이부서3' }
-                                    ]} />
+                                    onChange={handleSelectDeparment}
+                                    options={departmenetCodeOptions()} />
                             </InLineBlockWrapper>
                             <div></div>
                             <InLineBlockWrapper>
@@ -356,25 +377,7 @@ export default function ConfirmDocumentContent() {
             <div style={{ 'padding': '10px' }}></div>
             <h3 style={{ 'marginBottom': '0px' }}>조회 결과</h3>
             <ThinBlockLine />
-            {confirmDocuments.length > 0 ? <Table
-                columns={['결재 문서 ID', '회사 코드', '부서 코드', '부서 명', '기안자 ID', '기안자', '문서 유형', '결재 상태', '문서 생성 시간']}
-                rows={confirmDocuments.map(cd =>
-                    <tr key={cd.pk} onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
-                        <td>{cd.confirmDocumentId}</td>
-                        <td>{cd.companyId}</td>
-                        <td>{cd.departmentId}</td>
-                        <td>{cd.departmentName}</td>
-                        <td>{cd.requesterId}</td>
-                        <td>{cd.requesterName}</td>
-                        <td>{cd.documentType}</td>
-                        <td>{CONFRIM_STATUS[cd.confirmStatus]}</td>
-                        <td>{format(cd.createTime, 'yyyy-MM-dd HH:mm:dd')}</td>
-                    </tr>)}
-            /> : <EmptyMsg msg={['조건에 해당 하는 결재 문서가 존재하지 않습니다.']} />}
-            {modalIsOpen && <ConfirmDocumentModal
-                modalIsOpen={modalIsOpen}
-                setIsOpen={setIsOpen}
-                selectedDocument={selectedDocument} />}
+            <ConfirmDocumentSearchResult confirmDocuments={confirmDocuments} />
         </div>
     </>
 }

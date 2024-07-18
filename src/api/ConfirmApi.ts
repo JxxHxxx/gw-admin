@@ -41,7 +41,6 @@ export const getConfirmDocumentFormElements = function (confirmDocumentFormId: s
 }
 
 // 결재 문서 양식 조회 API
-
 export const findConfirmForms = function () {
     return instance.get(`/admin/confirm-document-forms`)
         .then((res) => res)

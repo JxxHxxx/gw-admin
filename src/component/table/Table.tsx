@@ -13,7 +13,7 @@ export default function Table({ columns, rows }: TableProps) {
     return <Fragment>
         <table className="table_bs">
             <thead>
-                <tr style={{'fontSize': '13px'}}>
+                <tr style={{'fontSize': '14px'}}>
                     {columns && columns.map((col) => <td key={col}>{col}</td>)}
                 </tr>
             </thead>
