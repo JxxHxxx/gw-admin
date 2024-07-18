@@ -96,7 +96,7 @@ export default function ConfirmDocumentContent() {
     }
 
     const updateDepartmentCode = async (companyId: string) => {
-        const {data} = await getDepartmentCode(companyId);
+        const { data } = await getDepartmentCode(companyId);
         if (data !== undefined) {
             setDepartmentCodes(data);
         }
@@ -162,16 +162,8 @@ export default function ConfirmDocumentContent() {
         // initialize searchCond State
         setSearchCond({
             confirmDocumentId: '',
-            requester: {
-                requesterId: '',
-                requesterName: '',
-                selected: ''
-            },
-            approver: {
-                approvalId: '',
-                approvalName: '',
-                selected: ''
-            },
+            requester: { requesterId: '', requesterName: '', selected: '' },
+            approver: { approvalId: '', approvalName: '', selected: '' },
             companyId: '',
             departmentId: '',
             startDate: nowDate,
@@ -196,19 +188,34 @@ export default function ConfirmDocumentContent() {
         }))
     }
 
-    const handleSelectCompany = (option: selectOption) => {
-        setSearchCond((prev) => ({
-            ...prev,
-            companyId: option.value
-        }))
-        updateDepartmentCode(option.value)
+    const handleSelectCompany = (option: selectOption | null) => {
+        if (option) {
+            setSearchCond((prev) => ({
+                ...prev,
+                companyId: option.value
+            }))
+            updateDepartmentCode(option.value)
+        } else {
+            setSearchCond((prev) => ({
+                ...prev,
+                companyId: ''
+            }));
+            setDepartmentCodes([]);
+        }
     }
 
-    const handleSelectDeparment = (option: selectOption) => {
-        setSearchCond((prev) => ({
-            ...prev,
-            departmentId: option.value
-        }))
+    const handleSelectDeparment = (option: selectOption | null) => {
+        if (option) {
+            setSearchCond((prev) => ({
+                ...prev,
+                departmentId: option.value
+            }));
+        } else {
+            setSearchCond((prev) => ({
+                ...prev,
+                departmentId: ''
+            }));
+        }
     }
 
     useEffect(() => {
@@ -295,6 +302,7 @@ export default function ConfirmDocumentContent() {
                                     placeholder='고객사'
                                     components={animatedComponents}
                                     onChange={handleSelectCompany}
+                                    isClearable={true}
                                     options={compnayOptions()} />
                             </InLineBlockWrapper>
                             <InLineBlockWrapper>
@@ -311,6 +319,7 @@ export default function ConfirmDocumentContent() {
                                     placeholder='부서를 선택해주세요'
                                     components={animatedComponents}
                                     onChange={handleSelectDeparment}
+                                    isClearable={true}
                                     options={departmenetCodeOptions()} />
                             </InLineBlockWrapper>
                             <div></div>
