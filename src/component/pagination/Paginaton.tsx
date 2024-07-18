@@ -102,6 +102,7 @@ export default function Pagination({
             alert('마지막 페이지 입니다')
             return;
         }
+
         // 마지막 버튼 페이지에서 마지막 버튼으로 이동하려고 할 때
         else if (selectedBtnNum < totalPages && selectedBtnNum > totalPages - BUTTON_SIZE + 1) {
             // totalPages 가 마지막 버튼 번호이기 때문에
@@ -122,7 +123,7 @@ export default function Pagination({
         // 버튼 랜더링, 버튼에 들어갈 숫자 및 색상을 표현하기 위한 반법 작업
         for (let nowBtnNum = startBtnNum; nowBtnNum < startBtnNum + BUTTON_SIZE; nowBtnNum++) {
             renderElements.push(<Button
-                className={nowBtnNum === selectedBtnNum ? "bs_selected" : "bs"}
+                className={nowBtnNum === selectedBtnNum ? "bs bs_selected round" : "bs round"}
                 name={nowBtnNum}
                 onClick={() => handleClickPageNumButton(nowBtnNum)} />)
 
@@ -135,17 +136,24 @@ export default function Pagination({
 
     // 검색 버튼 눌렀을 때 서버에 재요청하면서 바뀌게 해야 함
     useEffect(() => {
-        
+
     }, [pnContext.pageable.pageNumber])
 
     return <>
         <Table columns={columns}
             rows={<>{rows}</>} />
         {children}
-        <Button className={"bs"} name={"<<"} onClick={handlePreviousSectionBtn} />
-        <Button className={"bs"} name={"<"} onClick={handlePreviousBtn} />
-        {renderButtons()}
-        <Button className={"bs"} name={">"} onClick={handleNextBtn} />
-        <Button className={"bs"} name={">>"} onClick={handleNextSectionBtn} />
+        {/* <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}> */}
+            <Button className={"bs round"} name={"<<"} onClick={handlePreviousSectionBtn} />
+            <Button className={"bs round"} name={"<"} onClick={handlePreviousBtn} />
+            {renderButtons()}
+            <Button className={"bs round"} name={">"} onClick={handleNextBtn} />
+            <Button className={"bs round"} name={">>"} onClick={handleNextSectionBtn} />
+        {/* </div> */}
+
     </>
 }

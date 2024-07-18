@@ -1,8 +1,6 @@
 import { format } from "date-fns/format";
 import Input from "./Input";
 
-const nowDate = format(new Date(), 'yyyy-MM-dd');
-
 interface PeriodProp {
     startDateLabel?: string,
     endDateLabel?: string,
@@ -21,6 +19,8 @@ export default function PeriodInput({
     onChangeEndDate
 }: PeriodProp) {
 
+    const nowDate = format(new Date(), 'yyyy-MM-dd');
+    
     return <>
         <div style={{ 'display': 'inline-block' }}>
             <div>

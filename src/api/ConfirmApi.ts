@@ -44,5 +44,5 @@ export const getConfirmDocumentFormElements = function (confirmDocumentFormId: s
 export const findConfirmForms = function () {
     return instance.get(`/admin/confirm-document-forms`)
         .then((res) => res)
-        .catch((err) => err)
+        .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
 }

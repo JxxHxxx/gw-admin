@@ -89,13 +89,17 @@ export default function ConfirmDocumentContent() {
     const [departmentCodes, setDepartmentCodes] = useState([{ departmentId: '' }]);
 
     const requestCustomerInformation = async () => {
-        const response = await getCompanyCode();
-        setCompanyCodes(response.data);
+        const { data } = await getCompanyCode();
+        if (data !== undefined) {
+            setCompanyCodes(data);
+        }
     }
 
     const updateDepartmentCode = async (companyId: string) => {
-        const response = await getDepartmentCode(companyId);
-        setDepartmentCodes(response.data);
+        const {data} = await getDepartmentCode(companyId);
+        if (data !== undefined) {
+            setDepartmentCodes(data);
+        }
     }
 
     const requestSearchConfirmDocuments = async (event: any) => {

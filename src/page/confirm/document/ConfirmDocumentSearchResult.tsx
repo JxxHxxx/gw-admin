@@ -6,7 +6,8 @@ import ConfirmDocumentModal from "./ConfirmDocumentModal";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 
 
-export default function ConfirmDocumentSearchResult({ confirmDocuments }) {
+export default function ConfirmDocumentSearchResult({ 
+    confirmDocuments = [] }) {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     const [selectedDocument, setselectedDocument] = useState({

@@ -2,8 +2,6 @@ import Header from "../../../component/layout/Header";
 import Page from "../../Page";
 import ConfirmSidebar from "../ConfirmSidebar";
 import ConfirmFormConfig from "./ConfirmFormConfig";
-import FormCreate from "./FormCreate";
-
 
 export default function ConfirmFormConfigPage() {
 

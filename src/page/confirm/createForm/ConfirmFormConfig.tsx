@@ -6,6 +6,7 @@ import '../../../component/card/card.css'
 import { findConfirmForms } from "../../../api/ConfirmApi";
 import { useEffect, useState } from "react";
 import EmptyMsg from "../../../component/text/EmptyMsg";
+import CreateConfirmFormModal from "./CreateConfirmFormModal";
 
 function convertCompanyId(companyId: string) {
     switch (companyId) {
@@ -23,10 +24,11 @@ function convertCompanyId(companyId: string) {
 export default function ConfirmFormConfig() {
 
     const [confirmForms, setConfirmForms] = useState();
-
     const requestConfirmForm = async () => {
         const { data } = await findConfirmForms();
-        setConfirmForms(data.data);
+        if (data.status === 200) {
+            setConfirmForms(data.data);
+        }
     }
 
     useEffect(() => {
@@ -41,8 +43,12 @@ export default function ConfirmFormConfig() {
     const handleClickModifyIcon = () => {
         alert('결재 문서 수정');
     }
-
-    return <>
+    
+    const [createFormModal, setCreateFormModal] = useState(false);
+    const handleClickCreateConfirmForm = () => {
+        setCreateFormModal(true);
+    }
+        return <>
         <div id="cfc_container_900" style={{ width: '900px', border: '1px dashed red' }}>
             <div id="cfc_header">
                 <span id="cfc_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>양식 관리</span>
@@ -56,10 +62,11 @@ export default function ConfirmFormConfig() {
                     }}>
                         <Button className="cfc bs"
                             name='결재 템플릿 만들기'
-                            onClick={() => alert('새 양식 만드는 모달창으로 이동')} />
+                            onClick={handleClickCreateConfirmForm} />
                     </div>
                 </div>
             </div>
+            <CreateConfirmFormModal modalIsOpen={createFormModal} setIsOpen={setCreateFormModal} />
 
             <div style={{ borderBottom: '1px solid gray' }}></div>
             <div style={{ margin: '30px' }} ></div>
