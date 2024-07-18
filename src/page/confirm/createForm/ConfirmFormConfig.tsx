@@ -7,6 +7,7 @@ import { findConfirmForms } from "../../../api/ConfirmApi";
 import { useEffect, useState } from "react";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 import CreateConfirmFormModal from "./CreateConfirmFormModal";
+import ConfirmPreviewModal from "./ConfirmPreviewModal";
 
 function convertCompanyId(companyId: string) {
     switch (companyId) {
@@ -43,12 +44,21 @@ export default function ConfirmFormConfig() {
     const handleClickModifyIcon = () => {
         alert('결재 문서 수정');
     }
-    
+
+    const handleClickConfirmForm = () => {
+        alert('결재 문서 양식 미리보기')
+    }
     const [createFormModal, setCreateFormModal] = useState(false);
     const handleClickCreateConfirmForm = () => {
         setCreateFormModal(true);
     }
-        return <>
+
+    const [confirmPreviewFormModal, setConfirmPreviewFormModal] = useState(false);
+    const handleClickConfirmPreview = () => {
+        setConfirmPreviewFormModal(true);
+    }
+
+    return <>
         <div id="cfc_container_900" style={{ width: '900px', border: '1px dashed red' }}>
             <div id="cfc_header">
                 <span id="cfc_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>양식 관리</span>
@@ -92,16 +102,19 @@ export default function ConfirmFormConfig() {
                         return <>
                             <li key={form.confirmDocumentFormPk} className="card_item flex_card">
                                 <div>
-                                    <p style={{ margin: '0px' }}>{form.confirmDocumentFormName}</p>
-                                    <p style={{ margin: '0px', fontSize: '12px', color: 'gray' }}>{convertCompanyId(form.companyId)}</p>
+                                    <p style={{ margin: '0px', cursor: 'pointer' }}
+                                        onClick={handleClickConfirmPreview}>{form.confirmDocumentFormName}</p>
+                                    <p style={{ margin: '0px', fontSize: '12px', color: 'gray', cursor: 'pointer' }}
+                                        onClick={handleClickConfirmPreview}>{convertCompanyId(form.companyId)}</p>
                                 </div>
-                                <FiMoreVertical size='1.3em' className="fimore_icons" onClick={handleClickModifyIcon} />
+                                <FiMoreVertical style={{cursor: 'pointer'}} size='1.3em' className="fimore_icons" onClick={handleClickModifyIcon} />
                             </li>
                         </>
                     }
                     ) : <EmptyMsg msg={['조건을 만족하는 결재 양식이 존재하지 않습니다.']} />}
                 </ul>
             </div>
+            <ConfirmPreviewModal modalIsOpen={confirmPreviewFormModal} setIsOpen={setConfirmPreviewFormModal} />
 
             <div style={{ margin: '30px' }} ></div>
         </div>
