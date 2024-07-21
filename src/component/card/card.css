@@ -1,3 +1,12 @@
+.card_container {
+    list-style-type: none;
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-left: 0px;
+    padding-right: 10px;
+}
+
 .card_container_b {
     list-style-type: none;
     height: 400px;
@@ -28,6 +37,13 @@
     margin-bottom: 5px;
 }
 
+.item_info {
+    cursor: pointer;
+}
+
+.item_info:hover p {
+    font-weight: 900;
+}
 .flex_card {
     display: flex;
     justify-content: space-between;

@@ -14,13 +14,26 @@ const customStyles = {
     },
 };
 
+interface ConfirmDocumentModalProp {
+    modalIsOpen: boolean,
+    setIsOpen: () => void,
+    formElements: formElement[]
+}
+
+interface formElement {
+
+}
+
 export default function ConfirmPreviewModal({
     modalIsOpen,
-    setIsOpen }) {
+    setIsOpen,
+    formElements = [] }) {
 
     function closeModal() {
         setIsOpen(false);
     }
+
+    console.log(formElements);
 
     return <>
         <Modal
@@ -28,7 +41,10 @@ export default function ConfirmPreviewModal({
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="Batch Config Modal">
-            <p>결재 양식 미리보기 모달</p>
+            <p style={{ margin : '10px', paddingBottom: '20px'}}>결재 양식 미리보기 모달</p>
+            {formElements.map((formElement) => <div style={{border: '1px dashed black', borderRadius: '10px',  margin : '10px'}}>
+                <p>{formElement.elementGroupName}</p>
+            </div>)}
         </Modal>
     </>
 }
