@@ -38,6 +38,7 @@ export default function ConfirmFormConfig() {
     const [confirmForms, setConfirmForms] = useState<ConfirmFormState[]>([]);
     // 결재 문서 미리보기 모달 state
     const [createFormModal, setCreateFormModal] = useState(false);
+    const [createFormModalTitle, setCreateFormModalTitle] = useState('');
 
     const [formElements, setFormElements] = useState([]);
     const requestConfirmForm = async () => {
@@ -79,15 +80,16 @@ export default function ConfirmFormConfig() {
     }
 
     const [confirmPreviewFormModal, setConfirmPreviewFormModal] = useState(false);
-    const handleClickConfirmPreview = async (confirmDocumentFormId: string, companyId: string) => {
+    const handleClickConfirmPreview = async (title:string, confirmDocumentFormId: string, companyId: string) => {
         setConfirmPreviewFormModal(true);
+        setCreateFormModalTitle(title)
 
         const params = {
             companyId: companyId
         }
 
         const { data } = await getConfirmDocumentFormElementsV2(confirmDocumentFormId, params);
-        if(data.status === 200) {
+        if (data.status === 200) {
             setFormElements(data.data);
         }
     }
@@ -131,15 +133,16 @@ export default function ConfirmFormConfig() {
                 alignItems: 'center',
                 border: '1px dashed gray',
             }}>
-                {confirmForms.length > 0 ? (<ul className="card_container_b">
+                                            {/* 6개보다 결과가 많으면 스크롤 적용, 아니면 미적용 */}
+                {confirmForms.length > 0 ? (<ul className={confirmForms.length > 6 ? "card_container_b" : "card_container"}>
                     {confirmForms.map((form) => {
-                        return <>
+                       return <>
                             <li key={form.confirmDocumentFormPk} className="card_item flex_card">
                                 <div className="item_info">
                                     <p style={{ margin: '0px' }}
-                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormId, form.companyId)}>{form.confirmDocumentFormName}</p>
+                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{form.confirmDocumentFormName}</p>
                                     <p style={{ margin: '0px', fontSize: '12px', color: 'gray' }}
-                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormId, form.companyId)}>{convertCompanyId(form.companyId)}</p>
+                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{convertCompanyId(form.companyId)}</p>
                                 </div>
                                 <FiMoreVertical style={{ cursor: 'pointer' }} size='1.3em' className="fimore_icons" onClick={handleClickModifyIcon} />
                             </li>
@@ -148,7 +151,11 @@ export default function ConfirmFormConfig() {
                 </ul>)
                     : <div className="card_container"><EmptyMsg msg={['조건을 만족하는 결재 양식이 존재하지 않습니다.']} /></div>}
             </div>
-            <ConfirmPreviewModal modalIsOpen={confirmPreviewFormModal} setIsOpen={setConfirmPreviewFormModal} formElements={formElements} />
+            <ConfirmPreviewModal
+                modalIsOpen={confirmPreviewFormModal}
+                setIsOpen={setConfirmPreviewFormModal}
+                title={createFormModalTitle}
+                formElements={formElements} />
 
             <div style={{ margin: '30px' }} ></div>
         </div>

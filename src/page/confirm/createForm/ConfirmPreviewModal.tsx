@@ -1,6 +1,9 @@
 
 import Modal from 'react-modal';
 import { RiCloseLargeLine } from "react-icons/ri";
+import ApprovalLineSample from './ApprovalLineSample';
+
+
 const customStyles = {
     content: {
         top: '50%',
@@ -18,6 +21,7 @@ const customStyles = {
 interface ConfirmDocumentModalProp {
     modalIsOpen: boolean,
     setIsOpen: (open: boolean) => void,
+    title :string,
     formElements: formElement[]
 }
 
@@ -28,6 +32,7 @@ interface formElement {
 export default function ConfirmPreviewModal({
     modalIsOpen,
     setIsOpen,
+    title,
     formElements = [] }: ConfirmDocumentModalProp) {
 
     function closeModal() {
@@ -41,14 +46,16 @@ export default function ConfirmPreviewModal({
             style={customStyles}
             contentLabel="Batch Config Modal"
         >
-            <div style={{textAlign : 'right'}}
+            <div style={{ textAlign: 'right' }}
                 onClick={closeModal}>
                 <RiCloseLargeLine
                     size='1.2em'
                     color='gray' />
             </div>
-            <p style={{ fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold' }}>결재 양식 제목 자리</p>
-            <div style={{ marginBottom: '60px', fontSize: '22px', fontWeight: 'bold', textAlign: 'right' }}>결재선 컴포넌트 자리</div>
+            <p style={{
+                fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold'
+            }}>{title}</p>
+            <ApprovalLineSample />
             <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
             {formElements.map((formElement) => <div style={{ marginBottom: '10px' }}>
                 <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{formElement.elementGroupName}</p>
