@@ -39,7 +39,7 @@ export default function ConfirmFormConfig() {
     // 결재 문서 미리보기 모달 state
     const [createFormModal, setCreateFormModal] = useState(false);
 
-    const [formElements, setFormElements] = useState({});
+    const [formElements, setFormElements] = useState([]);
     const requestConfirmForm = async () => {
         const params = {
             companyId: '',

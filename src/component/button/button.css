@@ -101,6 +101,28 @@
     font-weight: bold;
 }
 
+.btn_pgn {
+    background-color: white;
+    border: 0px;
+    font-size: 14px;
+    font-weight: 900;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+}
+.btn_pgn:hover {
+    border: 1px solid var(--main-color);
+    color: var(--main-color-05);
+}
+
+.btn_pgn_selected {
+    background-color: var(--main-color-lightly);
+    color: var(--main-color-05)
+}
+
 .round {
     border-radius: 50%;
 }

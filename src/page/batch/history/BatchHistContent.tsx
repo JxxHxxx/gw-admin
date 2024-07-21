@@ -5,7 +5,7 @@ import PeriodInput from "../../../component/input/PeriodInput";
 import Button from "../../../component/button/Button";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
-import Pagination, { ONE_PAGES_CONTENT_SIZE } from "../../../component/pagination/Paginaton";
+import Pagination, { ONE_PAGES_CONTENT_SIZE, ONE_PAGES_CONTENT_SIZE_10 } from "../../../component/pagination/Paginaton";
 import { BatchJobExecutionHistContext } from "../../../context/PaginationContext";
 import ThinBlockLine from "../../../component/util/ThinBlockLine";
 
@@ -41,7 +41,7 @@ export default function BatchHistContent() {
             startDate: jobHistCond.startDate,
             endDate: jobHistCond.endDate,
             page: pageNumber,
-            size: ONE_PAGES_CONTENT_SIZE
+            size: ONE_PAGES_CONTENT_SIZE_10
         }
         const response = await getBatcJobHistory(params);
         if (response.data !== undefined) {
@@ -72,7 +72,7 @@ export default function BatchHistContent() {
     }, [jobExecPgn.pageable.pageNumber])
 
     return <>
-        <div id="beh_container_1200" style={{ width: '1200px', border: '1px dashed red' }}>
+        <div id="beh_container_1200" style={{ width: '1200px', height : '100%', border: '1px dashed red' }}>
             <span id="beh_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>배치 실행 이력</span>
             <div style={{ margin: '20px' }}></div>
             <form>
@@ -84,7 +84,6 @@ export default function BatchHistContent() {
                     name={'검색'}
                     onClick={() => requestGetBatchJobHistory(0)} />
             </form>
-            <div style={{ 'margin': '10px' }}></div>
             <BatchJobExecutionHistContext.Provider value={jobExecPgn} >
                 {jobExecPgn.content.length > 0 ?
                     <Pagination
@@ -101,7 +100,6 @@ export default function BatchHistContent() {
                                 <td>{hist.status}</td>
                                 <td>{hist.exitCode}</td>
                             </tr>))}>
-                        <div style={{ margin: '40px' }}></div>
                     </Pagination> :
                     <EmptyMsg msg={['해당 일자에 잡 실행 내역이 존재하지 않습니다.', '처리 일자를 다시 입력해주세요']} />
                 }

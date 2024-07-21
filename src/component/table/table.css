@@ -20,3 +20,14 @@
     background-color: gainsboro;
     cursor: pointer;
 }
+
+.abs_table_container {
+    margin-top: 10px;
+    margin-bottom: 40px;
+    width: 940px;
+    height: 470px;
+}
+
+.tbw100 {
+    width: 100%;    
+}

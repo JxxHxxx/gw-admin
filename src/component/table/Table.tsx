@@ -5,13 +5,14 @@ import '../../component/table/table.css'
 
 interface TableProps {
     columns: string[],
-    rows: ReactNode
+    rows: ReactNode,
+    className: string
 }
 
-export default function Table({ columns, rows }: TableProps) {
+export default function Table({ columns, rows, className }: TableProps) {
 
     return <Fragment>
-        <table className="table_bs">
+        <table className={className ? className : "table_bs"}>
             <thead>
                 <tr style={{'fontSize': '14px'}}>
                     {columns && columns.map((col) => <td key={col}>{col}</td>)}

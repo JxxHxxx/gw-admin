@@ -4,6 +4,7 @@ import Table from "../table/Table";
 
 export const ONE_PAGES_CONTENT_SIZE: number = 5; // 한 페이지에 보여줄 이력의 갯수
 export const ONE_PAGES_CONTENT_SIZE_1: number = 1; // 한 페이지에 보여줄 이력의 갯수
+export const ONE_PAGES_CONTENT_SIZE_10: number = 10; // 한 페이지에 보여줄 이력의 갯수
 export const ONE_PAGES_CONTENT_SIZE_20: number = 20; // 한 페이지에 보여줄 이력의 갯수
 export const BUTTON_SIZE: number = 5; // 페이지에서 보여줄 버튼의 갯수
 
@@ -123,7 +124,7 @@ export default function Pagination({
         // 버튼 랜더링, 버튼에 들어갈 숫자 및 색상을 표현하기 위한 반법 작업
         for (let nowBtnNum = startBtnNum; nowBtnNum < startBtnNum + BUTTON_SIZE; nowBtnNum++) {
             renderElements.push(<Button
-                className={nowBtnNum === selectedBtnNum ? "bs bs_selected round" : "bs round"}
+                className={nowBtnNum === selectedBtnNum ? "btn_pgn btn_pgn_selected round" : "btn_pgn round"}
                 name={nowBtnNum}
                 onClick={() => handleClickPageNumButton(nowBtnNum)} />)
 
@@ -140,20 +141,16 @@ export default function Pagination({
     }, [pnContext.pageable.pageNumber])
 
     return <>
-        <Table columns={columns}
-            rows={<>{rows}</>} />
-        {children}
-        {/* <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}> */}
-            <Button className={"bs round"} name={"<<"} onClick={handlePreviousSectionBtn} />
-            <Button className={"bs round"} name={"<"} onClick={handlePreviousBtn} />
+        <div className="abs_table_container">
+            <Table columns={columns} rows={<>{rows}</>} className="table_bs tbw100" />
+            {children}
+        </div>
+        <div style={{ textAlign: 'center', width : '940px' }}>
+            <Button className={"btn_pgn round"} name={"<<"} onClick={handlePreviousSectionBtn} />
+            <Button className={"btn_pgn round"} name={"<"} onClick={handlePreviousBtn} />
             {renderButtons()}
-            <Button className={"bs round"} name={">"} onClick={handleNextBtn} />
-            <Button className={"bs round"} name={">>"} onClick={handleNextSectionBtn} />
-        {/* </div> */}
-
+            <Button className={"btn_pgn round"} name={">"} onClick={handleNextBtn} />
+            <Button className={"btn_pgn round"} name={">>"} onClick={handleNextSectionBtn} />
+        </div>
     </>
 }
