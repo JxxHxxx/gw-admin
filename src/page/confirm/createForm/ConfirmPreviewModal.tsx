@@ -21,13 +21,21 @@ const customStyles = {
 interface ConfirmDocumentModalProp {
     modalIsOpen: boolean,
     setIsOpen: (open: boolean) => void,
-    title :string,
-    formElements: formElement[]
+    title: string,
+    formElements: FormElement[]
 }
 
-interface formElement {
-
+interface FormElement {
+    elementGroupName: string,
+    elementGroupKey: string,
+    elementGroupType: string,
+    elements: Element[]
 }
+
+interface Element {
+    elementName: string
+}
+
 
 export default function ConfirmPreviewModal({
     modalIsOpen,
@@ -38,6 +46,23 @@ export default function ConfirmPreviewModal({
     function closeModal() {
         setIsOpen(false);
     }
+
+    const renderPair = (formElement:FormElement) => (
+        <table className='table_cfc'>
+            <tbody>
+                <tr id={formElement.elementGroupKey} style={{ textAlign: 'center', backgroundColor: 'rgb(0, 40, 94)' }}>
+                    <td colSpan={2} style={{ color: 'white' }}>{formElement.elementGroupName}</td>
+                </tr>
+                {formElement.elements.map((element, index) => (
+                    <tr key={index}>
+                        <td className='ele_nm'>{element.elementName}</td>
+                        <td></td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+    
 
     return <>
         <Modal
@@ -57,25 +82,19 @@ export default function ConfirmPreviewModal({
             }}>{title}</p>
             <ApprovalLineSample />
             <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
-            {formElements.map((formElement) => <div style={{ marginBottom: '10px' }}>
+            {formElements.map((formElement) => (<div style={{ marginBottom: '10px' }}>
                 <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{formElement.elementGroupName}</p>
-                <table className='table_bs'>
-                    <tbody>
-                        <thead>
-                            <tr>
-                                <td style={{ color: 'black' }}>{formElement.elementGroupName}</td>
-                            </tr>
-                        </thead>
-                        {formElement.elements.map((element) => <>
-                            <tr>
-                                <td>{element.elementName}</td>
-                                <td>1</td>
-                            </tr>
-                        </>)}
-                    </tbody>
-                </table>
-
-            </div>)}
+                {(() => {
+                    switch (formElement.elementGroupType) {
+                        case 'PAIR':
+                            return renderPair(formElement);
+                        default:
+                            return (
+                                <p>개발중입니다</p>
+                            )
+                    }
+                })()}
+            </div>))}
         </Modal>
     </>
 }

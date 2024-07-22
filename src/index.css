@@ -2,7 +2,7 @@
   --main-color : rgb(0, 40, 94);
   --main-color-05 : rgb(0, 40, 94, 0.5);
   --main-color-lightly : rgb(0, 40, 94, 0.05);
-  --main-color-border : rgb(216, 216, 216);
+  --main-color-border : #DEDEDE;
 }
 
 @font-face {

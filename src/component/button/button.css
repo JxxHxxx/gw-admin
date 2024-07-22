@@ -103,11 +103,11 @@
 
 .btn_pgn {
     background-color: white;
-    border: 0px;
+    height: 40px;
+    width: 40px;
+    border: 1px solid var(--main-color-border);
     font-size: 14px;
     font-weight: 900;
-    width: 30px;
-    height: 30px;
     cursor: pointer;
     margin-left: 5px;
     margin-right: 5px;
