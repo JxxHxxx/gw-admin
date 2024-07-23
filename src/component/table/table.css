@@ -1,10 +1,12 @@
 .table_bs,
 .table_cfc,
+.table_cfc_tb,
 .table_apl_ex {
     border-collapse: collapse;
 }
 
-.table_cfc {
+.table_cfc,
+.table_cfc_tb {
     width: 100%;
 }
 
@@ -37,8 +39,9 @@
     width: 100%;
 }
 
-.table_apl_ex td, th {
-    border : 1px solid black;
+.table_apl_ex td,
+th {
+    border: 1px solid black;
     text-align: center;
 }
 
@@ -58,7 +61,8 @@
     font-size: 12px;
 }
 
-.table_cfc td {
+.table_cfc td,
+.table_cfc_tb td {
     padding: 0px;
     border: 1px solid black;
     /* width: 900px; */
@@ -66,4 +70,9 @@
 
 .table_cfc .ele_nm {
     width: 15%;
+}
+
+.table_cfc_tb .col {
+    background-color: var(--main-color);
+    color: white;
 }

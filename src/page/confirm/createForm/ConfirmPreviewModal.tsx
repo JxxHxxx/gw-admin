@@ -11,7 +11,7 @@ const customStyles = {
         right: 'auto',
         bottom: 'auto',
         width: '750px',
-        height: '800px',
+        height: '700px',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         border: '1px solid rgb(204, 204, 204)'
@@ -33,7 +33,8 @@ interface FormElement {
 }
 
 interface Element {
-    elementName: string
+    elementName: string,
+    elementOrder: number
 }
 
 
@@ -47,7 +48,7 @@ export default function ConfirmPreviewModal({
         setIsOpen(false);
     }
 
-    const renderPair = (formElement:FormElement) => (
+    const renderPair = (formElement: FormElement) => (
         <table className='table_cfc'>
             <tbody>
                 <tr id={formElement.elementGroupKey} style={{ textAlign: 'center', backgroundColor: 'rgb(0, 40, 94)' }}>
@@ -62,7 +63,21 @@ export default function ConfirmPreviewModal({
             </tbody>
         </table>
     );
-    
+
+    // 테이블 랜더링
+    const renderTable = (formElement: FormElement) => {
+        const sortedElement = formElement.elements.slice().sort((a, b) => a.elementOrder - b.elementOrder);
+        console.log('sortedElement', sortedElement)
+        return <table className='table_cfc_tb'>
+            <tbody>
+                <tr className='col'>
+                    {sortedElement.map(element =>
+                        <td style={{ textAlign: 'center' }}>{element.elementName}</td>
+                    )}
+                </tr>
+            </tbody>
+        </table>
+    }
 
     return <>
         <Modal
@@ -88,10 +103,8 @@ export default function ConfirmPreviewModal({
                     switch (formElement.elementGroupType) {
                         case 'PAIR':
                             return renderPair(formElement);
-                        default:
-                            return (
-                                <p>개발중입니다</p>
-                            )
+                        case 'TABLE':
+                            return renderTable(formElement);
                     }
                 })()}
             </div>))}
