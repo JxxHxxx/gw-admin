@@ -1,7 +1,7 @@
 .table_bs,
 .table_cfc,
 .table_cfc_tb,
-.table_apl_ex {
+.table_lnline {
     border-collapse: collapse;
 }
 
@@ -39,25 +39,25 @@
     width: 100%;
 }
 
-.table_apl_ex td,
+.table_lnline td,
 th {
     border: 1px solid black;
     text-align: center;
 }
 
-.table_apl_ex thead th {
+.table_lnline thead th {
     padding-left: 25px;
     padding-right: 25px;
 }
 
-.table_apl_ex th {
+.table_lnline th {
     font-size: 15px;
     background-color: var(--main-color);
     color: white;
     font-weight: normal;
 }
 
-.table_apl_ex td {
+.table_lnline td {
     font-size: 12px;
 }
 

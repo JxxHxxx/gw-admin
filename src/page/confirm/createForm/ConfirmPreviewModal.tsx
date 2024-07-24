@@ -2,6 +2,7 @@
 import Modal from 'react-modal';
 import { RiCloseLargeLine } from "react-icons/ri";
 import ApprovalLineSample from './ApprovalLineSample';
+import WriterSample from './WriterSample';
 
 const customStyles = {
     content: {
@@ -28,7 +29,7 @@ interface FormElement {
     elementGroupName: string,
     elementGroupKey: string,
     elementGroupType: string,
-    elementGroupOrder:number,
+    elementGroupOrder: number,
     elements: Element[]
 }
 
@@ -43,7 +44,7 @@ export default function ConfirmPreviewModal({
     setIsOpen,
     title,
     formElements = [] }: ConfirmDocumentModalProp) {
-    
+
 
     function closeModal() {
         setIsOpen(false);
@@ -108,25 +109,30 @@ export default function ConfirmPreviewModal({
         </div>))
     }
 
-return <>
-    <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Batch Config Modal"
-    >
-        <div style={{ textAlign: 'right' }}
-            onClick={closeModal}>
-            <RiCloseLargeLine
-                size='1.2em'
-                color='gray' />
-        </div>
-        <p style={{
-            fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold'
-        }}>{title}</p>
-        <ApprovalLineSample />
-        <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
-        {sortElementGroup(formElements)}
-    </Modal>
-</>
+    return <>
+        <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Batch Config Modal"
+        >
+            <div style={{ textAlign: 'right' }}
+                onClick={closeModal}>
+                <RiCloseLargeLine
+                    size='1.2em'
+                    color='gray' />
+            </div>
+            <p style={{
+                fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold'
+            }}>{title}</p>
+
+            <div style={{ marginBottom: '60px', display: 'flex', justifyContent: 'space-between' }}>
+                <WriterSample />
+                <ApprovalLineSample />
+            </div>
+
+            <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
+            {sortElementGroup(formElements)}
+        </Modal>
+    </>
 }

@@ -233,7 +233,7 @@ export default function ConfirmDocumentContent() {
     const departmenetCodeOptions = () => departmentCodes.map(dc => ({ value: dc.departmentId, label: dc.departmentName }));
 
     return <>
-        <div id="cfd_container_900" style={{ width: '900px', border: '1px dashed red' }}>
+        <div id="cfd_container_1000" style={{ width: '1000px', border: '1px dashed red' }}>
             <span id="cfd_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>결재 문서 관리</span>
             <div style={{
                 display: 'flex',
