@@ -36,9 +36,11 @@ export default function ConfirmFormConfig() {
     const [render, setRender] = useState(false);
     // 결재 양식 state
     const [confirmForms, setConfirmForms] = useState<ConfirmFormState[]>([]);
-    // 결재 문서 미리보기 모달 state
+    // 결재 템플릿 만들기 모달
     const [createFormModal, setCreateFormModal] = useState(false);
-    const [createFormModalTitle, setCreateFormModalTitle] = useState('');
+    // 결재 문서 미리보기 모달
+    const [previewFormModal, setPreviewFormModal] = useState(false);
+    const [previewFormTitle, setPreviewFormTitle] = useState('');
 
     const [formElements, setFormElements] = useState([]);
     const requestConfirmForm = async () => {
@@ -79,10 +81,9 @@ export default function ConfirmFormConfig() {
         setCreateFormModal(true);
     }
 
-    const [confirmPreviewFormModal, setConfirmPreviewFormModal] = useState(false);
     const handleClickConfirmPreview = async (title:string, confirmDocumentFormId: string, companyId: string) => {
-        setConfirmPreviewFormModal(true);
-        setCreateFormModalTitle(title)
+        setPreviewFormModal(true);
+        setPreviewFormTitle(title)
 
         const params = {
             companyId: companyId
@@ -93,6 +94,10 @@ export default function ConfirmFormConfig() {
             setFormElements(data.data);
         }
     }
+
+    useEffect(() => {
+        setFormElements([]);
+    }, [previewFormModal])
 
     return <>
         <div id="cfc_container_900" style={{ width: '900px', border: '1px dashed red' }}>
@@ -152,9 +157,9 @@ export default function ConfirmFormConfig() {
                     : <div className="card_container"><EmptyMsg msg={['조건을 만족하는 결재 양식이 존재하지 않습니다.']} /></div>}
             </div>
             <ConfirmPreviewModal
-                modalIsOpen={confirmPreviewFormModal}
-                setIsOpen={setConfirmPreviewFormModal}
-                title={createFormModalTitle}
+                modalIsOpen={previewFormModal}
+                setIsOpen={setPreviewFormModal}
+                title={previewFormTitle}
                 formElements={formElements} />
 
             <div style={{ margin: '30px' }} ></div>
