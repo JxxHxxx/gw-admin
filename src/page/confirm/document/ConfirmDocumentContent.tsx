@@ -154,7 +154,7 @@ export default function ConfirmDocumentContent() {
         }))
     }
 
-    // 검색 유형을 변경했을 때 SearchCond 를 초기화 하기 위한 작업
+    // 검색 유형을 변경했을 때 SearchCond, ConfirmDocuments 를 초기화 하기 위한 작업
     const handleChangeSearchType = (type: SEARCH_TYPE) => {
         setSearchType(() => ({
             type: type
@@ -169,6 +169,10 @@ export default function ConfirmDocumentContent() {
             startDate: nowDate,
             endDate: nowDate
         })
+
+        setConfirmDocuments(
+            []
+        )
     }
 
     const handleSelectInput = (event: any) => {

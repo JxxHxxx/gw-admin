@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import { RiCloseLargeLine } from "react-icons/ri";
 import ApprovalLineSample from './ApprovalLineSample';
 
-
 const customStyles = {
     content: {
         top: '50%',
@@ -29,6 +28,7 @@ interface FormElement {
     elementGroupName: string,
     elementGroupKey: string,
     elementGroupType: string,
+    elementGroupOrder:number,
     elements: Element[]
 }
 
@@ -43,11 +43,13 @@ export default function ConfirmPreviewModal({
     setIsOpen,
     title,
     formElements = [] }: ConfirmDocumentModalProp) {
+    
 
     function closeModal() {
         setIsOpen(false);
     }
 
+    // 페어 타입 랜더링
     const renderPair = (formElement: FormElement) => (
         <table className='table_cfc'>
             <tbody>
@@ -64,10 +66,10 @@ export default function ConfirmPreviewModal({
         </table>
     );
 
-    // 테이블 랜더링
+    // 테이블 타입 랜더링
     const renderTable = (formElement: FormElement) => {
         const sortedElement = formElement.elements.slice().sort((a, b) => a.elementOrder - b.elementOrder);
-        console.log('sortedElement', sortedElement)
+        // console.log('sortedElement', sortedElement)
         return <table className='table_cfc_tb'>
             <tbody>
                 <tr className='col'>
@@ -75,39 +77,56 @@ export default function ConfirmPreviewModal({
                         <td style={{ textAlign: 'center' }}>{element.elementName}</td>
                     )}
                 </tr>
+                <tr>
+                    {sortedElement.map(element =>
+                        <td className='empty_row'></td>
+                    )}
+                </tr>
+                <tr>
+                    {sortedElement.map(element =>
+                        <td className='empty_row'></td>
+                    )}
+                </tr>
             </tbody>
         </table>
     }
 
-    return <>
-        <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Batch Config Modal"
-        >
-            <div style={{ textAlign: 'right' }}
-                onClick={closeModal}>
-                <RiCloseLargeLine
-                    size='1.2em'
-                    color='gray' />
-            </div>
-            <p style={{
-                fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold'
-            }}>{title}</p>
-            <ApprovalLineSample />
-            <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
-            {formElements.map((formElement) => (<div style={{ marginBottom: '10px' }}>
-                <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{formElement.elementGroupName}</p>
-                {(() => {
-                    switch (formElement.elementGroupType) {
-                        case 'PAIR':
-                            return renderPair(formElement);
-                        case 'TABLE':
-                            return renderTable(formElement);
-                    }
-                })()}
-            </div>))}
-        </Modal>
-    </>
+    // 요소 그룹들을 정렬
+    const sortElementGroup = (formElements: FormElement[]) => {
+        const sortedFormElements = formElements.slice().sort((a, b) => a.elementGroupOrder - b.elementGroupOrder);
+        // console.log('sortedFormElements', sortedFormElements)
+        return sortedFormElements.map((formElement) => (<div style={{ marginBottom: '10px' }}>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{formElement.elementGroupName}</p>
+            {(() => {
+                switch (formElement.elementGroupType) {
+                    case 'PAIR':
+                        return renderPair(formElement);
+                    case 'TABLE':
+                        return renderTable(formElement);
+                }
+            })()}
+        </div>))
+    }
+
+return <>
+    <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Batch Config Modal"
+    >
+        <div style={{ textAlign: 'right' }}
+            onClick={closeModal}>
+            <RiCloseLargeLine
+                size='1.2em'
+                color='gray' />
+        </div>
+        <p style={{
+            fontSize: '22px', margin: '10px', paddingBottom: '20px', textAlign: 'center', fontWeight: 'bold'
+        }}>{title}</p>
+        <ApprovalLineSample />
+        <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '40px', borderBottom: '1px dashed black' }}>결재 내용 자리</div>
+        {sortElementGroup(formElements)}
+    </Modal>
+</>
 }

@@ -32,7 +32,7 @@ export default function ConfirmDocumentSearchResult({
                     <tr key={cd.pk}
                         style={{ 'fontSize': '14px' }}
                         onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
-                        <td>{cd.confirmDocumentId}</td>
+                        <td style={{cursor : 'default'}} >{cd.confirmDocumentId}</td>
                         <td>{cd.companyId}</td>
                         <td>{cd.departmentId}</td>
                         <td>{cd.departmentName}</td>

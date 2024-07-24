@@ -76,3 +76,8 @@ th {
     background-color: var(--main-color);
     color: white;
 }
+
+.table_cfc_tb .empty_row {
+    text-align: center;
+    padding: 11px; /* 원하는 만큼의 공백을 추가합니다. */
+}
