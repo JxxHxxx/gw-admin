@@ -5,22 +5,41 @@ import { useState } from "react";
 import ConfirmDocumentModal from "./ConfirmDocumentModal";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 
+interface ConfirmDocument {
+    pk: number
+    contentPk: number
+    documentType: string
+    confirmDocumentId: string
+    companyId: string
+    departmentId: string
+    departmentName: string
+    requesterId: string
+    requesterName: string
+    confirmStatus: string
+    createTime: string
+}
 
-export default function ConfirmDocumentSearchResult({ 
-    confirmDocuments = [] }) {
+interface ConfirmDocuments {
+    confirmDocuments: ConfirmDocument[]
+}
+
+export default function ConfirmDocumentSearchResult({
+    confirmDocuments = [] }: ConfirmDocuments) {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     const [selectedDocument, setselectedDocument] = useState({
         contentPk: 0,
-        documentType: ''
+        documentType: '',
+        confirmDocumentId : ''
     });
 
 
-    const handleOnClickConfrimDocumentRow = (contentPk: number, documentType: string) => {
+    const handleOnClickConfrimDocumentRow = (confirmDocument: object) => {
         setIsOpen(true);
         setselectedDocument(() => ({
-            contentPk: contentPk,
-            documentType: documentType
+            contentPk: confirmDocument.contentPk,
+            documentType: confirmDocument.documentType,
+            confirmDocumentId : confirmDocument.confirmDocumentId
         }));
     }
 
@@ -31,8 +50,8 @@ export default function ConfirmDocumentSearchResult({
                 rows={confirmDocuments.map(cd =>
                     <tr key={cd.pk}
                         style={{ 'fontSize': '14px' }}
-                        onClick={() => handleOnClickConfrimDocumentRow(cd.contentPk, cd.documentType)}>
-                        <td style={{cursor : 'default'}} >{cd.confirmDocumentId}</td>
+                        onClick={() => handleOnClickConfrimDocumentRow(cd)}>
+                        <td style={{ cursor: 'default' }} >{cd.confirmDocumentId}</td>
                         <td>{cd.companyId}</td>
                         <td>{cd.departmentId}</td>
                         <td>{cd.departmentName}</td>
@@ -42,7 +61,7 @@ export default function ConfirmDocumentSearchResult({
                         <td>{CONFRIM_STATUS[cd.confirmStatus]}</td>
                         <td>{format(cd.createTime, 'yyyy-MM-dd HH:mm:dd')}</td>
                     </tr>)}
-            /> 
+            />
             : <EmptyMsg msg={['조건에 해당 하는 결재 문서가 존재하지 않습니다.']} />}
         {modalIsOpen && <ConfirmDocumentModal
             modalIsOpen={modalIsOpen}

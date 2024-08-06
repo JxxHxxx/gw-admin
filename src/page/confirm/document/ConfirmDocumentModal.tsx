@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
+import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
 
 const customStyles = {
     content: {
@@ -16,13 +16,18 @@ const customStyles = {
 };
 
 interface ConfirmDocumentProps {
+    modalIsOpen: boolean
+    setIsOpen: () => void
     selectedDocument: object
 }
 
-interface contentState {
-    confirmDocument: object,
-    contentPk: number,
-    contents: object
+interface ConfirmDocument {
+    document: {
+        companyId: string
+        contents: {
+            title: string
+        }
+    },
 }
 
 export default function ConfirmDocumentModal({
@@ -30,15 +35,16 @@ export default function ConfirmDocumentModal({
     setIsOpen,
     selectedDocument = {} }: ConfirmDocumentProps) {
 
-    const [content, setContent] = useState<contentState>({
-        confirmDocument: {
-            documentType: ''
-        },
-        contentPk: 0,
-        contents: {
-
+    const [confirm, setConfirm] = useState<ConfirmDocument>({
+        document: {
+            companyId: '',
+            contents: {
+                title: ''
+            }
         }
     });
+
+    const [approvalLines, setApprovalLines] = useState({});
 
     const [documentElement, setDocumentElement] = useState();
 
@@ -48,19 +54,23 @@ export default function ConfirmDocumentModal({
 
     const requestConfirmDocumentContent = async () => {
         const response = await getConfirmDocumentContent(selectedDocument.contentPk);
-        setContent(() => ({
-            confirmDocument: response.data.confirmDocument,
-            contentPk: response.data.contentPk,
-            contents: response.data.contents
+        setConfirm(() => ({
+            document: response.data.confirmDocument
         }));
 
         const response2 = await getConfirmDocumentFormElements(selectedDocument.documentType);
         setDocumentElement(response2.data.data);
+
+        // 결재선 정보
+        const response3 = await getConfirmDocumentApporovalLine(selectedDocument.confirmDocumentId);
+        setApprovalLines(response3.data.data);
     }
 
     useEffect(() => {
         requestConfirmDocumentContent();
     }, [])
+
+    const { contents, companyId } = confirm.document;
 
     return <>
         <Modal
@@ -68,8 +78,19 @@ export default function ConfirmDocumentModal({
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="ConfirmDocument Detail Modal">
-            <p>결재 문서 상세 내역 모달</p>
+            <p style={{ fontSize: '18px', textAlign: 'center' }}>{contents.title}</p>
+            <p style={{ fontWeight: 'bold' }}>결재문서 정보</p>
+            <p style={{ margin: '0px' }}>고객사ID : {companyId}</p>
+            <p style={{ margin: '0px' }}>부서 정보 : ID - {companyId} 명 -  {companyId}</p>
 
+            <p style={{ fontWeight: 'bold' }}>결재자 정보</p>
+            <ul style={{ padding: '0px' }}>
+                {approvalLines.map(apl =>
+                    <>
+                        <li style={{ listStyleType: 'none' }}>결재자 : {apl.approvalName}</li>
+                        <li style={{ listStyleType: 'none' }}>결재자 ID : {apl.approvalId}</li>
+                    </>)}
+            </ul>
         </Modal>
     </>
 }

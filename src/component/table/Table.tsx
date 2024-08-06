@@ -6,7 +6,7 @@ import '../../component/table/table.css'
 interface TableProps {
     columns: string[],
     rows: ReactNode,
-    className: string
+    className?: string
 }
 
 export default function Table({ columns, rows, className }: TableProps) {
