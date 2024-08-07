@@ -14,7 +14,7 @@ export default function Table({ columns, rows, className }: TableProps) {
     return <Fragment>
         <table className={className ? className : "table_bs"}>
             <thead>
-                <tr style={{'fontSize': '14px'}}>
+                <tr>
                     {columns && columns.map((col) => <td key={col}>{col}</td>)}
                 </tr>
             </thead>

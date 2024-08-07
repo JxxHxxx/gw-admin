@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
+import { APPROVAL_STATUS } from '../../../util/convert/ConfirmStatusConverter';
+import Table from '../../../component/table/Table';
+import { format } from 'date-fns';
 
 const customStyles = {
     content: {
@@ -30,6 +33,15 @@ interface ConfirmDocument {
     },
 }
 
+interface ApprovalLines {
+    approvalLinePk: number
+    approvalOrder: number
+    approvalName: string
+    approvalId: string
+    approveStatus: typeof APPROVAL_STATUS
+    approveTime : string
+}
+
 export default function ConfirmDocumentModal({
     modalIsOpen,
     setIsOpen,
@@ -44,7 +56,7 @@ export default function ConfirmDocumentModal({
         }
     });
 
-    const [approvalLines, setApprovalLines] = useState({});
+    const [approvalLines, setApprovalLines] = useState<ApprovalLines[]>([]);
 
     const [documentElement, setDocumentElement] = useState();
 
@@ -84,13 +96,17 @@ export default function ConfirmDocumentModal({
             <p style={{ margin: '0px' }}>부서 정보 : ID - {companyId} 명 -  {companyId}</p>
 
             <p style={{ fontWeight: 'bold' }}>결재자 정보</p>
-            <ul style={{ padding: '0px' }}>
-                {approvalLines.map(apl =>
-                    <>
-                        <li style={{ listStyleType: 'none' }}>결재자 : {apl.approvalName}</li>
-                        <li style={{ listStyleType: 'none' }}>결재자 ID : {apl.approvalId}</li>
-                    </>)}
-            </ul>
+            <Table
+                className='table_minicol' columns={['결재선PK', '결재 순서', '결재자 이름', '결재자 ID', '승인 여부', '승인/반려 일시']}
+                rows={approvalLines.map(apl => <tr>
+                    <td>{apl.approvalLinePk}</td>
+                    <td>{apl.approvalOrder}</td>
+                    <td>{apl.approvalName}</td>
+                    <td>{apl.approvalId}</td>
+                    <td>{APPROVAL_STATUS[apl.approveStatus]}</td>
+                    <td>{apl.approveTime ? format(apl.approveTime, 'yyyy-MM-dd HH:mm:ss') : ''}</td>
+                </tr>)}
+            />
         </Modal>
     </>
 }
