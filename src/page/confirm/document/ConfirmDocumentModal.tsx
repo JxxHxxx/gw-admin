@@ -27,6 +27,10 @@ interface ConfirmDocumentProps {
 interface ConfirmDocument {
     document: {
         companyId: string
+        departmentId: string
+        departmentName: string
+        createTime: string
+        documentType: string
         contents: {
             title: string
         }
@@ -39,7 +43,7 @@ interface ApprovalLines {
     approvalName: string
     approvalId: string
     approveStatus: typeof APPROVAL_STATUS
-    approveTime : string
+    approveTime: string
 }
 
 export default function ConfirmDocumentModal({
@@ -50,6 +54,9 @@ export default function ConfirmDocumentModal({
     const [confirm, setConfirm] = useState<ConfirmDocument>({
         document: {
             companyId: '',
+            departmentId: '',
+            departmentName: '',
+            createTime: '',
             contents: {
                 title: ''
             }
@@ -82,7 +89,7 @@ export default function ConfirmDocumentModal({
         requestConfirmDocumentContent();
     }, [])
 
-    const { contents, companyId } = confirm.document;
+    const { contents, companyId, departmentId, departmentName, documentType, createTime, completedTime } = confirm.document;
 
     return <>
         <Modal
@@ -90,10 +97,16 @@ export default function ConfirmDocumentModal({
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="ConfirmDocument Detail Modal">
-            <p style={{ fontSize: '18px', textAlign: 'center' }}>{contents.title}</p>
             <p style={{ fontWeight: 'bold' }}>결재문서 정보</p>
-            <p style={{ margin: '0px' }}>고객사ID : {companyId}</p>
-            <p style={{ margin: '0px' }}>부서 정보 : ID - {companyId} 명 -  {companyId}</p>
+            <p style={{ margin: '0px', fontSize: '13px' }}>
+                생성 시간 : {createTime ? format(createTime, 'yyyy-MM-dd HH:mm:ss') : ''}
+            </p>
+            <p style={{ margin: '0px', fontSize: '13px' }}>
+                최종 결정 시간 : {completedTime ? format(completedTime, 'yyyy-MM-dd HH:mm:ss') : '진행중'}
+            </p>
+            <p style={{ margin: '0px', fontSize: '13px' }}>결재문서 유형 : {contents.title}({documentType})</p>
+            <p style={{ margin: '0px', fontSize: '13px' }}>고객사 : {companyId}</p>
+            <p style={{ margin: '0px', fontSize: '13px' }}>기안 부서 : {departmentName}({departmentId})</p>
 
             <p style={{ fontWeight: 'bold' }}>결재자 정보</p>
             <Table
