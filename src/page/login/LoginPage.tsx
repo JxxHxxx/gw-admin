@@ -7,6 +7,7 @@ import '../../component/button/button.css'
 import '../../component/input/input.css'
 import '../login/loginPage.css'
 import { useNavigate } from "react-router-dom";
+import { SignIn } from "../../api/AuthApi";
 
 interface signInState {
     id: string;
@@ -35,26 +36,26 @@ export default function LoginPage() {
         }))
     }
 
+
+
     const nav = useNavigate();
 
-    const handleOnClickLoginButton = () => {
-        if (signIn.id === '' || signIn.password === '') {
-            setSignIn((prev) => ({
-                ...prev,
-                failMsg: '아이디/비밀번호를 입력해주세요'
-            }))
-        } else if (signIn.id === signIn.password) {
-            setSignIn((prev) => ({
-                ...prev,
-                failMsg: null
-            }))
-            nav('/')
-        } else {
-            setSignIn((prev) => ({
-                ...prev,
-                failMsg: ['아이디 또는 비밀번호를 잘못 입력했습니다.', '입력하신 내용을 다시 확인해주세요.']
-            }))
+    const handleOnClickLoginButton = async (requestBody: object) => {
+        const {status, data} = await SignIn(requestBody)
+
+        if(status === 200) {
+            console.log('로그인 성공')
+            const loginResponse = data.data;
+            sessionStorage.setItem('memberId', loginResponse.memberId);
+            sessionStorage.setItem('name', loginResponse.name);
+            sessionStorage.setItem('companyId', loginResponse.companyId);
+            sessionStorage.setItem('companyName', loginResponse.companyName);
+            sessionStorage.setItem('departmentId', loginResponse.departmentId);
+            sessionStorage.setItem('departmentName', loginResponse.departmentName);
+
+            nav('/vacation/hist')
         }
+        
     }
 
     return <Fragment>
@@ -85,7 +86,10 @@ export default function LoginPage() {
                 <Button
                     name="sign-in"
                     className="bb"
-                    onClick={handleOnClickLoginButton} />
+                    onClick={() => handleOnClickLoginButton({
+                        memberId : signIn.id,
+                        password : signIn.password
+                    })} />
             </div>
         </div>
         <div style={{ 'textAlign': 'center', 'marginTop': '25px' }}>
