@@ -44,7 +44,7 @@ interface SearchTypeState {
     type: SEARCH_TYPE
 }
 
-interface Customers {
+export interface Customers {
     companyId: string,
     companyName: string
 }

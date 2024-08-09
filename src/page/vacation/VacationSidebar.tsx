@@ -9,8 +9,11 @@ interface SidebarMenu {
     select: string;
 }
 
-export default function VacationSidebar({selectedMenu}) {
+interface VacationSidebarProp {
+    selectedMenu : string;
+}
 
+export default function VacationSidebar({selectedMenu} : VacationSidebarProp) {
     const [menu, setMenu] = useState<SidebarMenu>({
         select: selectedMenu ? selectedMenu : ''
     });
