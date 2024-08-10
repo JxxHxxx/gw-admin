@@ -3,41 +3,38 @@ import { useNavigate } from "react-router-dom";
 import '../layout/header.css';
 import { URL_BATCH_CONFIGURATION, URL_CONFIRM_DOCUMENTS, URL_MESSAGE_RESYNC, URL_VACATION_HIST } from "../../constant/link/UrlConstant";
 import List from "../list/List";
+import ListItemV2 from "../list/ListItemV2";
 
 interface HeaderProp {
     menu?: string
 }
 
+interface HeaderMenu {
+    menuId: string
+    url: string
+    menuName: string
+}
+
+const headerMenuList: HeaderMenu[] = [
+    { menuId: 'userorg', url: '/userorg', menuName: '사용자/부서관리' },
+    { menuId: 'vacation', url: URL_VACATION_HIST, menuName: '휴가 관리' },
+    { menuId: 'confirm', url: URL_CONFIRM_DOCUMENTS, menuName: '결재 관리' },
+    { menuId: 'batch', url: URL_BATCH_CONFIGURATION, menuName: '배치 관리' },
+    { menuId: 'message', url: URL_MESSAGE_RESYNC, menuName: '메시지 관리' },
+]
+
 export default function Header({ menu = '' }: HeaderProp) {
     const nav = useNavigate();
 
+    const handleOnClickMenu = (url: string) => {
+        nav(url);
+    }
+
     return <List className="list_header">
-        <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-            <span className={menu === 'userorg' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                nav('/userorg');
-            }}
-            >사용자/부서 관리</span>
-        </li>
-        <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-            <span className={menu === 'vacation' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                nav(URL_VACATION_HIST);
-            }}
-            >휴가 관리</span>
-        </li>
-        <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-            <span className={menu === 'confirm' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                nav(URL_CONFIRM_DOCUMENTS)
-            }}>결재 관리</span>
-        </li>
-        <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-            <span className={menu === 'batch' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                nav(URL_BATCH_CONFIGURATION)
-            }}>배치 관리</span>
-        </li>
-        <li style={{ 'marginRight': '20px', 'cursor': 'pointer' }}>
-            <span className={menu === 'message' ? 'present_menu' : 'not_present_menu'} onClick={() => {
-                nav(URL_MESSAGE_RESYNC)
-            }}>메시지 관리</span>
-        </li>
+        {headerMenuList.map(headerMenu =>
+            <ListItemV2 className="list_item_header">
+                <span className={menu === headerMenu.menuId ? 'present_menu' : 'not_present_menu'}
+                    onClick={() => handleOnClickMenu(headerMenu.url)} >{headerMenu.menuName}</span>
+            </ListItemV2>)}
     </List>
 }
