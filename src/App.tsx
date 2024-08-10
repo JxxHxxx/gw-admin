@@ -15,12 +15,25 @@ import CommonVacationCreatePage from './page/vacation/config/common/CommonVacati
 import PersonalVacationConfigPage from './page/vacation/config/personal/PersonalVacationConfigPage'
 import CommonVacationUpdatePage from './page/vacation/config/common/CommonVacationUpdatePage'
 import SpecialVacationPage from './page/vacation/config/common/SpecialVacationPage'
+import Page from './page/Page'
+import Header from './component/layout/Header'
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/login',
       element: <LoginPage />
+    },
+    {
+      path: '/userorg',
+      element: <Page
+        cnSideMainLayout="page_grd"
+        cnAside="side_b"
+        cnMain="main_b"
+        header={<Header menu="userorg" />}
+      >
+        <h3>사용자/조직 관리 임시</h3>
+      </Page>
     },
     {
       path: URL_VACATION_HIST,
