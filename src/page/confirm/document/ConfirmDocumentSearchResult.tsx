@@ -5,7 +5,7 @@ import { useState } from "react";
 import ConfirmDocumentModal from "./ConfirmDocumentModal";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 
-interface ConfirmDocument {
+export interface ConfirmDocument {
     pk: number
     contentPk: number
     documentType: string

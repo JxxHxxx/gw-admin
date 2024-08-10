@@ -31,6 +31,7 @@ interface ConfirmDocument {
         departmentName: string
         createTime: string
         documentType: string
+        completedTime: string
         contents: {
             title: string
         }
@@ -108,6 +109,7 @@ export default function ConfirmDocumentModal({
             <p style={{ margin: '0px', fontSize: '13px' }}>고객사 : {companyId}</p>
             <p style={{ margin: '0px', fontSize: '13px' }}>기안 부서 : {departmentName}({departmentId})</p>
 
+            <p style={{ fontWeight: 'bold' }}>요청 내용</p>
             <p style={{ fontWeight: 'bold' }}>결재자 정보</p>
             <Table
                 className='table_minicol' columns={['결재선PK', '결재 순서', '결재자 이름', '결재자 ID', '승인 여부', '승인/반려 일시']}

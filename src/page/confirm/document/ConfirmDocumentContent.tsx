@@ -11,7 +11,7 @@ import PeriodInput from "../../../component/input/PeriodInput";
 import List from "../../../component/list/List";
 import ListItemV2 from "../../../component/list/ListItemV2";
 import { getCompanyCode, getDepartmentCode } from "../../../api/OrganizationApi";
-import ConfirmDocumentSearchResult from "./ConfirmDocumentSearchResult";
+import ConfirmDocumentSearchResult, { ConfirmDocument } from "./ConfirmDocumentSearchResult";
 
 interface SearchCondState {
     confirmDocumentId: string;
@@ -82,7 +82,7 @@ export default function ConfirmDocumentContent() {
         endDate: ''
     })
     // 검색 결과 결재 문서 state
-    const [confirmDocuments, setConfirmDocuments] = useState<object[]>([
+    const [confirmDocuments, setConfirmDocuments] = useState<ConfirmDocument[]>([
     ]);
     // 회사 코드 정보
     const [companyCodes, setCompanyCodes] = useState<Customers[]>([{ companyId: '', companyName: '' }]);
