@@ -34,7 +34,7 @@ export default function ConfirmDocumentSearchResult({
     });
 
 
-    const handleOnClickConfrimDocumentRow = (confirmDocument: object) => {
+    const handleOnClickConfrimDocumentRow = (confirmDocument: ConfirmDocument) => {
         setIsOpen(true);
         setselectedDocument(() => ({
             contentPk: confirmDocument.contentPk,

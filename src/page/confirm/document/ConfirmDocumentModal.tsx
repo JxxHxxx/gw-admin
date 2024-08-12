@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
+import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements, getConfirmDocumentFormElementsV2 } from '../../../api/ConfirmApi';
 import { APPROVAL_STATUS } from '../../../util/convert/ConfirmStatusConverter';
 import Table from '../../../component/table/Table';
 import { format } from 'date-fns';
@@ -21,7 +21,7 @@ const customStyles = {
 interface ConfirmDocumentProps {
     modalIsOpen: boolean
     setIsOpen: () => void
-    selectedDocument: object
+    selectedDocument: selectedDocument
 }
 
 interface ConfirmDocument {
@@ -47,10 +47,17 @@ interface ApprovalLines {
     approveTime: string
 }
 
+export interface selectedDocument {
+    contentPk : number
+    documentType : string
+    confirmDocumentId : string
+
+}
+
 export default function ConfirmDocumentModal({
     modalIsOpen,
     setIsOpen,
-    selectedDocument = {} }: ConfirmDocumentProps) {
+    selectedDocument }: ConfirmDocumentProps) {
 
     const [confirm, setConfirm] = useState<ConfirmDocument>({
         document: {
@@ -58,6 +65,8 @@ export default function ConfirmDocumentModal({
             departmentId: '',
             departmentName: '',
             createTime: '',
+            documentType: '',
+            completedTime: '',
             contents: {
                 title: ''
             }
@@ -72,13 +81,17 @@ export default function ConfirmDocumentModal({
         setIsOpen(false);
     }
 
+    const { contents, companyId, departmentId, departmentName, documentType, createTime, completedTime } = confirm.document;
+
     const requestConfirmDocumentContent = async () => {
         const response = await getConfirmDocumentContent(selectedDocument.contentPk);
         setConfirm(() => ({
             document: response.data.confirmDocument
         }));
-
-        const response2 = await getConfirmDocumentFormElements(selectedDocument.documentType);
+        const elementParams = {
+            companyId: 'com,' + companyId // com 공통으로 사용하는 결재문서 폼에 대한
+        }
+        const response2 = await getConfirmDocumentFormElementsV2(selectedDocument.documentType, { ...elementParams });
         setDocumentElement(response2.data.data);
 
         // 결재선 정보
@@ -89,8 +102,6 @@ export default function ConfirmDocumentModal({
     useEffect(() => {
         requestConfirmDocumentContent();
     }, [])
-
-    const { contents, companyId, departmentId, departmentName, documentType, createTime, completedTime } = confirm.document;
 
     return <>
         <Modal
