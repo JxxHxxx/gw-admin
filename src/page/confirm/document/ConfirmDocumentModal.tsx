@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements, getConfirmDocumentFormElementsV2 } from '../../../api/ConfirmApi';
+import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
 import { APPROVAL_STATUS } from '../../../util/convert/ConfirmStatusConverter';
 import Table from '../../../component/table/Table';
 import { format } from 'date-fns';
@@ -91,7 +91,7 @@ export default function ConfirmDocumentModal({
         const elementParams = {
             companyId: 'com,' + companyId // com 공통으로 사용하는 결재문서 폼에 대한
         }
-        const response2 = await getConfirmDocumentFormElementsV2(selectedDocument.documentType, { ...elementParams });
+        const response2 = await getConfirmDocumentFormElements(selectedDocument.documentType, { ...elementParams });
         setDocumentElement(response2.data.data);
 
         // 결재선 정보
