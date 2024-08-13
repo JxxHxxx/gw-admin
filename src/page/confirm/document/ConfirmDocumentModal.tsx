@@ -51,6 +51,7 @@ export interface selectedDocument {
     contentPk : number
     documentType : string
     confirmDocumentId : string
+    companyId : string
 
 }
 
@@ -89,7 +90,7 @@ export default function ConfirmDocumentModal({
             document: response.data.confirmDocument
         }));
         const elementParams = {
-            companyId: 'com,' + companyId // com 공통으로 사용하는 결재문서 폼에 대한
+            companyId: 'com,' + selectedDocument.companyId // com 공통으로 사용하는 결재문서 폼에 대한
         }
         const response2 = await getConfirmDocumentFormElements(selectedDocument.documentType, { ...elementParams });
         setDocumentElement(response2.data.data);

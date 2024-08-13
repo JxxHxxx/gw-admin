@@ -3,7 +3,7 @@ import Input from "../../../component/input/Input";
 import { FiMoreVertical } from "react-icons/fi";
 
 import '../../../component/card/card.css'
-import { findConfirmForms, getConfirmDocumentFormElementsV2 } from "../../../api/ConfirmApi";
+import { findConfirmForms, getConfirmDocumentFormElements } from "../../../api/ConfirmApi";
 import { useEffect, useRef, useState } from "react";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 import CreateConfirmFormModal from "./CreateConfirmFormModal";
@@ -89,7 +89,7 @@ export default function ConfirmFormConfig() {
             companyId: companyId
         }
 
-        const { data } = await getConfirmDocumentFormElementsV2(confirmDocumentFormId, params);
+        const { data } = await getConfirmDocumentFormElements(confirmDocumentFormId, params);
         if (data.status === 200) {
             setFormElements(data.data);
         }

@@ -30,7 +30,8 @@ export default function ConfirmDocumentSearchResult({
     const [selectedDocument, setselectedDocument] = useState({
         contentPk: 0,
         documentType: '',
-        confirmDocumentId : ''
+        confirmDocumentId : '',
+        companyId : ''
     });
 
 
@@ -39,7 +40,8 @@ export default function ConfirmDocumentSearchResult({
         setselectedDocument(() => ({
             contentPk: confirmDocument.contentPk,
             documentType: confirmDocument.documentType,
-            confirmDocumentId : confirmDocument.confirmDocumentId
+            confirmDocumentId : confirmDocument.confirmDocumentId,
+            companyId : confirmDocument.companyId
         }));
     }
 
