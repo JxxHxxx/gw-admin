@@ -7,7 +7,8 @@ import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import MessageReSyncModal from "./MessageReSyncModal";
 import PeriodInput from "../../../component/input/PeriodInput";
 import { MessageRetryContext } from "../../../context/PaginationContext";
-import Pagination, { ONE_PAGES_CONTENT_SIZE_1, PaginationContextProp } from "../../../component/pagination/Paginaton";
+import Pagination, { ONE_PAGES_CONTENT_SIZE_10, PaginationContextProp } from "../../../component/pagination/Paginaton";
+import DocumentUtils from "../../../util/convert/DocumentUtils";
 
 interface MessageSyncProp {
     pk: number,
@@ -16,7 +17,15 @@ interface MessageSyncProp {
     messageProcessStatus: string,
     processStartTime: string,
     processEndTime: string,
-    body: object
+    body: MessageBody
+}
+
+interface MessageBody {
+    company_id?: string
+    requester_id?: string
+    requester_name?: string
+    document_type?: string
+    requestBody?: object
 }
 
 interface Pagination {
@@ -65,12 +74,12 @@ export default function MessageRetryContent() {
         }))
     }
 
-    const requestFailMessageQResult = async (pageNumber:number) => {
+    const requestFailMessageQResult = async (pageNumber: number) => {
         const params = {
             startDate: searchCond.startDate,
             endDate: searchCond.endDate,
             page: pageNumber,
-            size: ONE_PAGES_CONTENT_SIZE_1
+            size: ONE_PAGES_CONTENT_SIZE_10
         }
 
         const response = await getFailMessageQResult(params);
@@ -119,15 +128,15 @@ export default function MessageRetryContent() {
                     <Pagination
                         paginationContext={MessageRetryContext}
                         sendToBtnNumber={(btnNum: number) => (updatePageNumber(btnNum))}
-                        columns={['MQ RESULT PK', 'Original MQ PK', '요청자 그룹', '요청자 ID', '요청자', '결재 문서 유형', '목적지', '처리 상태', '처리 시작일시', '처리 종료일시']}
+                        columns={['MQ RESULT PK', 'Original MQ PK', '요청자 그룹', '요청자 ID', '요청자', '문서 유형', '목적지', '처리 상태', '처리 시작일시', '처리 종료일시']}
                         rows={qHistPgn.content.map(mqr => (
                             <tr key={mqr.pk} onClick={() => onClickTableRow(mqr.pk)}>
-                                <td>{mqr.pk}</td>
-                                <td>{mqr.originalMessagePk}</td>
-                                <td>{mqr.body.company_id}</td>
-                                <td>{mqr.body.requester_id}</td>
-                                <td>{mqr.body.requester_name}</td>
-                                <td>{mqr.body.document_type}</td>
+                                <td style={{width : '100px'}}>{mqr.pk}</td>
+                                <td style={{width : '100px'}}>{mqr.originalMessagePk}</td>
+                                <td style={{width : '75px'}}>{mqr.body.company_id ? mqr.body.company_id : mqr.body.requestBody.companyId}</td>
+                                <td style={{width : '75px'}}>{mqr.body.requester_id ? mqr.body.requester_id : mqr.body.requestBody.requesterId}</td>
+                                <td style={{width : '50px'}}>{mqr.body.requester_name ? mqr.body.requester_name : mqr.body.requestBody.requesterName}</td>
+                                <td>{mqr.body.document_type ? DocumentUtils.convertDocumentType(mqr.body.document_type) : DocumentUtils.convertDocumentType(mqr.body.requestBody.documentType)}</td>
                                 <td>{mqr.messageDestination}</td>
                                 <td>{mqr.messageProcessStatus}</td>
                                 <td>{mqr.processStartTime}</td>

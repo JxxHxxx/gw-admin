@@ -141,11 +141,11 @@ export default function Pagination({
     }, [pnContext.pageable.pageNumber])
 
     return <>
-        <div className="abs_table_container">
+        <div className="pgnTableCtnV2">
             <Table columns={columns} rows={<>{rows}</>} className="table_bs tbw100" />
             {children}
         </div>
-        <div style={{ textAlign: 'center', width : '940px' }}>
+        <div className="pgnBtnGroupV2">
             <Button className={"btn_pgn round"} name={"<<"} onClick={handlePreviousSectionBtn} />
             <Button className={"btn_pgn round"} name={"<"} onClick={handlePreviousBtn} />
             {renderButtons()}
