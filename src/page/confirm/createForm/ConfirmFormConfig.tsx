@@ -81,7 +81,7 @@ export default function ConfirmFormConfig() {
         setCreateFormModal(true);
     }
 
-    const handleClickConfirmPreview = async (title:string, confirmDocumentFormId: string, companyId: string) => {
+    const handleClickConfirmPreview = async (title: string, confirmDocumentFormId: string, companyId: string) => {
         setPreviewFormModal(true);
         setPreviewFormTitle(title)
 
@@ -138,10 +138,10 @@ export default function ConfirmFormConfig() {
                 alignItems: 'center',
                 border: '1px dashed gray',
             }}>
-                                            {/* 6개보다 결과가 많으면 스크롤 적용, 아니면 미적용 */}
+                {/* 6개보다 결과가 많으면 스크롤 적용, 아니면 미적용 */}
                 {confirmForms.length > 0 ? (<ul className={confirmForms.length > 6 ? "card_container_b" : "card_container"}>
                     {confirmForms.map((form) => {
-                       return <>
+                        return <>
                             <li key={form.confirmDocumentFormPk} className="card_item flex_card">
                                 <div className="item_info">
                                     <p style={{ margin: '0px' }}
@@ -149,7 +149,10 @@ export default function ConfirmFormConfig() {
                                     <p style={{ margin: '0px', fontSize: '12px', color: 'gray' }}
                                         onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{convertCompanyId(form.companyId)}</p>
                                 </div>
-                                <FiMoreVertical style={{ cursor: 'pointer' }} size='1.3em' className="fimore_icons" onClick={handleClickModifyIcon} />
+                                <FiMoreVertical style={{ cursor: 'pointer' }}
+                                    size='1.3em'
+                                    className="fimore_icons"
+                                    onClick={handleClickModifyIcon} />
                             </li>
                         </>
                     })}

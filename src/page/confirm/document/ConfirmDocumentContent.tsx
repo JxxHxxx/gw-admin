@@ -44,12 +44,12 @@ interface SearchTypeState {
     type: SEARCH_TYPE
 }
 
-export interface Customers {
+export interface Customer {
     companyId: string,
     companyName: string
 }
 
-interface selectOption {
+export interface selectOption {
     value: string;
     label: string;
 }
@@ -85,7 +85,7 @@ export default function ConfirmDocumentContent() {
     const [confirmDocuments, setConfirmDocuments] = useState<ConfirmDocument[]>([
     ]);
     // 회사 코드 정보
-    const [companyCodes, setCompanyCodes] = useState<Customers[]>([{ companyId: '', companyName: '' }]);
+    const [companyCodes, setCompanyCodes] = useState<Customer[]>([{ companyId: '', companyName: '' }]);
     const [departmentCodes, setDepartmentCodes] = useState([{ departmentId: '' }]);
 
     const requestCustomerInformation = async () => {

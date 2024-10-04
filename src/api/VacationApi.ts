@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 interface VacationApi {
-    addCommonVacation: () => object;
+    addCommonVacation: (requestBody:object) => object;
     updateCommonVacation: () => object;
 }
 
@@ -19,8 +19,8 @@ const createAxiosInstance = (baseURL = '') => {
 const instance = createAxiosInstance('http://localhost:8080')
 
 
-const addCommonVacation = () => {
-    return instance.post(`/admin/vacations/set-common-vacation`)
+const addCommonVacation = (requestBody:object) => {
+    return instance.post(`/admin/vacations/set-common-vacation`, requestBody)
         .then((res) => res)
         .catch((err) => alert(err))
 };
@@ -30,6 +30,7 @@ const updateCommonVacation = () => {
         .catch((err) => alert(err))
 
 };
+
 export const VacationApi:VacationApi = {
     addCommonVacation,
     updateCommonVacation

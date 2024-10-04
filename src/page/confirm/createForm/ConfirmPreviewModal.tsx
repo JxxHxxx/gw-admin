@@ -163,6 +163,7 @@ export default function ConfirmPreviewModal({
             <div style={{ textAlign: 'right' }}
                 onClick={closeModal}>
                 <RiCloseLargeLine
+                    style={{cursor : 'pointer'}}
                     size='1.2em'
                     color='gray' />
             </div>
