@@ -48,7 +48,13 @@ export const findConfirmForms = function (params: object) {
 
 // 결재선 조회 API
 export const getConfirmDocumentApporovalLine = function (confirmDocumentId: string) {
-    return instance.get(`/api/confirm-documents/${confirmDocumentId}/approval-lines`)
+    return instance.get(`/admin/confirm-documents/${confirmDocumentId}/approval-lines`)
         .then((res) => res)
         .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
 }
+
+const ConfirmApi = {
+    getConfirmDocumentApporovalLine
+}
+
+export default ConfirmApi;

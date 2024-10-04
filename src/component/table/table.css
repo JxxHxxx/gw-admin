@@ -102,10 +102,6 @@
     /* width: 900px; */
 }
 
-.table_cfc .ele_nm {
-    width: 15%;
-}
-
 .table_cfc_tb .col {
     background-color: var(--main-color);
     color: white;

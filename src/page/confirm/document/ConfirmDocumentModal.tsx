@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
+import ConfirmApi, { getConfirmDocumentApporovalLine, getConfirmDocumentContent, getConfirmDocumentFormElements } from '../../../api/ConfirmApi';
 import { APPROVAL_STATUS } from '../../../util/convert/ConfirmStatusConverter';
 import Table from '../../../component/table/Table';
 import { format } from 'date-fns';
@@ -96,7 +96,7 @@ export default function ConfirmDocumentModal({
         setDocumentElement(response2.data.data);
 
         // 결재선 정보
-        const response3 = await getConfirmDocumentApporovalLine(selectedDocument.confirmDocumentId);
+        const response3 = await ConfirmApi.getConfirmDocumentApporovalLine(selectedDocument.confirmDocumentId);
         setApprovalLines(response3.data.data);
     }
 

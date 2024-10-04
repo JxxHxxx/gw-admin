@@ -10,6 +10,7 @@ export const URL_BATCH_CONFIGURATION: string = '/batch/run';
 // 결재 관리
 export const URL_CONFIRM_DOCUMENTS: string = '/confirm-documents';
 export const URL_CONFIRM_DOCUMENTS_CREATE: string = '/confirm-documents/create';
+export const URL_CONFIRM_DOCUMENTS_MAPPING_API: string = '/confirm-documents/mapping-api';
 export const URL_APPROVAL_LINE: string = '/approval-lines';
 
 // 휴가 관리

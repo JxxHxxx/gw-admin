@@ -8,7 +8,7 @@ import MessageRetryPage from './page/message/resync/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
 import BatchHistPage from './page/batch/history/BatchHistPage'
-import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_CONFIRM_DOCUMENTS_CREATE, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC, URL_VACATION_CONFIG_COMMON_CREATE, URL_VACATION_CONFIG_COMMON_SPECIAL, URL_VACATION_CONFIG_COMMON_UPDATE, URL_VACATION_CONFIG_PERSONAL, URL_VACATION_HIST } from './constant/link/UrlConstant'
+import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_CONFIRM_DOCUMENTS_CREATE, URL_CONFIRM_DOCUMENTS_MAPPING_API, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC, URL_VACATION_CONFIG_COMMON_CREATE, URL_VACATION_CONFIG_COMMON_SPECIAL, URL_VACATION_CONFIG_COMMON_UPDATE, URL_VACATION_CONFIG_PERSONAL, URL_VACATION_HIST } from './constant/link/UrlConstant'
 import ApprovalLinePage from './page/confirm/approvalLine/ApprovalLinePage'
 import ConfirmFormConfigPage from './page/confirm/createForm/ConfirmFormConfigPage'
 import CommonVacationCreatePage from './page/vacation/config/common/CommonVacationCreatePage'
@@ -17,6 +17,7 @@ import CommonVacationUpdatePage from './page/vacation/config/common/CommonVacati
 import SpecialVacationPage from './page/vacation/config/common/SpecialVacationPage'
 import Page from './page/Page'
 import Header from './component/layout/Header'
+import MappingApiPage from './page/confirm/mappingApi/MappingApiPage'
 
 function App() {
   const router = createBrowserRouter([
@@ -89,6 +90,10 @@ function App() {
       path: URL_APPROVAL_LINE,
       element: <ApprovalLinePage />
     },
+    {
+      path: URL_CONFIRM_DOCUMENTS_MAPPING_API,
+      element : <MappingApiPage />
+    }
   ])
 
   Modal.setAppElement('#root');
