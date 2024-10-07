@@ -4,6 +4,7 @@ import ConfirmApi, { getConfirmDocumentApporovalLine, getConfirmDocumentContent,
 import { APPROVAL_STATUS } from '../../../util/convert/ConfirmStatusConverter';
 import Table from '../../../component/table/Table';
 import { format } from 'date-fns';
+import OneConfirmContent, { FormElement } from './OneConfirmContent';
 
 const customStyles = {
     content: {
@@ -48,10 +49,10 @@ interface ApprovalLines {
 }
 
 export interface selectedDocument {
-    contentPk : number
-    documentType : string
-    confirmDocumentId : string
-    companyId : string
+    contentPk: number
+    documentType: string
+    confirmDocumentId: string
+    companyId: string
 
 }
 
@@ -76,7 +77,7 @@ export default function ConfirmDocumentModal({
 
     const [approvalLines, setApprovalLines] = useState<ApprovalLines[]>([]);
 
-    const [documentElement, setDocumentElement] = useState();
+    const [documentElement, setDocumentElement] = useState<FormElement[]>([]);
 
     function closeModal() {
         setIsOpen(false);
@@ -122,6 +123,7 @@ export default function ConfirmDocumentModal({
             <p style={{ margin: '0px', fontSize: '13px' }}>기안 부서 : {departmentName}({departmentId})</p>
 
             <p style={{ fontWeight: 'bold' }}>요청 내용</p>
+            <OneConfirmContent formElements={documentElement} confirm={confirm} />
             <p style={{ fontWeight: 'bold' }}>결재자 정보</p>
             <Table
                 className='table_minicol' columns={['결재선PK', '결재 순서', '결재자 이름', '결재자 ID', '승인 여부', '승인/반려 일시']}
