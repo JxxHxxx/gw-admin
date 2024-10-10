@@ -12,12 +12,20 @@ import { RiCloseLargeLine } from "react-icons/ri";
 import ListItemV2 from "../../../../component/list/ListItemV2";
 import { ko } from "date-fns/locale";
 import RadioDuoV2 from "../../../../component/input/RadioDouV2";
+import Input from "../../../../component/input/Input";
 
 interface CommonVacation {
     companyId?: string
     dates: string[]
     deducted: boolean
     approval: boolean
+}
+
+interface Requester {
+    departmentId: string
+    departmentName: string
+    requesterId: string
+    requesterName: string
 }
 
 export default function CommonVacationCreateContent() {
@@ -28,6 +36,13 @@ export default function CommonVacationCreateContent() {
         deducted: true,
         approval: true,
         dates: []
+    });
+
+    const [requester, setRequester] = useState<Requester>({
+        departmentId : '',
+        departmentName : '',
+        requesterId : '',
+        requesterName : ''
     });
 
     const handleAddCommonVacationDate = (value: string): void => {
@@ -43,7 +58,7 @@ export default function CommonVacationCreateContent() {
         }))
     }
     // 라디오 버튼 값 상태 변경 처리
-    const handleChangeRadioValue = (fieldName:string, used:boolean) => {
+    const handleChangeRadioValue = (fieldName: string, used: boolean) => {
         setCommonVacation((prev) => ({
             ...prev,
             [fieldName]: used
@@ -79,15 +94,24 @@ export default function CommonVacationCreateContent() {
 
     const handleAddCommonVacation = async (event?: any) => {
         event.preventDefault();
-        alert('공동 연차 등록 처리')
+        if (!requester.departmentId || !requester.departmentName || !requester.requesterId || !requester.requesterName) {
+            alert('요청자 정보를 입력해주세요');
+            return;
+        }
+
         const requestBody = {
             companyId: commonVacation.companyId,
             mustApproval: true,
             deducted: true,
-            vacationDates: commonVacation.dates
+            vacationDates: commonVacation.dates,
+            // 테스트를 위한 코드
+            requesterId: requester.requesterId,
+            requesterName: requester.requesterName,
+            departmentId: requester.departmentId,
+            departmentName: requester.departmentName
         }
         const response = await VacationApi.addCommonVacation(requestBody);
-        console.log(response);
+        alert('공동 연차 등록 처리');
     }
 
     useEffect(() => {
@@ -113,20 +137,52 @@ export default function CommonVacationCreateContent() {
                         onClick={handleAddCommonVacation} />
                 </div>
             </div>
-            <div style={{ display: 'inline-block' }}>
-                <label htmlFor="company_choice" style={{ 'fontSize': '12px' }}>고객사 선택</label>
-                <Select
-                    id="company_choice"
-                    styles={{
-                        control: (base) => ({
-                            ...base,
-                            width: 200,
-                            fontSize: '12px'
-                        }),
-                    }}
-                    placeholder='고객사'
-                    options={companyOptions()}
-                    onChange={handleChangeCommonVacationCompanyId} />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: 'inline-block' }}>
+                    <label htmlFor="company_choice" style={{ 'fontSize': '12px' }}>고객사 선택</label>
+                    <Select
+                        id="company_choice"
+                        styles={{
+                            control: (base) => ({
+                                ...base,
+                                width: 200,
+                                fontSize: '12px'
+                            }),
+                        }}
+                        placeholder='고객사'
+                        options={companyOptions()}
+                        onChange={handleChangeCommonVacationCompanyId} />
+                </div>
+                <div id="requesterInfoDiv">
+                    <label htmlFor="requesterId" style={{ display: 'block', fontSize: '12px' }}>요청자 ID</label>
+                    <Input id="requesterId"
+                        placeholder="요청자 ID를 입력하세요" 
+                        onChange={(event) => setRequester((prev) => ({
+                            ...prev,
+                            requesterId : event.target.value
+                        }))}/>
+                    <label htmlFor="requesterName" style={{ display: 'block', fontSize: '12px' }}>요청자</label>
+                    <Input id="requesterName"
+                        placeholder="요청자를 입력하세요" 
+                        onChange={(event) => setRequester((prev) => ({
+                            ...prev,
+                            requesterName : event.target.value
+                        }))}/>
+                    <label htmlFor="departmentId" style={{ display: 'block', fontSize: '12px' }}>요청 부서 ID</label>
+                    <Input id="departmentId"
+                        placeholder="요청 부서 ID를 입력하세요" 
+                        onChange={(event) => setRequester((prev) => ({
+                            ...prev,
+                            departmentId : event.target.value
+                        }))}/>
+                    <label htmlFor="departmentName" style={{ display: 'block', fontSize: '12px' }}>요청 부서</label>
+                    <Input id="departmentName"
+                        placeholder="요청 부서 명을 입력하세요" 
+                        onChange={(event) => setRequester((prev) => ({
+                            ...prev,
+                            departmentName : event.target.value
+                        }))}/>
+                </div>
             </div>
             <div id="vacationRadioOptions" style={{ fontFamily: 'S-CoreDream-3Light' }}>
                 <div style={{ marginBottom: '10px' }}>
