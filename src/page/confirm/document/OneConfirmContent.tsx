@@ -13,11 +13,15 @@ interface Element {
     elementKey: string
 }
 
+interface Confirm {
+    document ?:object
+}
+
 
 export default function OneConfirmContent({
     formElements,
     confirm
-}: { formElements: FormElement[] }) {``
+}: { formElements: FormElement[], confirm:Confirm }) {
 
     // 페어 타입 랜더링
     const renderPair = (pairFormElement: FormElement) => (
@@ -37,7 +41,7 @@ export default function OneConfirmContent({
                             width: '15%',
                             fontSize: '15px'
                         }}>{element.elementName}</td>
-                        <td>{confirm.document.contents[element.elementKey]}</td>
+                        <td>{confirm && confirm.document.contents[element.elementKey]}</td>
                     </tr>
                 ))}
             </tbody>
