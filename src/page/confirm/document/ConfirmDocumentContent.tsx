@@ -12,6 +12,8 @@ import List from "../../../component/list/List";
 import ListItemV2 from "../../../component/list/ListItemV2";
 import { getCompanyCode, getDepartmentCode } from "../../../api/OrganizationApi";
 import ConfirmDocumentSearchResult, { ConfirmDocument } from "./ConfirmDocumentSearchResult";
+import MainContainer from "../../../component/container/MainContainer";
+import Title from "../../../component/text/Title";
 
 interface SearchCondState {
     confirmDocumentId: string;
@@ -233,8 +235,10 @@ export default function ConfirmDocumentContent() {
     const departmenetCodeOptions = () => departmentCodes.map(dc => ({ value: dc.departmentId, label: dc.departmentName }));
 
     return <>
-        <div id="cfd_container_1000" style={{ width: '1000px', border: '1px dashed red' }}>
-            <span id="cfd_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>결재 문서 관리</span>
+        <MainContainer>
+            <Title
+                id="confirmDocumentHistTitle"
+                name="결재 문서 관리" />
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -395,6 +399,6 @@ export default function ConfirmDocumentContent() {
             <h3 style={{ 'marginBottom': '0px' }}>조회 결과</h3>
             <ThinBlockLine />
             <ConfirmDocumentSearchResult confirmDocuments={confirmDocuments} />
-        </div>
+        </MainContainer>
     </>
 }

@@ -8,7 +8,7 @@ import MessageRetryPage from './page/message/resync/MessageRetryPage'
 import BatchConfigurationPage from './page/batch/config/BatchConfigurationPage'
 import Modal from 'react-modal';
 import BatchHistPage from './page/batch/history/BatchHistPage'
-import { URL_APPROVAL_LINE, URL_BATCH_CONFIGURATION, URL_BATCH_EXECUTION_HIST, URL_CONFIRM_DOCUMENTS, URL_CONFIRM_DOCUMENTS_CREATE, URL_CONFIRM_DOCUMENTS_MAPPING_API, URL_MESSAGE_HIST, URL_MESSAGE_RESYNC, URL_VACATION_CONFIG_COMMON_CREATE, URL_VACATION_CONFIG_COMMON_SPECIAL, URL_VACATION_CONFIG_COMMON_UPDATE, URL_VACATION_CONFIG_PERSONAL, URL_VACATION_HIST } from './constant/link/UrlConstant'
+import * as UrlConstant from './constant/link/UrlConstant'
 import ApprovalLinePage from './page/confirm/approvalLine/ApprovalLinePage'
 import ConfirmFormConfigPage from './page/confirm/createForm/ConfirmFormConfigPage'
 import CommonVacationCreatePage from './page/vacation/config/common/CommonVacationCreatePage'
@@ -22,7 +22,7 @@ import MappingApiPage from './page/confirm/mappingApi/MappingApiPage'
 function App() {
   const router = createBrowserRouter([
     {
-      path: '/login',
+      path: UrlConstant.URL_MAIN,
       element: <LoginPage />
     },
     {
@@ -37,61 +37,57 @@ function App() {
       </Page>
     },
     {
-      path: URL_VACATION_HIST,
+      path: UrlConstant.URL_VACATION_HIST,
       element: <VacationHistPage />
     },
     {
-      path: URL_VACATION_CONFIG_COMMON_CREATE,
+      path: UrlConstant.URL_VACATION_CONFIG_COMMON_CREATE,
       element: <CommonVacationCreatePage />
     },
     {
-      path: URL_VACATION_CONFIG_COMMON_UPDATE,
+      path: UrlConstant.URL_VACATION_CONFIG_COMMON_UPDATE,
       element: <CommonVacationUpdatePage />
     },
     {
-      path: URL_VACATION_CONFIG_COMMON_SPECIAL,
+      path: UrlConstant.URL_VACATION_CONFIG_COMMON_SPECIAL,
       element: <SpecialVacationPage />
     },
     {
-      path: URL_VACATION_CONFIG_PERSONAL,
+      path: UrlConstant.URL_VACATION_CONFIG_PERSONAL,
       element: <PersonalVacationConfigPage />
     },
     {
-      path: URL_MESSAGE_HIST,
+      path: UrlConstant.URL_MESSAGE_HIST,
       element: <MessageHistPage />
     }
     ,
     {
-      path: URL_MESSAGE_RESYNC,
+      path: UrlConstant.URL_MESSAGE_RESYNC,
       element: <MessageRetryPage />
     }
     ,
     {
-      path: URL_BATCH_CONFIGURATION,
+      path: UrlConstant.URL_BATCH_CONFIGURATION,
       element: <BatchConfigurationPage />
     },
     {
-      path: URL_BATCH_EXECUTION_HIST,
+      path: UrlConstant.URL_BATCH_EXECUTION_HIST,
       element: <BatchHistPage />
     },
     {
-      path: '/vacation',
-      element: <VacationHistPage />
-    },
-    {
-      path: URL_CONFIRM_DOCUMENTS,
+      path: UrlConstant.URL_CONFIRM_DOCUMENTS,
       element: <ConfirmPage />
     },
     {
-      path: URL_CONFIRM_DOCUMENTS_CREATE,
+      path: UrlConstant.URL_CONFIRM_DOCUMENTS_CREATE,
       element: <ConfirmFormConfigPage />
     },
     {
-      path: URL_APPROVAL_LINE,
+      path: UrlConstant.URL_APPROVAL_LINE,
       element: <ApprovalLinePage />
     },
     {
-      path: URL_CONFIRM_DOCUMENTS_MAPPING_API,
+      path: UrlConstant.URL_CONFIRM_DOCUMENTS_MAPPING_API,
       element : <MappingApiPage />
     }
   ])

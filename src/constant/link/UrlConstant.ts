@@ -1,4 +1,6 @@
 
+export const URL_MAIN: string = '/';
+
 // 메시지Q 관리
 export const URL_MESSAGE_RESYNC: string = '/message/retry';
 export const URL_MESSAGE_HIST: string = '/message/hist';
