@@ -13,7 +13,7 @@ export default function ListItemV2({
     children = <></>,
     onClick = () => { } }: ListProps) {
     return <Fragment>
-        <li
+        <li style={{listStyle : 'none'}}
             className={className}
             onClick={onClick}>
             {children}

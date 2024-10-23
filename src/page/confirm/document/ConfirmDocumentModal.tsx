@@ -21,7 +21,7 @@ const customStyles = {
 
 interface ConfirmDocumentProps {
     modalIsOpen: boolean
-    setIsOpen: () => void
+    setIsOpen: (open:boolean) => void
     selectedDocument: selectedDocument
 }
 

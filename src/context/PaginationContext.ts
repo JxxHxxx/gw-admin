@@ -31,3 +31,10 @@ export const BatchJobExecutionHistContext = createContext<SimplePageContextProp>
     },
     totalPages: 0
 });
+
+export const RestApiConnectContentContext = createContext<SimplePageContextProp>({
+    pageable: {
+        pageNumber: 0
+    },
+    totalPages: 0
+});

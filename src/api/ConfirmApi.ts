@@ -53,8 +53,15 @@ export const getConfirmDocumentApporovalLine = function (confirmDocumentId: stri
         .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
 }
 
+const searchMappingConfirmApi = function (params?: object) {
+    return instance.get(`/admin/confirm-documents/mapping-api` , {params})
+        .then((res) => res)
+        .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
+}
+
 const ConfirmApi = {
-    getConfirmDocumentApporovalLine
+    getConfirmDocumentApporovalLine,
+    searchMappingConfirmApi
 }
 
 export default ConfirmApi;

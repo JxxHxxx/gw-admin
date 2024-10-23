@@ -15,12 +15,19 @@ const RECON_VAL_PAGETOBTN = 1;
 const PGN_BTN_AMT = 5;
 
 interface PaginationProp<T> {
+    className?: paginationClassName
     paginationContext: Context<T>,
     sendToBtnNumber: (val: number) => void, // 버튼 넘버를 보내면 알아서 페이지 번호로 변환한다.  
     columns: string[],
     rows: ReactNode,
-    children: ReactNode
+    children?: ReactNode
 }
+
+interface paginationClassName {
+    tableDiv: string
+    btnDiv: string
+}
+
 export interface PaginationContextProp<T> {
     pageable: PageableProp,
     totalPages: number,
@@ -32,6 +39,10 @@ export interface PageableProp {
 }
 
 export default function Pagination({
+    className = {
+        tableDiv : 'pgnTableCtnV2',
+        btnDiv : 'pgnBtnGroupV2'
+    },
     paginationContext,
     sendToBtnNumber,
     columns,
@@ -141,11 +152,11 @@ export default function Pagination({
     }, [pnContext.pageable.pageNumber])
 
     return <>
-        <div className="pgnTableCtnV2">
+        <div className={className.tableDiv}>
             <Table columns={columns} rows={<>{rows}</>} className="table_bs tbw100" />
             {children}
         </div>
-        <div className="pgnBtnGroupV2">
+        <div className={className.btnDiv}>
             <Button className={"btn_pgn round"} name={"<<"} onClick={handlePreviousSectionBtn} />
             <Button className={"btn_pgn round"} name={"<"} onClick={handlePreviousBtn} />
             {renderButtons()}

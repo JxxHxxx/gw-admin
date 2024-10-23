@@ -8,6 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import EmptyMsg from "../../../component/text/EmptyMsg";
 import CreateConfirmFormModal from "./CreateConfirmFormModal";
 import ConfirmPreviewModal from "./ConfirmPreviewModal";
+import Title from "../../../component/text/Title";
+import MainContainer from "../../../component/container/MainContainer";
+import HorizontalMenu from "../../../component/division/HorizontalMenu";
 
 function convertCompanyId(companyId: string) {
     switch (companyId) {
@@ -99,73 +102,62 @@ export default function ConfirmFormConfig() {
         setFormElements([]);
     }, [previewFormModal])
 
-    return <>
-        <div id="cfc_container_900" style={{ width: '900px', border: '1px dashed red' }}>
-            <div id="cfc_header">
-                <span id="cfc_title" style={{ fontSize: '24px', fontWeight: 'bold' }}>양식 관리</span>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        flex: 1,
-                        marginTop: '10px',
-                        marginBottom: '3px'
-                    }}>
-                        <Button className="cfc bs"
-                            name='결재 템플릿 만들기'
-                            onClick={handleClickCreateConfirmForm} />
-                    </div>
-                </div>
-            </div>
-            <CreateConfirmFormModal modalIsOpen={createFormModal} setIsOpen={setCreateFormModal} />
-
-            <div style={{ borderBottom: '1px solid gray' }}></div>
-            <div style={{ margin: '30px' }} ></div>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-                <form
-                    onSubmit={handleOnSubmitSearchCond}>
-                    <Input className='input_wh350 ip_bgc ip_br' placeholder="양식 제목 검색" onChange={handleOnChangeSearchCond} />
-                </form>
-            </div>
-            <div style={{ margin: '30px' }} ></div>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                border: '1px dashed gray',
-            }}>
-                {/* 6개보다 결과가 많으면 스크롤 적용, 아니면 미적용 */}
-                {confirmForms.length > 0 ? (<ul className={confirmForms.length > 6 ? "card_container_b" : "card_container"}>
-                    {confirmForms.map((form) => {
-                        return <>
-                            <li key={form.confirmDocumentFormPk} className="card_item flex_card">
-                                <div className="item_info">
-                                    <p style={{ margin: '0px' }}
-                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{form.confirmDocumentFormName}</p>
-                                    <p style={{ margin: '0px', fontSize: '12px', color: 'gray' }}
-                                        onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{convertCompanyId(form.companyId)}</p>
-                                </div>
-                                <FiMoreVertical style={{ cursor: 'pointer' }}
-                                    size='1.3em'
-                                    className="fimore_icons"
-                                    onClick={handleClickModifyIcon} />
-                            </li>
-                        </>
-                    })}
-                </ul>)
-                    : <div className="card_container"><EmptyMsg msg={['조건을 만족하는 결재 양식이 존재하지 않습니다.']} /></div>}
-            </div>
-            <ConfirmPreviewModal
-                modalIsOpen={previewFormModal}
-                setIsOpen={setPreviewFormModal}
-                title={previewFormTitle}
-                formElements={formElements} />
-
-            <div style={{ margin: '30px' }} ></div>
+    return <MainContainer>
+        <div id="cfc_header">
+            <Title id="confirmDocumentFormAdminTitle" name="양식 관리" />
+            <HorizontalMenu>
+                <Button className="cfc bs"
+                    name='결재 템플릿 만들기'
+                    onClick={handleClickCreateConfirmForm} />
+            </HorizontalMenu>
         </div>
-    </>
+        <CreateConfirmFormModal isOpen={createFormModal} setIsOpen={setCreateFormModal} />
+
+        <div style={{ borderBottom: '1px solid gray' }}></div>
+        <div style={{ margin: '30px' }} ></div>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+            <form
+                onSubmit={handleOnSubmitSearchCond}>
+                <Input className='input_wh350 ip_bgc ip_br' placeholder="양식 제목 검색" onChange={handleOnChangeSearchCond} />
+            </form>
+        </div>
+        <div style={{ margin: '30px' }} ></div>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            border: '1px dashed gray',
+        }}>
+            {/* 6개보다 결과가 많으면 스크롤 적용, 아니면 미적용 */}
+            {confirmForms.length > 0 ? (<ul className={confirmForms.length > 6 ? "card_container_b" : "card_container"}>
+                {confirmForms.map((form) => {
+                    return <>
+                        <li key={form.confirmDocumentFormPk} className="card_item flex_card">
+                            <div className="item_info">
+                                <p style={{ margin: '0px' }}
+                                    onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{form.confirmDocumentFormName}</p>
+                                <p style={{ margin: '0px', fontSize: '12px', color: 'gray' }}
+                                    onClick={() => handleClickConfirmPreview(form.confirmDocumentFormName, form.confirmDocumentFormId, form.companyId)}>{convertCompanyId(form.companyId)}</p>
+                            </div>
+                            <FiMoreVertical style={{ cursor: 'pointer' }}
+                                size='1.3em'
+                                className="fimore_icons"
+                                onClick={handleClickModifyIcon} />
+                        </li>
+                    </>
+                })}
+            </ul>)
+                : <div className="card_container"><EmptyMsg msg={['조건을 만족하는 결재 양식이 존재하지 않습니다.']} /></div>}
+        </div>
+        <ConfirmPreviewModal
+            modalIsOpen={previewFormModal}
+            setIsOpen={setPreviewFormModal}
+            title={previewFormTitle}
+            formElements={formElements} />
+        <div style={{ margin: '30px' }} ></div>
+    </MainContainer>
 }

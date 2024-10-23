@@ -102,8 +102,8 @@ export default function MessageHistContent() {
                                 <td>{content.body.requester_id ? content.body.requester_id : content.body.requestBody.requesterId}</td>
                                 <td>{content.body.requester_name ? content.body.requester_name : content.body.requestBody.requesterName}</td>
                                 <td>{content.messageProcessType}</td>
-                                <td>{format(content.processStartTime, 'yyyy-MM-dd HH:mm:ss')}</td>
-                                <td>{format(content.processEndTime, 'yyyy-MM-dd HH:mm:ss')}</td>
+                                <td>{content.processStartTime && format(content.processStartTime, 'yyyy-MM-dd HH:mm:ss')}</td>
+                                <td>{content.processEndTime && format(content.processEndTime, 'yyyy-MM-dd HH:mm:ss')}</td>
                                 <td>{content.messageProcessStatus}</td>
                             </tr>
                         </>)}</>} />

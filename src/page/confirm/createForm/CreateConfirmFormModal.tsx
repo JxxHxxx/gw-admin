@@ -1,4 +1,5 @@
 import Modal from 'react-modal';
+import { ModalProp } from '../../../component/modal/ModalInterface';
 
 const customStyles = {
     content: {
@@ -14,8 +15,8 @@ const customStyles = {
 };
 
 export default function CreateConfirmFormModal({
-    modalIsOpen,
-    setIsOpen }) {
+    isOpen,
+    setIsOpen }: ModalProp) {
 
     function closeModal() {
         setIsOpen(false);
@@ -23,7 +24,7 @@ export default function CreateConfirmFormModal({
 
     return <>
         <Modal
-            isOpen={modalIsOpen}
+            isOpen={isOpen}
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="Batch Config Modal">
