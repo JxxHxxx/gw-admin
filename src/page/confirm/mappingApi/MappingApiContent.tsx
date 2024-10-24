@@ -11,7 +11,10 @@ import EmptyMsg from "../../../component/text/EmptyMsg";
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import ConfirmApi from "../../../api/ConfirmApi";
 import DocumentUtils from "../../../util/convert/DocumentUtils";
-import RestApiConnectionOneModal from "./RestApiConnectionOneModal";
+import Select from "react-select";
+import makeAnimated from 'react-select/animated';
+import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
+import Input from "../../../component/input/Input";
 
 const HELP_MODAL_STYLES = {
     content: {
@@ -25,6 +28,21 @@ const HELP_MODAL_STYLES = {
         transform: 'translate(-50%, -50%)',
     },
 };
+
+const ENROLL_API_MODAL_STYLES = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        width: '650px',
+        height: '500px',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
+
+const animatedComponents = makeAnimated();
 
 const INFO_MSG_STYLES = { fontSize: '14px', fontFamily: 'MaruBuri', color: 'black', fontWeight: 'bold' }
 
@@ -53,8 +71,8 @@ export default function MappingApiContent() {
 
     const intialfetchItem = async () => {
         const params = {
-            size : ONE_PAGES_CONTENT_SIZE,
-            page : restApiConnections.pageable.pageNumber
+            size: ONE_PAGES_CONTENT_SIZE,
+            page: restApiConnections.pageable.pageNumber
         }
 
         const { data, status } = await ConfirmApi.searchMappingConfirmApi(params);
@@ -78,15 +96,146 @@ export default function MappingApiContent() {
                 onClick={() => setAddRestApiConnectionModalOpen(true)} />
             {/* 결재 연동 API 등록 모달 */}
             <DefaultModal
+                styles={ENROLL_API_MODAL_STYLES}
                 title="결재 연동 API 등록"
                 isOpen={addRestApiConnectionModalOpen}
                 setIsOpen={setAddRestApiConnectionModalOpen}>
-                <div style={{ borderBottom: '1px solid black', marginTop: '10px' }}></div>
+                <div style={{ borderBottom: '0.02em solid gray', marginTop: '10px', marginBottom: '10px' }}></div>
+                <li style={{
+                    listStyle: 'none',
+                    width: '628px',
+                    padding: '10px',
+                    border: '1px solid rgb(216, 216, 216)',
+                    borderRadius: '5px',
+                    marginBottom: '5px'
+                }}>
+                    <Title name="문서/트리거 선택"
+                        style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <InLineBlockWrapper id='ci_bwr1' marginRight="5px">
+                            <Select
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        width: 300,
+                                        fontSize: '12px'
+                                    }),
+                                }}
+                                components={animatedComponents}
+                                placeholder="문서 유형을 선택해주세요"
+                                isClearable={true}
+                                options={[
+                                    { value: 'VAC', label: '휴가신청서(VAC)' },
+                                    { value: 'WRK', label: '작업요청서(WRK)' },
+                                ]}>
+                            </Select>
+                        </InLineBlockWrapper>
+                        <InLineBlockWrapper id='ci_bwr2' marginRight="5px">
+                            <Select
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        width: 300,
+                                        fontSize: '12px'
+                                    }),
+                                }}
+                                components={animatedComponents}
+                                placeholder="트리거 유형을 선택해주세요"
+                                isClearable={true}
+                                options={[
+                                    { value: 'FINAL_ACCEPT', label: '최종승인(FINAL_ACCPET)' },
+                                    { value: 'RAISE', label: '상신(RAISE)' },
+                                    { value: 'REJECT', label: '반려(REJECT)' },
+                                ]}>
+                            </Select>
+                        </InLineBlockWrapper>
+                    </div>
+                </li>
+                <Button name="연동 API 정보 입력 값 검증" onClick={() => alert('미구현, css 변경해야함')}/>
+                <li style={{
+                    listStyle: 'none',
+                    width: '628px',
+                    padding: '10px',
+                    border: '1px solid rgb(216, 216, 216)',
+                    borderRadius: '5px',
+                    marginBottom: '5px'
+                }}>
+                    <Title name="연동 API 정보"
+                        style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
+                    <InLineBlockWrapper id='ci_bwr3' marginRight="5px">
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: 130,
+                                    fontSize: '12px'
+                                }),
+                            }}
+                            components={animatedComponents}
+                            placeholder="프로토콜"
+                            isClearable={true}
+                            options={[
+                                { value: 'http', label: 'http' },
+                                { value: 'https', label: 'https' },
+                            ]}>
+                        </Select>
+                    </InLineBlockWrapper>
+                    <InLineBlockWrapper id='ci_bwr4' marginRight="5px">
+                        <div>
+                            <Input id="ipDomainInput"
+                                className='input_wh200 ip_bgc'
+                                placeholder="서버 IP/도메인"
+                            />
+                        </div>
+                    </InLineBlockWrapper>
+                    <InLineBlockWrapper id='ci_bwr5' marginRight="5px">
+                        <div>
+                            <Input id="portInput"
+                                className='input_wh75 ip_bgc'
+                                placeholder="포트 번호"
+                            />
+                        </div>
+                    </InLineBlockWrapper>
+                    <div style={{ marginBottom: '10px' }}></div>
+                    <InLineBlockWrapper id='ci_bwr4' marginRight="5px">
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: 140,
+                                    fontSize: '12px'
+                                }),
+                            }}
+                            components={animatedComponents}
+                            placeholder="HTTP 메서드"
+                            isClearable={true}
+                            options={[
+                                { value: 'PATCH', label: 'PATCH' },
+                                { value: 'POST', label: 'POST' },
+                                { value: 'GET', label: 'GET' },
+                            ]}>
+                        </Select>
+                    </InLineBlockWrapper>
+                    <InLineBlockWrapper id='ci_bwr6' marginRight="5px">
+                        <div>
+                            <label htmlFor="apiUriInput" style={{ fontSize: '13px' }} >
+                                API PATH
+                            </label>
+                        </div>
+                        <div>
+                            <Input id="apiUriInput"
+                                className='input_wh300 ip_bgc'
+                                placeholder="ex) /api/confirms/{confirm-id}"
+                            />
+                        </div>
+                    </InLineBlockWrapper>
+                </li>
             </DefaultModal>
             <Button className="cfc bs"
                 name="HELP"
                 onClick={() => setHelpModalOpen(true)} />
-            <DefaultModal styles={HELP_MODAL_STYLES}
+            <DefaultModal
+                styles={HELP_MODAL_STYLES}
                 title="결재 연동 API 설명"
                 isOpen={helpModalOpen}
                 setIsOpen={setHelpModalOpen}>
@@ -95,6 +244,8 @@ export default function MappingApiContent() {
                     <br />양식 관리 페이지에서 결재 양식 페이지에서 존재하는 결재 양식 유형을 확인할 수 있습니다.</p>
                 <p style={INFO_MSG_STYLES}>트리거 타입 - 연동 API가 호출되는 시점을 나타냅니다.
                     <br />트리거 타입은 결재 문서 상태와 관련 있습니다.</p>
+                <p style={INFO_MSG_STYLES}>API PATH - 연동할 API 의 경로를 의미합니다.
+                    <br />슬래시(/)로 시작해야 하며 경로 변수는 중괄호({'{' + '}'}) 안에 표현해야 합니다.</p>
             </DefaultModal>
         </HorizontalMenu>
         <div style={{ borderBottom: '1px solid gray' }}></div>
@@ -121,5 +272,5 @@ export default function MappingApiContent() {
                 />
                 : <EmptyMsg msg={['조건에 해당하는 결재 문서 연동 API 가 존재하지 않습니다', '검색 조건을 다시 입력해주세요']} />}
         </RestApiConnectContentContext.Provider>
-    </MainContainer>
+    </MainContainer >
 }
