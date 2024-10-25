@@ -12,12 +12,19 @@ const createAxiosInstance = (baseURL = '') => {
 
 const instance = createAxiosInstance('http://localhost:8080')
 
-
-export const SignIn = (requestBody: object) => {
+const SignIn = (requestBody: object) => {
 
     return instance.post(`/api/auth/login`, requestBody)
         .then(res => res)
-        .catch(err => alert(err))
+        .catch(err => {
+            console
+            return err
+        })
 }
 
 
+const AuthApi = {
+    SignIn
+} 
+
+export default AuthApi;

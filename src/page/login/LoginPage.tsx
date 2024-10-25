@@ -2,29 +2,31 @@ import { Fragment } from "react/jsx-runtime";
 import Input from "../../component/input/Input";
 import { useState } from "react";
 import Button from "../../component/button/Button";
-
 import '../../component/button/button.css'
 import '../../component/input/input.css'
 import '../login/loginPage.css'
 import { useNavigate } from "react-router-dom";
-import { SignIn } from "../../api/AuthApi";
+import AuthApi from "../../api/AuthApi";
 
 interface signInState {
     id: string;
     password: string;
     failMsg: string | string[] | null;
+    requesting: boolean;
 }
 
 export default function LoginPage() {
     const [signIn, setSignIn] = useState<signInState>({
         id: '',
         password: '',
+        requesting: false,
         failMsg: null
     });
 
     const handleIdOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignIn((prev) => ({
             ...prev,
+            failMsg : null,
             id: event.target.value
         }))
     }
@@ -32,6 +34,7 @@ export default function LoginPage() {
     const handlePasswordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignIn((prev) => ({
             ...prev,
+            failMsg : null,
             password: event.target.value
         }))
     }
@@ -41,9 +44,13 @@ export default function LoginPage() {
     const nav = useNavigate();
 
     const handleOnClickLoginButton = async (requestBody: object) => {
-        const {status, data} = await SignIn(requestBody)
+        setSignIn((prev) => ({
+            ...prev,
+            requesting: true
+        }))
+        const { status, data } = await AuthApi.SignIn(requestBody)
 
-        if(status === 200) {
+        if (status === 200) {
             console.log('로그인 성공')
             const loginResponse = data.data;
             sessionStorage.setItem('memberId', loginResponse.memberId);
@@ -55,7 +62,22 @@ export default function LoginPage() {
 
             nav('/vacation/hist')
         }
-        
+        else {
+            setSignIn((prev) => ({
+                ...prev,
+                requesting: false,
+                failMsg : '아이디/비밀번호가 올바르지 않습니다'
+            }))
+        }
+    }
+
+    const handleOnKeyDownEnte = (event) => {
+        if(event.key === 'Enter') {
+            handleOnClickLoginButton({
+                memberId: signIn.id,
+                password: signIn.password
+            });
+        }
     }
 
     return <Fragment>
@@ -64,12 +86,14 @@ export default function LoginPage() {
                 <Input
                     className="bi"
                     onChange={handleIdOnChange}
+                    onKeyDown={handleOnKeyDownEnte}
                     placeholder="아이디를 입력해주세요" />
             </div>
             <div style={{ 'marginBottom': '5px' }}>
                 <Input
                     className="bi"
                     onChange={handlePasswordOnChange}
+                    onKeyDown={handleOnKeyDownEnte}
                     type="password"
                     placeholder="비밀번호를 입력해주세요" />
             </div>
@@ -84,11 +108,11 @@ export default function LoginPage() {
                 </div>)}
             <div>
                 <Button
-                    name="sign-in"
+                    name={signIn.requesting ? "waiting..." : "sign-in"}
                     className="bb"
                     onClick={() => handleOnClickLoginButton({
-                        memberId : signIn.id,
-                        password : signIn.password
+                        memberId: signIn.id,
+                        password: signIn.password
                     })} />
             </div>
         </div>
