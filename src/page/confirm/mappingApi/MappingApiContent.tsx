@@ -35,7 +35,7 @@ const ENROLL_API_MODAL_STYLES = {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        width: '650px',
+        width: '660px',
         height: '500px',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
@@ -107,7 +107,7 @@ export default function MappingApiContent() {
                     padding: '10px',
                     border: '1px solid rgb(216, 216, 216)',
                     borderRadius: '5px',
-                    marginBottom: '5px'
+                    marginBottom: '15px'
                 }}>
                     <Title name="문서/트리거 선택"
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
@@ -151,14 +151,18 @@ export default function MappingApiContent() {
                         </InLineBlockWrapper>
                     </div>
                 </li>
-                <Button name="연동 API 정보 입력 값 검증" onClick={() => alert('미구현, css 변경해야함')}/>
+                <Button
+                    className="cfc bs" style={{ marginLeft: '0px' }}
+                    name="연동 API 정보 입력 값 검증"
+                    onClick={() => alert('API 정보가 유효한지 검증합니다')} />
                 <li style={{
                     listStyle: 'none',
                     width: '628px',
                     padding: '10px',
                     border: '1px solid rgb(216, 216, 216)',
                     borderRadius: '5px',
-                    marginBottom: '5px'
+                    marginTop: '3px',
+                    marginBottom: '15px'
                 }}>
                     <Title name="연동 API 정보"
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
@@ -229,6 +233,20 @@ export default function MappingApiContent() {
                             />
                         </div>
                     </InLineBlockWrapper>
+                </li>
+                <li style={{
+                    listStyle: 'none',
+                    width: '628px',
+                    padding: '10px',
+                    border: '1px solid rgb(216, 216, 216)',
+                    borderRadius: '5px',
+                    marginTop: '3px',
+                    marginBottom: '15px'
+                }}>
+                    <Title name="Path Variable/Reqeust Body 설정"
+                        style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
+                        <p style={{fontSize : '13px'}}>경로 변수는 입력 값 검증 누르면 자동 생성되는 형태로</p>
+                        <p style={{fontSize : '13px'}}>요청 바디는 Key, Value 형태로</p>
                 </li>
             </DefaultModal>
             <Button className="cfc bs"

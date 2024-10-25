@@ -130,9 +130,11 @@
 .standardBtn {
     padding: 4px 15px 4px 15px;
     background-color: white;
+    border: 1px solid gray;
 }
 
 .standardBtn:hover {
     cursor: pointer;
     background-color: var(--main-color-lightly);
 }
+
