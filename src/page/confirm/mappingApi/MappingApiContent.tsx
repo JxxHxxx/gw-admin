@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Button from "../../../component/button/Button";
 import MainContainer from "../../../component/container/MainContainer";
 import Title from "../../../component/text/Title";
@@ -15,6 +15,8 @@ import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
 import Input from "../../../component/input/Input";
+import { IoAddCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
+import { add } from "date-fns";
 
 const HELP_MODAL_STYLES = {
     content: {
@@ -80,6 +82,12 @@ export default function MappingApiContent() {
         if (status === 200 && data !== null) {
             setRestApiConnections(data.data);
         }
+    }
+
+    const [requestBody, setRequestBody] = useState<ReactNode[]>([]);
+
+    const addRequestBody = (reactElement: ReactNode) => {
+        setRequestBody([...requestBody, reactElement])
     }
 
     // 최초 해당 컴포넌트를 호출했을 때만 동작
@@ -243,10 +251,54 @@ export default function MappingApiContent() {
                     marginTop: '3px',
                     marginBottom: '15px'
                 }}>
-                    <Title name="Path Variable/Reqeust Body 설정"
+                    <Title name="Path Variable 설정"
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
-                        <p style={{fontSize : '13px'}}>경로 변수는 입력 값 검증 누르면 자동 생성되는 형태로</p>
-                        <p style={{fontSize : '13px'}}>요청 바디는 Key, Value 형태로</p>
+                    <p style={{ fontSize: '13px' }}>경로 변수는 입력 값 검증 누르면 자동 생성되는 형태로</p>
+                    <div style={{ textAlign: 'center' }} >
+                        <IoAddCircleOutline style={{
+                            cursor: 'pointer',
+                            margin: '20px 20px 21px 20px',
+                            fontSize: '20px'
+                        }} />
+                    </div>
+                </li>
+                <li style={{
+                    listStyle: 'none',
+                    width: '628px',
+                    padding: '10px',
+                    border: '1px solid rgb(216, 216, 216)',
+                    borderRadius: '5px',
+                    marginTop: '3px',
+                    marginBottom: '15px'
+                }}>
+                    <Title name="Reqeust Body 설정"
+                        style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
+                    <p style={{ fontSize: '13px' }}>요청 바디는 Key, Value 형태로</p>
+                    <div style={{
+                        textAlign: 'center'
+                    }} >
+                        {requestBody}
+                        <IoAddCircleOutline style={{
+                            cursor: 'pointer',
+                            margin: '20px 20px 21px 20px',
+                            fontSize: '20px'
+                        }}
+                            onClick={() => addRequestBody(<div>
+                                <div>
+                                    <Input style={{ marginRight: '10px' }}
+                                        placeholder="request body KEY 입력"
+                                        name="requestBodyKey" />
+                                    <Input
+                                        placeholder="request body VALUE 입력"
+                                        name="requestBodyValue" />
+                                    <IoCloseCircleOutline style = {{
+                                        cursor : 'pointer'
+                                    }}
+                                        onClick={() => alert('해당 인풋 제거')}
+                                    />
+                                </div>
+                            </div>)} />
+                    </div>
                 </li>
             </DefaultModal>
             <Button className="cfc bs"
