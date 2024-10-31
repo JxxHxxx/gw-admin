@@ -48,7 +48,7 @@ export default function LoginPage() {
             ...prev,
             requesting: true
         }))
-        const { status, data } = await AuthApi.SignIn(requestBody)
+        const { status, data, code } = await AuthApi.SignIn(requestBody)
 
         if (status === 200) {
             console.log('로그인 성공')
@@ -62,11 +62,25 @@ export default function LoginPage() {
 
             nav('/vacation/hist')
         }
-        else {
+        else if(status === 400) {
             setSignIn((prev) => ({
                 ...prev,
                 requesting: false,
                 failMsg : '아이디/비밀번호가 올바르지 않습니다'
+            }))
+        }
+        else if(code === 'ERR_NETWORK') {
+            setSignIn((prev) => ({
+                ...prev,
+                requesting: false,
+                failMsg : '서비스 점검중입니다'
+            }))
+        }
+        else {
+            setSignIn((prev) => ({
+                ...prev,
+                requesting: false,
+                failMsg : '관리자에게 문의하세요'
             }))
         }
     }

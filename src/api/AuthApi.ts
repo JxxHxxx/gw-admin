@@ -4,7 +4,7 @@ const createAxiosInstance = (baseURL = '') => {
     const instance = axios.create({
         baseURL: baseURL,
         timeout: 3000,
-        withCredentials : true
+        withCredentials: true
     });
 
     return instance
@@ -16,15 +16,12 @@ const SignIn = (requestBody: object) => {
 
     return instance.post(`/api/auth/login`, requestBody)
         .then(res => res)
-        .catch(err => {
-            console
-            return err
-        })
+        .catch(err => err)
 }
 
 
 const AuthApi = {
     SignIn
-} 
+}
 
 export default AuthApi;
