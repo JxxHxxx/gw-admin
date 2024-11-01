@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import Button from "../../../component/button/Button";
 import MainContainer from "../../../component/container/MainContainer";
 import Title from "../../../component/text/Title";
@@ -16,7 +16,8 @@ import makeAnimated from 'react-select/animated';
 import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
 import Input from "../../../component/input/Input";
 import { IoAddCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
-import { add } from "date-fns";
+
+
 
 const HELP_MODAL_STYLES = {
     content: {
@@ -47,6 +48,11 @@ const ENROLL_API_MODAL_STYLES = {
 const animatedComponents = makeAnimated();
 
 const INFO_MSG_STYLES = { fontSize: '14px', fontFamily: 'MaruBuri', color: 'black', fontWeight: 'bold' }
+
+interface RequestBody {
+    key: string;
+    value: string;
+}
 
 export default function MappingApiContent() {
     const [addRestApiConnectionModalOpen, setAddRestApiConnectionModalOpen] = useState(false);
@@ -84,10 +90,10 @@ export default function MappingApiContent() {
         }
     }
 
-    const [requestBody, setRequestBody] = useState<ReactNode[]>([]);
-
-    const addRequestBody = (reactElement: ReactNode) => {
-        setRequestBody([...requestBody, reactElement])
+    const [tempRequestBody, setTempRequestBody] = useState<RequestBody>();
+    const [requestBody, setRequestBody] = useState<RequestBody[]>([]);
+    const addRequestBody = (key: string, value: string) => {
+        setRequestBody([...requestBody, { key, value }])
     }
 
     // 최초 해당 컴포넌트를 호출했을 때만 동작
@@ -277,27 +283,29 @@ export default function MappingApiContent() {
                     <div style={{
                         textAlign: 'center'
                     }} >
-                        {requestBody}
-                        <IoAddCircleOutline style={{
-                            cursor: 'pointer',
-                            margin: '20px 20px 21px 20px',
-                            fontSize: '20px'
-                        }}
-                            onClick={() => addRequestBody(<div>
-                                <div>
-                                    <Input style={{ marginRight: '10px' }}
-                                        placeholder="request body KEY 입력"
-                                        name="requestBodyKey" />
-                                    <Input
-                                        placeholder="request body VALUE 입력"
-                                        name="requestBodyValue" />
-                                    <IoCloseCircleOutline style = {{
-                                        cursor : 'pointer'
-                                    }}
-                                        onClick={() => alert('해당 인풋 제거')}
-                                    />
-                                </div>
-                            </div>)} />
+                        <div style={{ display: 'flex' }}>
+                            <Input className='input_wh200 ip_bgc' style={{ marginRight: '10px' }}
+                                placeholder="request body KEY 입력"
+                                name="requestBodyKey"
+                                onChange={(event) => setTempRequestBody((prev) => ({
+                                    ...prev,
+                                    'key': event.target.value
+                                }))} />
+                            <Input className='input_wh200 ip_bgc'
+                                placeholder="request body VALUE 입력"
+                                name="requestBodyValue"
+                                onChange={(event) => setTempRequestBody((prev) => ({
+                                    ...prev,
+                                    'value': event.target.value
+                                }))} />
+                            <IoAddCircleOutline style={{
+                                bottom: '50%',
+                                cursor: 'pointer',
+                                fontSize: '20px',
+                                margin: '10px',
+                            }} onClick={() => addRequestBody(tempRequestBody.key, tempRequestBody.value)} />
+                        </div>
+
                     </div>
                 </li>
             </DefaultModal>
