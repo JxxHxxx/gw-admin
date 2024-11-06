@@ -305,7 +305,12 @@ export default function MappingApiContent() {
                                 margin: '10px',
                             }} onClick={() => addRequestBody(tempRequestBody.key, tempRequestBody.value)} />
                         </div>
-
+                        {requestBody.length > 0 &&
+                            requestBody.map((reqbody) => <div style={{ textAlign: 'left' }}>
+                                <span>
+                                    {reqbody.key} : {reqbody.value}</span>
+                            </div>)
+                        }
                     </div>
                 </li>
             </DefaultModal>
