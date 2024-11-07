@@ -18,6 +18,8 @@ import SpecialVacationPage from './page/vacation/config/common/SpecialVacationPa
 import Page from './page/Page'
 import Header from './component/layout/Header'
 import MappingApiPage from './page/confirm/mappingApi/MappingApiPage'
+import UserManagePage from './page/memberOrganization/UserManagePage'
+import OrganizationManagePage from './page/memberOrganization/OrganizationManagePage'
 
 function App() {
   const router = createBrowserRouter([
@@ -26,15 +28,12 @@ function App() {
       element: <LoginPage />
     },
     {
-      path: '/userorg',
-      element: <Page
-        cnSideMainLayout="page_grd"
-        cnAside="side_b"
-        cnMain="main_b"
-        header={<Header menu="userorg" />}
-      >
-        <h3>사용자/조직 관리 임시</h3>
-      </Page>
+      path: UrlConstant.URL_USER_MANAGE,
+      element: <UserManagePage />
+    },
+    {
+      path: UrlConstant.URL_ORGANIZATION_MANAGE,
+      element: <OrganizationManagePage />
     },
     {
       path: UrlConstant.URL_VACATION_HIST,

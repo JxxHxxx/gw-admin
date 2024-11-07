@@ -279,7 +279,7 @@ export default function MappingApiContent() {
                 }}>
                     <Title name="Reqeust Body 설정"
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
-                    <p style={{ fontSize: '13px' }}>요청 바디는 Key, Value 형태로</p>
+                    <p style={{ fontSize: '13px' }}>요청 바디는 Key, Value 형식으로 구성합니다</p>
                     <div style={{
                         textAlign: 'center'
                     }} >
@@ -307,8 +307,7 @@ export default function MappingApiContent() {
                         </div>
                         {requestBody.length > 0 &&
                             requestBody.map((reqbody) => <div style={{ textAlign: 'left' }}>
-                                <span>
-                                    {reqbody.key} : {reqbody.value}</span>
+                                <span>{reqbody.key} : {reqbody.value}</span>
                             </div>)
                         }
                     </div>

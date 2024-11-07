@@ -21,3 +21,7 @@ export const URL_VACATION_CONFIG_PERSONAL: string = '/vacation/config/personal';
 export const URL_VACATION_CONFIG_COMMON_CREATE: string = '/vacation/config/create-common';
 export const URL_VACATION_CONFIG_COMMON_UPDATE: string = '/vacation/config/update-common';
 export const URL_VACATION_CONFIG_COMMON_SPECIAL: string = '/vacation/config/special';
+
+// 사용자/조직 관리
+export const URL_USER_MANAGE: string = '/users';
+export const URL_ORGANIZATION_MANAGE: string = '/organizations';

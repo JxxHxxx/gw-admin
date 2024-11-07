@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import '../layout/header.css';
-import { URL_BATCH_CONFIGURATION, URL_CONFIRM_DOCUMENTS, URL_MESSAGE_RESYNC, URL_VACATION_HIST } from "../../constant/link/UrlConstant";
+import { URL_BATCH_CONFIGURATION, URL_CONFIRM_DOCUMENTS, URL_USER_MANAGE, URL_MESSAGE_RESYNC, URL_VACATION_HIST } from "../../constant/link/UrlConstant";
 import List from "../list/List";
 import ListItemV2 from "../list/ListItemV2";
 
@@ -16,7 +16,7 @@ interface HeaderMenu {
 }
 
 const headerMenuList: HeaderMenu[] = [
-    { menuId: 'userorg', url: '/userorg', menuName: '사용자/부서관리' },
+    { menuId: 'userOrg', url: URL_USER_MANAGE, menuName: '사용자/부서관리' },
     { menuId: 'vacation', url: URL_VACATION_HIST, menuName: '휴가 관리' },
     { menuId: 'confirm', url: URL_CONFIRM_DOCUMENTS, menuName: '결재 관리' },
     { menuId: 'batch', url: URL_BATCH_CONFIGURATION, menuName: '배치 관리' },
