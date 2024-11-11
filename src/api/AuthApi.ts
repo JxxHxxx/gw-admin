@@ -16,7 +16,7 @@ const SignIn = (requestBody: object) => {
 
     return instance.post(`/api/auth/login`, requestBody)
         .then(res => res)
-        .catch(err => err)
+        .catch(err => err.response)
 }
 
 
