@@ -16,6 +16,7 @@ import makeAnimated from 'react-select/animated';
 import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
 import Input from "../../../component/input/Input";
 import { IoAddCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
+import MappingApiUtil, { MappingApiPathVariable } from "./MappingApiUtil";
 
 
 
@@ -90,8 +91,10 @@ export default function MappingApiContent() {
         }
     }
 
+    const [enrollRestApiInfo, setEnrollRestApiInfo] = useState();
     const [tempRequestBody, setTempRequestBody] = useState<RequestBody>();
     const [requestBody, setRequestBody] = useState<RequestBody[]>([]);
+    const [pathVariables, setPathVariables] = useState<MappingApiPathVariable[]>([]);
     const addRequestBody = (key: string, value: string) => {
         setRequestBody([...requestBody, { key, value }])
     }
@@ -168,7 +171,7 @@ export default function MappingApiContent() {
                 <Button
                     className="cfc bs" style={{ marginLeft: '0px' }}
                     name="연동 API 정보 입력 값 검증"
-                    onClick={() => alert('API 정보가 유효한지 검증합니다')} />
+                    onClick={() => setPathVariables(() => MappingApiUtil.extractPathVariable(enrollRestApiInfo.path))} />
                 <li style={{
                     listStyle: 'none',
                     width: '628px',
@@ -236,14 +239,13 @@ export default function MappingApiContent() {
                     </InLineBlockWrapper>
                     <InLineBlockWrapper id='ci_bwr6' marginRight="5px">
                         <div>
-                            <label htmlFor="apiUriInput" style={{ fontSize: '13px' }} >
-                                API PATH
-                            </label>
-                        </div>
-                        <div>
                             <Input id="apiUriInput"
                                 className='input_wh300 ip_bgc'
                                 placeholder="ex) /api/confirms/{confirm-id}"
+                                onChange={(event) => setEnrollRestApiInfo((prev) => ({
+                                    ...prev,
+                                    path: event.target.value
+                                }))}
                             />
                         </div>
                     </InLineBlockWrapper>
@@ -261,11 +263,46 @@ export default function MappingApiContent() {
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
                     <p style={{ fontSize: '13px' }}>경로 변수는 입력 값 검증 누르면 자동 생성되는 형태로</p>
                     <div style={{ textAlign: 'center' }} >
-                        <IoAddCircleOutline style={{
-                            cursor: 'pointer',
-                            margin: '20px 20px 21px 20px',
-                            fontSize: '20px'
-                        }} />
+                        {pathVariables.length > 0 &&
+                            pathVariables.map((pathVariable) => <div style={{ textAlign: 'left' }}>
+                                <div style={{ display: 'flex', marginBottom: '10px' }}>
+                                    <div style={{ marginRight: '5px' }} >
+                                        <label htmlFor={pathVariable.key} style={{
+                                            fontSize: '12px',
+                                            fontWeight: 'bold',
+                                            display: 'block'
+                                        }}>경로 변수 key</label>
+                                        <Input id={pathVariable.key}
+                                            className='input_wh200 ip_bgc'
+                                            style={{ 'width': '140px' }}
+                                            name="Value"
+                                            defaultValue={pathVariable.key}
+                                            disabled />
+                                    </div>
+                                    <div style={{ marginRight: '5px' }}>
+                                        <label htmlFor={pathVariable.key + "Value"} style={{
+                                            fontSize: '12px',
+                                            fontWeight: 'bold',
+                                            display: 'block'
+                                        }}>경로 변수 Value</label>
+                                        <Input id={pathVariable.key + "Value"}
+                                            className='input_wh200 ip_bgc'
+                                            name="Value"
+                                            placeholder={pathVariable.key + " 값"} />
+                                    </div>
+                                    <div>
+                                        <label htmlFor={pathVariable.key + "ValueType"} style={{
+                                            fontSize: '12px',
+                                            fontWeight: 'bold',
+                                            display: 'block'
+                                        }}>경로 변수 Value Type</label>
+                                        <Input id={pathVariable.key + "ValueType"}
+                                            className='input_wh200 ip_bgc'
+                                            name="ValueType"
+                                            placeholder={pathVariable.key + " 값 타입"} />
+                                    </div>
+                                </div>
+                            </div>)}
                     </div>
                 </li>
                 <li style={{
