@@ -16,7 +16,7 @@ const extractPathVariable = (path:string):MappingApiPathVariable[] => {
             value : '', 
             valueType: ''})
     }
-
+    console.log('mathces', matches);
     return matches;
 }
 

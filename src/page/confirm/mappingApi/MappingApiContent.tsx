@@ -91,12 +91,21 @@ export default function MappingApiContent() {
         }
     }
 
-    const [enrollRestApiInfo, setEnrollRestApiInfo] = useState();
+    const [path, setPath] = useState<string>('');
     const [tempRequestBody, setTempRequestBody] = useState<RequestBody>();
     const [requestBody, setRequestBody] = useState<RequestBody[]>([]);
     const [pathVariables, setPathVariables] = useState<MappingApiPathVariable[]>([]);
     const addRequestBody = (key: string, value: string) => {
         setRequestBody([...requestBody, { key, value }])
+    }
+
+    const onClickValidatePath = (path: string) => {
+        if (path === '') {
+            alert('API path를 입력해주세요');
+            return;
+        }
+
+        setPathVariables(() => MappingApiUtil.extractPathVariable(path));
     }
 
     // 최초 해당 컴포넌트를 호출했을 때만 동작
@@ -171,7 +180,7 @@ export default function MappingApiContent() {
                 <Button
                     className="cfc bs" style={{ marginLeft: '0px' }}
                     name="연동 API 정보 입력 값 검증"
-                    onClick={() => setPathVariables(() => MappingApiUtil.extractPathVariable(enrollRestApiInfo.path))} />
+                    onClick={() => onClickValidatePath(path)} />
                 <li style={{
                     listStyle: 'none',
                     width: '628px',
@@ -242,10 +251,7 @@ export default function MappingApiContent() {
                             <Input id="apiUriInput"
                                 className='input_wh300 ip_bgc'
                                 placeholder="ex) /api/confirms/{confirm-id}"
-                                onChange={(event) => setEnrollRestApiInfo((prev) => ({
-                                    ...prev,
-                                    path: event.target.value
-                                }))}
+                                onChange={(event) => setPath(event.target.value)}
                             />
                         </div>
                     </InLineBlockWrapper>
