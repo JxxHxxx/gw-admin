@@ -322,37 +322,15 @@ export default function MappingApiContent() {
                 }}>
                     <Title name="Reqeust Body 설정"
                         style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
-                    <p style={{ fontSize: '13px' }}>요청 바디는 Key, Value 형식으로 구성합니다</p>
+                    <p style={{ fontSize: '13px' }}>요청 바디는 JSON 형식으로 구성합니다</p>
                     <div style={{
                         textAlign: 'center'
                     }} >
-                        <div style={{ display: 'flex' }}>
-                            <Input className='input_wh200 ip_bgc' style={{ marginRight: '10px' }}
-                                placeholder="request body KEY 입력"
-                                name="requestBodyKey"
-                                onChange={(event) => setTempRequestBody((prev) => ({
-                                    ...prev,
-                                    'key': event.target.value
-                                }))} />
-                            <Input className='input_wh200 ip_bgc'
-                                placeholder="request body VALUE 입력"
-                                name="requestBodyValue"
-                                onChange={(event) => setTempRequestBody((prev) => ({
-                                    ...prev,
-                                    'value': event.target.value
-                                }))} />
-                            <IoAddCircleOutline style={{
-                                bottom: '50%',
-                                cursor: 'pointer',
-                                fontSize: '20px',
-                                margin: '10px',
-                            }} onClick={() => addRequestBody(tempRequestBody.key, tempRequestBody.value)} />
-                        </div>
-                        {requestBody.length > 0 &&
-                            requestBody.map((reqbody) => <div style={{ textAlign: 'left' }}>
-                                <span>{reqbody.key} : {reqbody.value}</span>
-                            </div>)
-                        }
+                        <textarea style={{
+                            width: '600px',
+                            height: '400px',
+                            resize: 'none'
+                        }} />
                     </div>
                 </li>
             </DefaultModal>
