@@ -59,8 +59,8 @@ const searchMappingConfirmApi = function (params?: object) {
         .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
 }
 // 결재 연동 API 등록 API
-const createRestApiConnection = function () {
-    return instance.post(`/admin/confirm-documents/mapping-api`)
+const createRestApiConnection = function (requestBody?: object) {
+    return instance.post(`/admin/confirm-documents/mapping-api`, requestBody)
         .then((res) => res)
         .catch(() => alert('등록할 수 없습니다. 입력 값들을 확인하세요'))
 }

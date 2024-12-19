@@ -108,6 +108,13 @@ export default function MappingApiContentV2() {
         setPathVariables(() => MappingApiUtil.extractPathVariable(path));
     }
 
+    // 여기 구현 해야 합니다.
+    const requestCreateRestApiConnection = async () => {
+        const response = await ConfirmApi.createRestApiConnection();
+
+        console.log('tmp', response);
+    }
+
     // 최초 해당 컴포넌트를 호출했을 때만 동작
     useEffect(() => {
         intialfetchItem();
@@ -255,7 +262,8 @@ export default function MappingApiContentV2() {
                 <div style={{ textAlign: 'center' }}>
                     <Button name='등록'
                         className="cfc bs"
-                        style={{ marginLeft: '0px', marginRight: '5px', padding: '3px 10px 3px 10px' }} />
+                        style={{ marginLeft: '0px', marginRight: '5px', padding: '3px 10px 3px 10px' }}
+                         onClick={() => requestCreateRestApiConnection()} />
                     <Button name='취소'
                         className="cfc bs"
                         style={{ marginLeft: '0px', padding: '3px 10px 3px 10px' }} 

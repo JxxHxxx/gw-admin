@@ -153,6 +153,7 @@ export default function MappingApiContent() {
                                 options={[
                                     { value: 'VAC', label: '휴가신청서(VAC)' },
                                     { value: 'WRK', label: '작업요청서(WRK)' },
+                                    { value: 'TEST', label: '테스트(TEST)' },
                                 ]}>
                             </Select>
                         </InLineBlockWrapper>
