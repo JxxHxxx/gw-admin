@@ -40,7 +40,7 @@ export const getConfirmDocumentFormElements = function (confirmDocumentFormId: s
 }
 
 // 결재 문서 양식 조회 API
-export const findConfirmForms = function (params: object) {
+export const findConfirmForms = function (params?: object) {
     return instance.get(`/admin/confirm-document-forms`, { params })
         .then((res) => res)
         .catch(() => alert('결재 서버와의 연결이 원활하지 않습니다. 관리자에게 문의하세요.'))
@@ -66,6 +66,7 @@ const createRestApiConnection = function (requestBody?: object) {
 }
 
 const ConfirmApi = {
+    findConfirmForms,
     getConfirmDocumentApporovalLine,
     searchMappingConfirmApi,
     createRestApiConnection

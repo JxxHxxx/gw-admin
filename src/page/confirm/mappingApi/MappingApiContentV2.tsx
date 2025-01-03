@@ -50,9 +50,13 @@ const animatedComponents = makeAnimated();
 
 const INFO_MSG_STYLES = { fontSize: '14px', fontFamily: 'MaruBuri', color: 'black', fontWeight: 'bold' }
 
-interface RequestBody {
-    key: string;
-    value: string;
+interface confirmDocumentForm {
+    confirmDocumentFormPk: number
+    companyId: string
+    confirmDocumentFormId: string
+    confirmDocumentFormName: string
+    used: boolean
+    createTime: string
 }
 
 export default function MappingApiContentV2() {
@@ -78,9 +82,9 @@ export default function MappingApiContentV2() {
         }))
     }
 
-    const intialfetchItem = async () => {
+    const requestMappingConfirmApi = async () => {
         const params = {
-            size: ONE_PAGES_CONTENT_SIZE,
+            size: 3,
             page: restApiConnections.pageable.pageNumber
         }
 
@@ -92,12 +96,32 @@ export default function MappingApiContentV2() {
     }
 
     const [path, setPath] = useState<string>('');
-    const [tempRequestBody, setTempRequestBody] = useState<RequestBody>();
-    const [requestBody, setRequestBody] = useState<RequestBody[]>([]);
     const [pathVariables, setPathVariables] = useState<MappingApiPathVariable[]>([]);
-    const addRequestBody = (key: string, value: string) => {
-        setRequestBody([...requestBody, { key, value }])
+    const [confirmDocumentForm, setConfirmDocumentForm] = useState<confirmDocumentForm[]>();
+
+    // 결재 문서 양식 Form 조회 API - 문서 유형 SELECT 박스에서 사용
+    const requestConfirmDocumentFormSelectBox = async () => {
+        try {
+            const { data, status } = await ConfirmApi.findConfirmForms();
+            if (status === 200) {
+                setConfirmDocumentForm(() => data.data);
+            }
+        } catch (e) {
+            console.error('JX ERROR', e);
+        }
     }
+    // IIFE
+    const initializeConfirmDoucmentFormSelectOptions = () => {
+        return confirmDocumentForm?.filter((cdf) => cdf.used === true) // 사용하는 양식으로만 필터
+            .sort((form1, form2) => (form2.confirmDocumentFormPk - form1.confirmDocumentFormPk)) // Pk가 큰 것 부터 상위 노출, PK가 높을수록 최근에 생성된 것
+            .map((cdf) => ({
+                value: cdf.confirmDocumentFormId,
+                label: cdf.confirmDocumentFormName + "(" + cdf.confirmDocumentFormId + ")"
+            }))
+
+    }
+
+    // END
 
     const onClickValidatePath = (path: string) => {
         if (path === '') {
@@ -117,7 +141,11 @@ export default function MappingApiContentV2() {
 
     // 최초 해당 컴포넌트를 호출했을 때만 동작
     useEffect(() => {
-        intialfetchItem();
+        requestConfirmDocumentFormSelectBox();
+    }, [])
+    // 페이지 이동 시, 호출
+    useEffect(() => {
+        requestMappingConfirmApi();
     }, [restApiConnections.pageable.pageNumber])
 
     return <MainContainer>
@@ -157,10 +185,7 @@ export default function MappingApiContentV2() {
                                 components={animatedComponents}
                                 placeholder="문서 유형을 선택해주세요"
                                 isClearable={true}
-                                options={[
-                                    { value: 'VAC', label: '휴가신청서(VAC)' },
-                                    { value: 'WRK', label: '작업요청서(WRK)' },
-                                ]}>
+                                options={initializeConfirmDoucmentFormSelectOptions()}>
                             </Select>
                         </InLineBlockWrapper>
                         <InLineBlockWrapper id='ci_bwr2' marginRight="5px">
@@ -263,11 +288,11 @@ export default function MappingApiContentV2() {
                     <Button name='등록'
                         className="cfc bs"
                         style={{ marginLeft: '0px', marginRight: '5px', padding: '3px 10px 3px 10px' }}
-                         onClick={() => requestCreateRestApiConnection()} />
+                        onClick={() => requestCreateRestApiConnection()} />
                     <Button name='취소'
                         className="cfc bs"
-                        style={{ marginLeft: '0px', padding: '3px 10px 3px 10px' }} 
-                        onClick={() => setAddRestApiConnectionModalOpen(false)}/>
+                        style={{ marginLeft: '0px', padding: '3px 10px 3px 10px' }}
+                        onClick={() => setAddRestApiConnectionModalOpen(false)} />
                 </div>
             </DefaultModal>
             <Button className="cfc bs"
