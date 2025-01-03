@@ -40,7 +40,7 @@ const ENROLL_API_MODAL_STYLES = {
         right: 'auto',
         bottom: 'auto',
         width: '660px',
-        height: '360px',
+        height: '460px',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
     },
@@ -59,10 +59,22 @@ interface confirmDocumentForm {
     createTime: string
 }
 
+interface mappingApiEnrollment {
+    scheme: string
+    host: string
+    port: number
+    methodType: string
+    path: string
+    requesterId: string
+    description: string
+    triggerType: string
+    documentType: string
+}
+
 export default function MappingApiContentV2() {
     const [addRestApiConnectionModalOpen, setAddRestApiConnectionModalOpen] = useState(false);
     const [helpModalOpen, setHelpModalOpen] = useState(false);
-    const [restApiConnectionOneModalOpen, setRestApiConnectionOneModalOpen] = useState(false);
+    const [restApiConnectionOneModalOpen, setRestApiConnectionOneModalOpen] = useState(false); // 테이블 요소 클릭 시, 생성되는 모달의 상태
 
     const [restApiConnections, setRestApiConnections] = useState<PaginationContextProp>({
         pageable: {
@@ -81,7 +93,7 @@ export default function MappingApiContentV2() {
             }
         }))
     }
-
+    // 결재 문서에 연동된 API 목록 호출하는 API
     const requestMappingConfirmApi = async () => {
         const params = {
             size: 3,
@@ -95,9 +107,8 @@ export default function MappingApiContentV2() {
         }
     }
 
-    const [path, setPath] = useState<string>('');
-    const [pathVariables, setPathVariables] = useState<MappingApiPathVariable[]>([]);
-    const [confirmDocumentForm, setConfirmDocumentForm] = useState<confirmDocumentForm[]>();
+    const [mappingApiEnrollment, setMappingApiEnrollment] = useState<mappingApiEnrollment>(); // 결재 문서에 연동할 API 등록 정보
+    const [confirmDocumentForm, setConfirmDocumentForm] = useState<confirmDocumentForm[]>(); // 결재 문서 양식
 
     // 결재 문서 양식 Form 조회 API - 문서 유형 SELECT 박스에서 사용
     const requestConfirmDocumentFormSelectBox = async () => {
@@ -121,22 +132,27 @@ export default function MappingApiContentV2() {
 
     }
 
-    // END
-
-    const onClickValidatePath = (path: string) => {
-        if (path === '') {
-            alert('API path를 입력해주세요');
-            return;
-        }
-
-        setPathVariables(() => MappingApiUtil.extractPathVariable(path));
-    }
 
     // 여기 구현 해야 합니다.
     const requestCreateRestApiConnection = async () => {
-        const response = await ConfirmApi.createRestApiConnection();
-
+        const response = await ConfirmApi.createRestApiConnection(mappingApiEnrollment);
         console.log('tmp', response);
+    }
+
+    const handleOnchangeSelectOptions = (fieldName: string, event: any) => {
+        // X 버튼 눌러서 초기화 될 때
+        if (event === null) {
+            setMappingApiEnrollment((prev) => ({
+                ...prev,
+                [fieldName]: ''
+            }))
+        }
+        else {
+            setMappingApiEnrollment((prev) => ({
+                ...prev,
+                [fieldName]: event.value
+            }))
+        }
     }
 
     // 최초 해당 컴포넌트를 호출했을 때만 동작
@@ -181,9 +197,14 @@ export default function MappingApiContentV2() {
                                         width: 300,
                                         fontSize: '12px'
                                     }),
+                                    option: (base) => ({
+                                        ...base,
+                                        fontSize: '12px'
+                                    }),
                                 }}
                                 components={animatedComponents}
                                 placeholder="문서 유형을 선택해주세요"
+                                onChange={(event) => handleOnchangeSelectOptions('documentType', event)}
                                 isClearable={true}
                                 options={initializeConfirmDoucmentFormSelectOptions()}>
                             </Select>
@@ -196,9 +217,14 @@ export default function MappingApiContentV2() {
                                         width: 300,
                                         fontSize: '12px'
                                     }),
+                                    option: (base) => ({
+                                        ...base,
+                                        fontSize: '12px'
+                                    })
                                 }}
                                 components={animatedComponents}
                                 placeholder="트리거 유형을 선택해주세요"
+                                onChange={(event) => handleOnchangeSelectOptions('triggerType', event)}
                                 isClearable={true}
                                 options={[
                                     { value: 'FINAL_ACCEPT', label: '최종승인(FINAL_ACCPET)' },
@@ -228,9 +254,14 @@ export default function MappingApiContentV2() {
                                     width: 130,
                                     fontSize: '12px'
                                 }),
+                                option: (base) => ({
+                                    ...base,
+                                    fontSize: '12px'
+                                })
                             }}
                             components={animatedComponents}
                             placeholder="프로토콜"
+                            onChange={(event) => handleOnchangeSelectOptions('scheme', event)}
                             isClearable={true}
                             options={[
                                 { value: 'http', label: 'http' },
@@ -243,6 +274,10 @@ export default function MappingApiContentV2() {
                             <Input id="ipDomainInput"
                                 className='input_wh200 ip_bgc'
                                 placeholder="서버 IP/도메인"
+                                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                    ...prev,
+                                    'host' : event.target.value
+                                }))}
                             />
                         </div>
                     </InLineBlockWrapper>
@@ -251,6 +286,10 @@ export default function MappingApiContentV2() {
                             <Input id="portInput"
                                 className='input_wh75 ip_bgc'
                                 placeholder="포트 번호"
+                                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                    ...prev,
+                                    'port' : event.target.value
+                                }))}
                             />
                         </div>
                     </InLineBlockWrapper>
@@ -263,9 +302,14 @@ export default function MappingApiContentV2() {
                                     width: 140,
                                     fontSize: '12px'
                                 }),
+                                option: (base) => ({
+                                    ...base,
+                                    fontSize: '12px'
+                                })
                             }}
                             components={animatedComponents}
                             placeholder="HTTP 메서드"
+                            onChange={(event) => handleOnchangeSelectOptions('methodType', event)}
                             isClearable={true}
                             options={[
                                 { value: 'PATCH', label: 'PATCH' },
@@ -279,12 +323,15 @@ export default function MappingApiContentV2() {
                             <Input id="apiUriInput"
                                 className='input_wh300 ip_bgc'
                                 placeholder="ex) /api/confirms/{confirm-id}"
-                                onChange={(event) => setPath(event.target.value)}
+                                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                    ...prev,
+                                    'path' : event.target.value
+                                }))}
                             />
                         </div>
                     </InLineBlockWrapper>
                 </li>
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center', marginTop: '100px' }}>
                     <Button name='등록'
                         className="cfc bs"
                         style={{ marginLeft: '0px', marginRight: '5px', padding: '3px 10px 3px 10px' }}
