@@ -1,7 +1,7 @@
 import Header from "../../../component/layout/Header";
 import Page from "../../Page";
 import ConfirmSidebar from "../ConfirmSidebar";
-import MappingApiContentV2 from "./MappingApiContentV2";
+import MappingApiContent from "./MappingApiContent";
 
 export default function MappingApiPage() {
     return <Page
@@ -10,6 +10,6 @@ export default function MappingApiPage() {
         cnMain="main_b"
         header={<Header menu="confirm"/>}
         sidebar={<ConfirmSidebar />}>
-        <MappingApiContentV2 />
+        <MappingApiContent />
     </Page>
 }
