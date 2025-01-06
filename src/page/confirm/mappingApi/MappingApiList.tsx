@@ -5,6 +5,20 @@ import { RestApiConnectContentContext } from "../../../context/PaginationContext
 import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import DocumentUtils from "../../../util/convert/DocumentUtils";
 import ConfirmApi from "../../../api/ConfirmApi";
+import DefaultModal from "../../../component/modal/DefaultModal";
+
+const ENROLL_API_MODAL_STYLES = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        width: '660px',
+        height: '460px',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
 
 export default function MappingApiList() {
     const [restApiConnectionOneModalOpen, setRestApiConnectionOneModalOpen] = useState(false); // 테이블 요소 클릭 시, 생성되는 모달의 상태
@@ -15,6 +29,7 @@ export default function MappingApiList() {
         totalpage: 0,
         content: [],
     });
+    const [selectRestApiConnection, setSelectedRestApiConnection] = useState();
 
     const updatePageNumber = (btnNum: number) => {
         setRestApiConnections((prev: any) => ({
@@ -46,6 +61,12 @@ export default function MappingApiList() {
 
     return <>
         <RestApiConnectContentContext.Provider value={restApiConnections}>
+            <DefaultModal styles={ENROLL_API_MODAL_STYLES}
+                title="결재 연동 API 등록"
+                isOpen={restApiConnectionOneModalOpen}
+                setIsOpen={setRestApiConnectionOneModalOpen}>
+                test
+            </DefaultModal>
             {restApiConnections.content.length > 0 ?
                 <Pagination
                     className={{
