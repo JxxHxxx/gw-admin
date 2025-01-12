@@ -15,7 +15,7 @@ const ENROLL_API_MODAL_STYLES = {
         right: 'auto',
         bottom: 'auto',
         width: '660px',
-        height: '460px',
+        height: '560px',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
     },
@@ -33,7 +33,7 @@ interface ConfirmDocumentForm {
 interface MappingApiEnrollment {
     scheme: string
     host: string
-    port: number
+    port?: number
     methodType: string
     path: string
     requesterId: string
@@ -45,7 +45,17 @@ interface MappingApiEnrollment {
 const animatedComponents = makeAnimated();
 
 export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
-    const [mappingApiEnrollment, setMappingApiEnrollment] = useState<MappingApiEnrollment>(); // 결재 문서에 연동할 API 등록 정보
+    const [mappingApiEnrollment, setMappingApiEnrollment] = useState<MappingApiEnrollment>({
+        scheme: '',
+        host: '',
+        port: undefined,
+        methodType: '',
+        path: '',
+        requesterId: '',
+        description: '',
+        triggerType: '',
+        documentType: ''
+    }); // 결재 문서에 연동할 API 등록 정보
     const [confirmDocumentForm, setConfirmDocumentForm] = useState<ConfirmDocumentForm[]>(); // 결재 문서 양식
 
     // IIFE
@@ -76,15 +86,35 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
     }
 
     const handleOnChangeInput = (fieldName: string, event: any) => {
-        setMappingApiEnrollment((prev:MappingApiEnrollment) => ({
+        setMappingApiEnrollment((prev: MappingApiEnrollment) => ({
             ...prev,
             [fieldName]: event.target.value
         }))
     }
 
-    // 여기 구현 해야 합니다.
     const requestCreateRestApiConnection = async () => {
+        const notInputFields = Object.entries(mappingApiEnrollment)
+            .filter(([key]) => !['description', 'requesterId'].includes(key)) // description, requesterId 필드는 검증 제외
+            .filter(([_, value]) => value === undefined || (typeof value === 'string' && value.trim() === ''))
+            .map(([key]) => key);
+    
+
+        if (notInputFields.length > 0) {
+            alert('필수 값 ' + notInputFields + ' 을 입력해주세요');
+            return;
+        }
+
         const response = await ConfirmApi.createRestApiConnection(mappingApiEnrollment);
+        try {
+            if (response.status === 400) {
+                const { data, message } = response;
+                alert('에러코드:' + data.errCode +
+                    "\n에러메시지:" + message);
+            }
+        }
+        catch (e) {
+            alert('등록할 수 없습니다. 관리자에게 문의하세요')
+        }
     }
 
     // 결재 문서 양식 Form 조회 API - 문서 유형 SELECT 박스에서 사용
@@ -102,6 +132,21 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
     useEffect(() => {
         requestConfirmDocumentFormSelectBox();
     }, [])
+
+    // 모달 창 열리고 닫힐 때 상태 초기화
+    useEffect(() => {
+        setMappingApiEnrollment({
+            scheme: '',
+            host: '',
+            port: undefined,
+            methodType: '',
+            path: '',
+            requesterId: '',
+            description: '',
+            triggerType: '',
+            documentType: ''
+        })
+    }, [isOpen])
 
     return <DefaultModal
         styles={ENROLL_API_MODAL_STYLES}
@@ -261,6 +306,26 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
                     />
                 </div>
             </InLineBlockWrapper>
+        </li>
+        <li style={{
+            listStyle: 'none',
+            width: '628px',
+            padding: '10px',
+            border: '1px solid rgb(216, 216, 216)',
+            borderRadius: '5px',
+            marginTop: '3px',
+            marginBottom: '15px'
+        }}>
+            <Title name="연동 API 설명"
+                style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
+            <Input id="descriptionInput"
+                className='input_wh500 ip_bgc'
+                placeholder="연동 API에 대해 설명해주세요"
+                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                    ...prev,
+                    'description': event.target.value
+                }))}
+            />
         </li>
         <div style={{ textAlign: 'center', marginTop: '100px' }}>
             <Button name='등록'

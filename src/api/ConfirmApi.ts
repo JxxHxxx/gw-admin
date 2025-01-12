@@ -62,7 +62,14 @@ const searchMappingConfirmApi = function (params?: object) {
 const createRestApiConnection = function (requestBody?: object) {
     return instance.post(`/admin/confirm-documents/mapping-api`, requestBody)
         .then((res) => res)
-        .catch(() => alert('등록할 수 없습니다. 입력 값들을 확인하세요'))
+        .catch((err) => {
+            if (err.response.data) {
+                return err.response.data;
+            }
+            else {
+                alert('등록할 수 없습니다. 관리자에게 문의하세요')
+            }
+        })
 }
 
 const ConfirmApi = {
