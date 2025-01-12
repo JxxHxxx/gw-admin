@@ -26,7 +26,7 @@ export default function LoginPage() {
     const handleIdOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignIn((prev) => ({
             ...prev,
-            failMsg : null,
+            failMsg: null,
             id: event.target.value
         }))
     }
@@ -34,7 +34,7 @@ export default function LoginPage() {
     const handlePasswordOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignIn((prev) => ({
             ...prev,
-            failMsg : null,
+            failMsg: null,
             password: event.target.value
         }))
     }
@@ -48,11 +48,10 @@ export default function LoginPage() {
             ...prev,
             requesting: true
         }))
-        const { status, data, code } = await AuthApi.SignIn(requestBody)
+        const response = await AuthApi.SignIn(requestBody);
 
-        if (status === 200) {
-            console.log('로그인 성공')
-            const loginResponse = data.data;
+        if (response.status === 200) {
+            const loginResponse = response.data.data;
             sessionStorage.setItem('memberId', loginResponse.memberId);
             sessionStorage.setItem('name', loginResponse.name);
             sessionStorage.setItem('companyId', loginResponse.companyId);
@@ -62,31 +61,31 @@ export default function LoginPage() {
 
             nav('/vacation/hist')
         }
-        else if(status === 400) {
+        else if (response.code === 'ERR_BAD_REQUEST' && response.response.data.status === 400) {
             setSignIn((prev) => ({
                 ...prev,
                 requesting: false,
-                failMsg : '아이디/비밀번호가 올바르지 않습니다'
+                failMsg: '아이디/비밀번호가 올바르지 않습니다'
             }))
         }
-        else if(code === 'ERR_NETWORK') {
+        else if (response.code === 'ERR_NETWORK') {
             setSignIn((prev) => ({
                 ...prev,
                 requesting: false,
-                failMsg : '서비스 점검중입니다'
+                failMsg: '서비스 점검중입니다'
             }))
         }
         else {
             setSignIn((prev) => ({
                 ...prev,
                 requesting: false,
-                failMsg : '관리자에게 문의하세요'
+                failMsg: '관리자에게 문의하세요'
             }))
         }
     }
 
     const handleOnKeyDownEnte = (event) => {
-        if(event.key === 'Enter') {
+        if (event.key === 'Enter') {
             handleOnClickLoginButton({
                 memberId: signIn.id,
                 password: signIn.password
