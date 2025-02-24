@@ -1,4 +1,4 @@
-import { Fragment } from "react/jsx-runtime";
+import React, { forwardRef } from "react";
 
 interface InputProps {
     className?: string;
@@ -8,7 +8,7 @@ interface InputProps {
     onKeyDown?: () => void;
     placeholder?: string;
     type?: string;
-    minLegnth?: number;
+    minLength?: number;
     maxLength?: number;
     readOnly?: boolean;
     defaultValue?: string | number;
@@ -16,7 +16,8 @@ interface InputProps {
     style?: object;
 }
 
-export default function Input({
+// forwardRef를 사용하여 ref를 전달
+const Input = forwardRef<HTMLInputElement, InputProps>(({
     className = '',
     id = '',
     name = '',
@@ -24,29 +25,16 @@ export default function Input({
     onKeyDown = () => { },
     placeholder = '',
     type = 'text',
-    minLegnth = 0,
+    minLength = 0,  // Fixed typo 'minLegnth' to 'minLength'
     maxLength = 100,
     readOnly = false,
     defaultValue,
     disabled = false,
     style = {}
-}: InputProps) {
-    return <Fragment>
-        {disabled ? <input
-            style={style}
-            className={className}
-            id={id}
-            name={name}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            placeholder={placeholder}
-            minLength={minLegnth}
-            maxLength={maxLength}
-            readOnly={readOnly}
-            type={type}
-            defaultValue={defaultValue}
-            disabled
-        /> :
+}, ref) => {
+
+    return (
+        disabled ? 
             <input
                 style={style}
                 className={className}
@@ -55,11 +43,30 @@ export default function Input({
                 onChange={onChange}
                 onKeyDown={onKeyDown}
                 placeholder={placeholder}
-                minLength={minLegnth}
+                minLength={minLength}
                 maxLength={maxLength}
                 readOnly={readOnly}
                 type={type}
                 defaultValue={defaultValue}
-            />}
-    </Fragment>
-}
+                disabled
+                ref={ref}  // ref 전달
+            /> :
+            <input
+                style={style}
+                className={className}
+                id={id}
+                name={name}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                placeholder={placeholder}
+                minLength={minLength}
+                maxLength={maxLength}
+                readOnly={readOnly}
+                type={type}
+                defaultValue={defaultValue}
+                ref={ref}  // ref 전달
+            />
+    );
+});
+
+export default Input;

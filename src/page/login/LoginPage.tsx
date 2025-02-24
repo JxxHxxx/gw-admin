@@ -1,6 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import Input from "../../component/input/Input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../component/button/Button";
 import '../../component/button/button.css'
 import '../../component/input/input.css'
@@ -23,6 +23,8 @@ export default function LoginPage() {
         failMsg: null
     });
 
+    const initFocusForRef = useRef<HTMLInputElement>(null);
+
     const handleIdOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignIn((prev) => ({
             ...prev,
@@ -38,8 +40,6 @@ export default function LoginPage() {
             password: event.target.value
         }))
     }
-
-
 
     const nav = useNavigate();
 
@@ -93,10 +93,18 @@ export default function LoginPage() {
         }
     }
 
+    useEffect(() => {
+        if(initFocusForRef.current) {
+            console.log('init complete');
+            initFocusForRef.current.focus();
+        }
+    }, [])
+
     return <Fragment>
         <div className="input-container">
             <div style={{ 'marginBottom': '5px' }}>
                 <Input
+                    ref={initFocusForRef}
                     className="bi"
                     onChange={handleIdOnChange}
                     onKeyDown={handleOnKeyDownEnte}
