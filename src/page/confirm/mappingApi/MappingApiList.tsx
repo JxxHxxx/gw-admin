@@ -6,6 +6,7 @@ import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import DocumentUtils from "../../../util/convert/DocumentUtils";
 import ConfirmApi from "../../../api/ConfirmApi";
 import DefaultModal from "../../../component/modal/DefaultModal";
+import { BiFontSize } from "react-icons/bi";
 
 const ENROLL_API_MODAL_STYLES = {
     content: {
@@ -20,16 +21,41 @@ const ENROLL_API_MODAL_STYLES = {
     },
 };
 
+interface restApiConnectionData {
+    connectionPk: number | null
+    host: string | null
+    port: number | null
+    path: string | null
+    methodType: string | null
+    triggerType: string
+    scheme: string | null
+    description: string | null
+    used: boolean
+    documentType:string
+}
+
+
 export default function MappingApiList() {
     const [restApiConnectionOneModalOpen, setRestApiConnectionOneModalOpen] = useState(false); // 테이블 요소 클릭 시, 생성되는 모달의 상태
-    const [restApiConnections, setRestApiConnections] = useState<PaginationContextProp>({
+    const [restApiConnections, setRestApiConnections] = useState<PaginationContextProp<restApiConnectionData>>({
         pageable: {
             pageNumber: 0
         },
         totalpage: 0,
         content: [],
     });
-    const [selectRestApiConnection, setSelectedRestApiConnection] = useState();
+    const [selectedRestApiConnection, setSelectedRestApiConnection] = useState<restApiConnectionData>({
+        connectionPk: null,
+        host: null,
+        port: null,
+        path: null,
+        triggerType: '',
+        methodType: null,
+        scheme: null,
+        description: null,
+        used: false,
+        documentType:''
+    });
 
     const updatePageNumber = (btnNum: number) => {
         setRestApiConnections((prev: any) => ({
@@ -54,6 +80,13 @@ export default function MappingApiList() {
         }
     }
 
+    const handleRestApiConnectionModal = (connectionPk: number) => {
+        setRestApiConnectionOneModalOpen(true);
+
+        const result = restApiConnections.content.find((item) => item.connectionPk === connectionPk)
+        setSelectedRestApiConnection(result);
+    }
+
     // 페이지 이동 시, 호출
     useEffect(() => {
         requestMappingConfirmApi();
@@ -62,10 +95,27 @@ export default function MappingApiList() {
     return <>
         <RestApiConnectContentContext.Provider value={restApiConnections}>
             <DefaultModal styles={ENROLL_API_MODAL_STYLES}
-                title="결재 연동 API 등록"
+                title="결재 연동 API 정보"
                 isOpen={restApiConnectionOneModalOpen}
                 setIsOpen={setRestApiConnectionOneModalOpen}>
-                test
+                <div style={{marginTop : '30px', marginBottom : '10px'}}>
+                    <span>{selectedRestApiConnection.description}</span>
+                </div>
+                <div>
+                    <p style={{ margin: '0px' }}>호출 URL</p>
+                    <span>{selectedRestApiConnection.methodType} - {selectedRestApiConnection.scheme + "://" + selectedRestApiConnection.host + ":" + selectedRestApiConnection.port + selectedRestApiConnection.path}</span>
+                </div>
+                <div style={{marginTop : '30px', marginBottom : '10px'}}>
+                    <span>트리거 타입 : {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType) + '(' + selectedRestApiConnection.triggerType + ')'}</span><br/>
+                    <span style={{ fontSize: '12px' }}>결재 문서의 상태가 {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType)}(으)로 변경 되었을 때 API를 호출합니다</span>
+                </div>
+                <div style={{marginTop : '30px', marginBottom : '10px'}}>
+                    <p style={{ margin: '0px' }}>적용되는 문서의 타입</p>
+                    <span>{DocumentUtils.convertDocumentType(selectedRestApiConnection.documentType)}</span>
+                </div>
+                <div>
+                    사용 여부 : {selectedRestApiConnection.used ? 'Y' : 'N'}
+                </div>
             </DefaultModal>
             {restApiConnections.content.length > 0 ?
                 <Pagination
@@ -78,7 +128,7 @@ export default function MappingApiList() {
                     columns={['결재 문서 유형', '트리거 타입', '설명', '사용 여부']}
                     rows={<>
                         {restApiConnections.content.map((content: any) => <>
-                            <tr key={content.connectionPk} onClick={() => setRestApiConnectionOneModalOpen(true)}>
+                            <tr key={content.connectionPk} onClick={() => handleRestApiConnectionModal(content.connectionPk)}>
                                 <td>{DocumentUtils.convertDocumentType(content.documentType)}</td>
                                 <td>{DocumentUtils.convertTriggerType(content.triggerType)}</td>
                                 <td>{content.description}</td>
