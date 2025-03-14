@@ -6,7 +6,12 @@ import { convertBtnNumToPageNum } from "../../../util/PageSupport";
 import DocumentUtils from "../../../util/convert/DocumentUtils";
 import ConfirmApi from "../../../api/ConfirmApi";
 import DefaultModal from "../../../component/modal/DefaultModal";
-import { BiFontSize } from "react-icons/bi";
+import Input from "../../../component/input/Input";
+import Button from "../../../component/button/Button";
+import Select from "react-select";
+import { HTTP_UTIL } from "../../../constant/HttpConst";
+import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
+
 
 const ENROLL_API_MODAL_STYLES = {
     content: {
@@ -31,9 +36,8 @@ interface restApiConnectionData {
     scheme: string | null
     description: string | null
     used: boolean
-    documentType:string
+    documentType: string
 }
-
 
 export default function MappingApiList() {
     const [restApiConnectionOneModalOpen, setRestApiConnectionOneModalOpen] = useState(false); // 테이블 요소 클릭 시, 생성되는 모달의 상태
@@ -54,7 +58,7 @@ export default function MappingApiList() {
         scheme: null,
         description: null,
         used: false,
-        documentType:''
+        documentType: ''
     });
 
     const updatePageNumber = (btnNum: number) => {
@@ -92,29 +96,70 @@ export default function MappingApiList() {
         requestMappingConfirmApi();
     }, [restApiConnections.pageable.pageNumber])
 
+    const selectedRestApiUrl = selectedRestApiConnection.scheme + "://" + selectedRestApiConnection.host + ":" + selectedRestApiConnection.port + selectedRestApiConnection.path
+
     return <>
         <RestApiConnectContentContext.Provider value={restApiConnections}>
             <DefaultModal styles={ENROLL_API_MODAL_STYLES}
                 title="결재 연동 API 정보"
                 isOpen={restApiConnectionOneModalOpen}
                 setIsOpen={setRestApiConnectionOneModalOpen}>
-                <div style={{marginTop : '30px', marginBottom : '10px'}}>
+                <div className="Titleline" style={{
+                    marginTop: '15px',
+                    borderBottom: '1px solid black'
+                }}>
+                </div>
+                <div style={{ marginTop: '30px', marginBottom: '10px' }}>
                     <span>{selectedRestApiConnection.description}</span>
                 </div>
                 <div>
                     <p style={{ margin: '0px' }}>호출 URL</p>
-                    <span>{selectedRestApiConnection.methodType} - {selectedRestApiConnection.scheme + "://" + selectedRestApiConnection.host + ":" + selectedRestApiConnection.port + selectedRestApiConnection.path}</span>
+                    <InLineBlockWrapper id='ci_bwr3' marginRight="5px">
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: 100,
+                                    fontSize: '12px'
+                                }),
+                                option: (base) => ({
+                                    ...base,
+                                    fontSize: '12px'
+                                })
+                            }} defaultValue={{
+                                value: selectedRestApiConnection.methodType,
+                                label: selectedRestApiConnection.methodType
+                            }} options={HTTP_UTIL.METHOD_OPTIONS} />
+                    </InLineBlockWrapper>
+                    <Input className='input_wh500 ip_bgc'
+                        defaultValue={selectedRestApiConnection ? selectedRestApiUrl : ''} />
+
                 </div>
-                <div style={{marginTop : '30px', marginBottom : '10px'}}>
-                    <span>트리거 타입 : {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType) + '(' + selectedRestApiConnection.triggerType + ')'}</span><br/>
+                <div style={{ marginTop: '30px', marginBottom: '10px' }}>
+                    <span>트리거 타입 : {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType) + '(' + selectedRestApiConnection.triggerType + ')'}</span><br />
                     <span style={{ fontSize: '12px' }}>결재 문서의 상태가 {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType)}(으)로 변경 되었을 때 API를 호출합니다</span>
                 </div>
-                <div style={{marginTop : '30px', marginBottom : '10px'}}>
+                <div style={{ marginTop: '30px', marginBottom: '10px' }}>
                     <p style={{ margin: '0px' }}>적용되는 문서의 타입</p>
                     <span>{DocumentUtils.convertDocumentType(selectedRestApiConnection.documentType)}</span>
                 </div>
                 <div>
                     사용 여부 : {selectedRestApiConnection.used ? 'Y' : 'N'}
+                </div>
+                <div className="Titleline" style={{
+                    marginBottom: '15px',
+                    marginTop: '15px',
+                    paddingTop: '5px',
+                    borderTop: '1px solid black'
+                }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <Button className="cfc bs"
+                            name={'수정'}
+                            onClick={() => setRestApiConnectionOneModalOpen(false)} />
+                        <Button className="cfc bs"
+                            name={'취소'}
+                            onClick={() => setRestApiConnectionOneModalOpen(false)} />
+                    </div>
                 </div>
             </DefaultModal>
             {restApiConnections.content.length > 0 ?
@@ -138,6 +183,7 @@ export default function MappingApiList() {
                     </>}
                 />
                 : <EmptyMsg msg={['조건에 해당하는 결재 문서 연동 API 가 존재하지 않습니다', '검색 조건을 다시 입력해주세요']} />}
+
         </RestApiConnectContentContext.Provider>
     </>
 }
