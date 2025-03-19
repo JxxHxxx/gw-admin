@@ -17,7 +17,7 @@ export default function MappingApiContent() {
             name="결재 문서 API 연동" />
         <HorizontalMenu>
             <Button className="cfc bs"
-                name='API 연동 추가'
+                name='결재 문서에 API 연동하기'
                 onClick={() => setAddRestApiConnectionModalOpen(true)} />
             <MappingApiCreateModal
                 isOpen={addRestApiConnectionModalOpen}

@@ -11,6 +11,7 @@ import Button from "../../../component/button/Button";
 import Select from "react-select";
 import { HTTP_UTIL } from "../../../constant/HttpConst";
 import InLineBlockWrapper from "../../../component/util/InlineBlockWrapper";
+import Card from "../../../component/list/Card";
 
 
 const ENROLL_API_MODAL_STYLES = {
@@ -106,9 +107,22 @@ export default function MappingApiList() {
                 setIsOpen={setRestApiConnectionOneModalOpen}>
                 <div className="Titleline" style={{
                     marginTop: '15px',
+                    marginBottom: '5px',
                     borderBottom: '1px solid black'
                 }}>
                 </div>
+                <Card id="docAndTrgTypeInfoCard">
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div style={{ marginBottom: '10px' }}>
+                            <span>트리거 타입 : {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType) + '(' + selectedRestApiConnection.triggerType + ')'}</span><br />
+                            <span style={{ fontSize: '12px' }}>결재 문서의 상태가 {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType)}(으)로 변경 되었을 때 API를 호출합니다</span>
+                        </div>
+                        <div style={{ marginBottom: '10px' }}>
+                            <p style={{ margin: '0px' }}>적용되는 문서의 타입</p>
+                            <span>{DocumentUtils.convertDocumentType(selectedRestApiConnection.documentType)}</span>
+                        </div>
+                    </div>
+                </Card>
                 <div style={{ marginTop: '30px', marginBottom: '10px' }}>
                     <span>{selectedRestApiConnection.description}</span>
                 </div>
@@ -134,14 +148,6 @@ export default function MappingApiList() {
                     <Input className='input_wh500 ip_bgc'
                         defaultValue={selectedRestApiConnection ? selectedRestApiUrl : ''} />
 
-                </div>
-                <div style={{ marginTop: '30px', marginBottom: '10px' }}>
-                    <span>트리거 타입 : {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType) + '(' + selectedRestApiConnection.triggerType + ')'}</span><br />
-                    <span style={{ fontSize: '12px' }}>결재 문서의 상태가 {DocumentUtils.convertTriggerType(selectedRestApiConnection.triggerType)}(으)로 변경 되었을 때 API를 호출합니다</span>
-                </div>
-                <div style={{ marginTop: '30px', marginBottom: '10px' }}>
-                    <p style={{ margin: '0px' }}>적용되는 문서의 타입</p>
-                    <span>{DocumentUtils.convertDocumentType(selectedRestApiConnection.documentType)}</span>
                 </div>
                 <div>
                     사용 여부 : {selectedRestApiConnection.used ? 'Y' : 'N'}
@@ -184,6 +190,6 @@ export default function MappingApiList() {
                 />
                 : <EmptyMsg msg={['조건에 해당하는 결재 문서 연동 API 가 존재하지 않습니다', '검색 조건을 다시 입력해주세요']} />}
 
-        </RestApiConnectContentContext.Provider>
+        </RestApiConnectContentContext.Provider >
     </>
 }

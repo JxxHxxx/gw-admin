@@ -18,12 +18,28 @@
   font-style: normal;
 }
 
+label {
+  font-size: 12px;
+}
 
 body,
 input::placeholder,
 input,
-button  {
+button,
+textarea,
+textarea::placeholder  {
   font-family: "MaruBuri";
+}
+textarea {
+  resize: none;
+  border: 1px solid #DEDEDE;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline : none;
+  border : 1px solid rgb(0, 40, 94);
 }
 
 p {

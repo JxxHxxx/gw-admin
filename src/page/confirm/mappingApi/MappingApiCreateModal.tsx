@@ -97,19 +97,22 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
             .filter(([key]) => !['description', 'requesterId'].includes(key)) // description, requesterId 필드는 검증 제외
             .filter(([_, value]) => value === undefined || (typeof value === 'string' && value.trim() === ''))
             .map(([key]) => key);
-    
+
 
         if (notInputFields.length > 0) {
-            alert('필수 값 ' + notInputFields + ' 을 입력해주세요');
+            alert('필수 값 ' + notInputFields + ' 을 설정하세요');
             return;
         }
 
         const response = await ConfirmApi.createRestApiConnection(mappingApiEnrollment);
         try {
             if (response.status === 400) {
+
                 const { data, message } = response;
-                alert('에러코드:' + data.errCode +
-                    "\n에러메시지:" + message);
+                const { documentType, triggerType } = mappingApiEnrollment;
+                if (data.errCode === 'RCF10') {
+                    alert('문서 유형 코드:' + documentType + '/트리거 유형 코드:' + triggerType + '은 이미 존재합니다.')
+                }
             }
         }
         catch (e) {
@@ -168,10 +171,15 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
                 <InLineBlockWrapper id='ci_bwr1' marginRight="5px">
                     <Select
                         styles={{
-                            control: (base) => ({
+                            control: (base, state) => ({
                                 ...base,
                                 width: 300,
-                                fontSize: '12px'
+                                fontSize: '12px',
+                                border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE',
+                                boxShadow: state.isFocused ? 0 : 0,
+                                '&:hover': {
+                                    border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE'
+                                }
                             }),
                             option: (base) => ({
                                 ...base,
@@ -188,10 +196,15 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
                 <InLineBlockWrapper id='ci_bwr2' marginRight="5px">
                     <Select
                         styles={{
-                            control: (base) => ({
+                            control: (base, state) => ({
                                 ...base,
                                 width: 300,
-                                fontSize: '12px'
+                                fontSize: '12px',
+                                border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE',
+                                boxShadow: state.isFocused ? 0 : 0,
+                                '&:hover': {
+                                    border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE'
+                                }
                             }),
                             option: (base) => ({
                                 ...base,
@@ -223,87 +236,113 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
             <Title name="연동 API 정보"
                 style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
             <InLineBlockWrapper id='ci_bwr3' marginRight="5px">
-                <Select
-                    styles={{
-                        control: (base) => ({
-                            ...base,
-                            width: 130,
-                            fontSize: '12px'
-                        }),
-                        option: (base) => ({
-                            ...base,
-                            fontSize: '12px'
-                        })
-                    }}
-                    components={animatedComponents}
-                    placeholder="프로토콜"
-                    onChange={(event) => handleOnchangeSelectOptions('scheme', event)}
-                    isClearable={true}
-                    options={[
-                        { value: 'http', label: 'http' },
-                        { value: 'https', label: 'https' },
-                    ]}>
-                </Select>
+                <label>프로토콜
+                    <Select
+                        styles={{
+                            control: (base, state) => ({
+                                ...base,
+                                width: 130,
+                                fontSize: '12px',
+                                border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE',
+                                boxShadow: state.isFocused ? 0 : 0,
+                                '&:hover': {
+                                    border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE'
+                                }
+                            }),
+                            option: (base) => ({
+                                ...base,
+                                fontSize: '12px'
+                            })
+                        }}
+                        components={animatedComponents}
+                        placeholder="protocol"
+                        onChange={(event) => handleOnchangeSelectOptions('scheme', event)}
+                        isClearable={true}
+                        options={[
+                            { value: 'http', label: 'http' },
+                            { value: 'https', label: 'https' },
+                        ]}>
+                    </Select>
+                </label>
             </InLineBlockWrapper>
             <InLineBlockWrapper id='ci_bwr4' marginRight="5px">
-                <div>
-                    <Input id="ipDomainInput"
-                        className='input_wh200 ip_bgc'
-                        placeholder="서버 IP/도메인"
-                        onChange={(event) => setMappingApiEnrollment((prev) => ({
-                            ...prev,
-                            'host': event.target.value
-                        }))}
-                    />
-                </div>
+                <label htmlFor="ipDomainInput">IP/도메인
+                    <div>
+                        <Input id="ipDomainInput"
+                            className='ip_bgc'
+                            style={{ width: '394px', height: '35px' }}
+                            placeholder="ex) gw.jxxcloud.com"
+                            onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                ...prev,
+                                'host': event.target.value
+                            }))}
+                        />
+                    </div>
+                </label>
             </InLineBlockWrapper>
             <InLineBlockWrapper id='ci_bwr5' marginRight="5px">
                 <div>
-                    <Input id="portInput"
-                        className='input_wh75 ip_bgc'
-                        placeholder="포트 번호"
-                        onChange={(event) => setMappingApiEnrollment((prev) => ({
-                            ...prev,
-                            'port': event.target.value
-                        }))}
-                    />
+                    <label htmlFor="portInput">포트 번호
+                        <div>
+                            <Input id="portInput"
+                                className='input_wh75 ip_bgc'
+                                placeholder="port"
+                                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                    ...prev,
+                                    'port': event.target.value
+                                }))}
+                            />
+                        </div>
+                    </label>
                 </div>
             </InLineBlockWrapper>
             <div style={{ marginBottom: '10px' }}></div>
             <InLineBlockWrapper id='ci_bwr4' marginRight="5px">
-                <Select
-                    styles={{
-                        control: (base) => ({
-                            ...base,
-                            width: 140,
-                            fontSize: '12px'
-                        }),
-                        option: (base) => ({
-                            ...base,
-                            fontSize: '12px'
-                        })
-                    }}
-                    components={animatedComponents}
-                    placeholder="HTTP 메서드"
-                    onChange={(event) => handleOnchangeSelectOptions('methodType', event)}
-                    isClearable={true}
-                    options={[
-                        { value: 'PATCH', label: 'PATCH' },
-                        { value: 'POST', label: 'POST' },
-                        { value: 'GET', label: 'GET' },
-                    ]}>
-                </Select>
+                <label>HTTP 메서드
+                    <Select id="httpMethodSelectOpt"
+                        styles={{
+                            control: (base, state) => ({
+                                ...base,
+                                width: 140,
+                                fontSize: '12px',
+                                border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE',
+                                boxShadow: state.isFocused ? 0 : 0,
+                                '&:hover': {
+                                    border: state.isFocused ? '1px solid rgb(0, 40, 94)' : '1px solid #DEDEDE'
+                                }
+                            }),
+                            option: (base) => ({
+                                ...base,
+                                fontSize: '12px'
+                            })
+                        }}
+                        components={animatedComponents}
+                        placeholder="HTTP Method"
+                        onChange={(event) => handleOnchangeSelectOptions('methodType', event)}
+                        isClearable={true}
+                        options={[
+                            { value: 'PATCH', label: 'PATCH' },
+                            { value: 'POST', label: 'POST' },
+                            { value: 'GET', label: 'GET' },
+                        ]}>
+                    </Select>
+                </label>
             </InLineBlockWrapper>
             <InLineBlockWrapper id='ci_bwr6' marginRight="5px">
                 <div>
-                    <Input id="apiUriInput"
-                        className='input_wh300 ip_bgc'
-                        placeholder="ex) /api/confirms/{confirm-id}"
-                        onChange={(event) => setMappingApiEnrollment((prev) => ({
-                            ...prev,
-                            'path': event.target.value
-                        }))}
-                    />
+                    <label>API URL
+                        <div>
+                            <Input id="apiUriInput"
+                                className='ip_bgc'
+                                style={{ width: '470px', height: '35px' }}
+                                placeholder="ex) /api/confirms/{confirm-id}"
+                                onChange={(event) => setMappingApiEnrollment((prev) => ({
+                                    ...prev,
+                                    'path': event.target.value
+                                }))}
+                            />
+                        </div>
+                    </label>
                 </div>
             </InLineBlockWrapper>
         </li>
@@ -318,16 +357,22 @@ export default function MappingApiCreateModal({ isOpen, setIsOpen }) {
         }}>
             <Title name="연동 API 설명"
                 style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 'bold' }} />
-            <Input id="descriptionInput"
-                className='input_wh500 ip_bgc'
-                placeholder="연동 API에 대해 설명해주세요"
+            <textarea
+                style={{
+                    width: '615px',
+                    height: '175px',
+                    fontFamily: 'MaruBuri'
+                }}
+                onFocus={(event) => event.target.style.border = '1px solid rgb(0, 40, 94)'}
+                onBlur={(event) => event.target.style.border = '1px solid #DEDEDE'}
+                placeholder="결재 문서에 연동되는 API에 대해 설명해주세요"
                 onChange={(event) => setMappingApiEnrollment((prev) => ({
                     ...prev,
                     'description': event.target.value
-                }))}
-            />
+                }))}>
+            </textarea>
         </li>
-        <div style={{ textAlign: 'center', marginTop: '100px' }}>
+        <div style={{ textAlign: 'center', marginTop: '30px' }}>
             <Button name='등록'
                 className="cfc bs"
                 style={{ marginLeft: '0px', marginRight: '5px', padding: '3px 10px 3px 10px' }}
