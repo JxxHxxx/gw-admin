@@ -20,6 +20,7 @@ import Header from './component/layout/Header'
 import MappingApiPage from './page/confirm/mappingApi/MappingApiPage'
 import UserManagePage from './page/memberOrganization/UserManagePage'
 import OrganizationManagePage from './page/memberOrganization/OrganizationManagePage'
+import MessageDestinationPage from './page/message/destination/MessageDestinationPage'
 
 function App() {
   const router = createBrowserRouter([
@@ -63,6 +64,10 @@ function App() {
     {
       path: UrlConstant.URL_MESSAGE_RESYNC,
       element: <MessageRetryPage />
+    },
+    {
+      path: UrlConstant.URL_MESSAGE_DESTINATION,
+      element: <MessageDestinationPage />
     }
     ,
     {
