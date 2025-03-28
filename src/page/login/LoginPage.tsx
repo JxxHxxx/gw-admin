@@ -59,7 +59,7 @@ export default function LoginPage() {
             sessionStorage.setItem('departmentId', loginResponse.departmentId);
             sessionStorage.setItem('departmentName', loginResponse.departmentName);
 
-            nav('/vacation/hist')
+            nav('/confirm-documents')
         }
         else if (response.code === 'ERR_BAD_REQUEST' && response.response.data.status === 400) {
             setSignIn((prev) => ({
