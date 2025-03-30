@@ -29,7 +29,6 @@ export default function MappingApiContent() {
                 helpModalOpen={helpModalOpen}
                 setHelpModalOpen={setHelpModalOpen} />
         </HorizontalMenu>
-        <div style={{ borderBottom: '1px solid gray' }}></div>
         <MappingApiList />
     </MainContainer >
 }

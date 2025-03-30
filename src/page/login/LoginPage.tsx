@@ -7,6 +7,7 @@ import '../../component/input/input.css'
 import '../login/loginPage.css'
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../../api/AuthApi";
+import LoadingIcon from "../../component/animate/LoadingIcon";
 
 interface signInState {
     id: string;
@@ -129,8 +130,9 @@ export default function LoginPage() {
                 </div>)}
             <div>
                 <Button
-                    name={signIn.requesting ? "waiting..." : "sign-in"}
-                    className="bb"
+                    style={{width : '400px' , height : '41px', padding : '0px'}}
+                    name={signIn.requesting ? <LoadingIcon style={{width : '4%', display: 'inline'}} /> : "sign-in"}
+                    
                     onClick={() => handleOnClickLoginButton({
                         memberId: signIn.id,
                         password: signIn.password

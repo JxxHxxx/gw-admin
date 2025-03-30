@@ -112,8 +112,6 @@ export default function ConfirmFormConfig() {
             </HorizontalMenu>
         </div>
         <CreateConfirmFormModal isOpen={createFormModal} setIsOpen={setCreateFormModal} />
-
-        <div style={{ borderBottom: '1px solid gray' }}></div>
         <div style={{ margin: '30px' }} ></div>
         <div style={{
             display: 'flex',

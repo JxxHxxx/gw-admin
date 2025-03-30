@@ -38,3 +38,10 @@ export const RestApiConnectContentContext = createContext<SimplePageContextProp>
     },
     totalPages: 0
 });
+
+export const MessageDestinationContext = createContext<SimplePageContextProp>({
+    pageable: {
+        pageNumber: 0
+    },
+    totalPages: 0
+});
