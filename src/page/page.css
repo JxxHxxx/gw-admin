@@ -49,3 +49,20 @@
     color : black;
     font-weight: bold;
 }
+
+.pnli {
+    list-style-type: none;
+    display: inline;
+    margin : 5px;
+}
+
+.rpnA {
+    text-align: center;
+    cursor: pointer;
+    padding: 10px 15px 10px 15px;
+    margin: 5px;
+    border-radius: 50%;
+}
+.rpnAActive {
+    background-color: #e2efff;
+}

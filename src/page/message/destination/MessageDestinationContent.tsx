@@ -27,7 +27,7 @@ export default function MessageDestinationContent() {
                     </div>
                 </DefaultModal>
             </HorizontalMenu>
-            <MessageDestinationList />
+            <MessageDestinationList itemsPerPage={1}/>
         </MainContainer>
 
     </>

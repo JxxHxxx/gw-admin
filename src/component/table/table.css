@@ -2,6 +2,7 @@
 .table_cfc,
 .table_cfc_tb,
 .table_minicol,
+.rTb,
 .table_lnline {
     border-collapse: collapse;
 }
