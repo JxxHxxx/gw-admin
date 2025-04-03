@@ -24,18 +24,18 @@ export default function MessageDestinationList({ itemsPerPage }) {
         content: [],
     });
 
-    const reorderedContent = destinations.content.map(({ 
-        destinationId, 
-        destinationName, 
-        connectionType, 
-        used, 
-        createDateTime }) => ({
+    const reorderedContent = destinations.content.map(({
         destinationId,
         destinationName,
         connectionType,
         used,
-        createDateTime
-      }));
+        createDateTime }) => ({
+            destinationId,
+            destinationName,
+            connectionType,
+            used,
+            createDateTime
+        }));
 
     const requestSearchMessageQDestination = async (params?: object) => {
         const { data, status } = await MessageApi.searchMessageQDestination(params);
@@ -75,7 +75,7 @@ export default function MessageDestinationList({ itemsPerPage }) {
     return <div>
         <TableV2 columns={["서비스 ID", "서비스 명", "목적지 유형", "사용 여부", "생성일시"]}
             data={currentItems} />
-        <div style={{margin : '50px'}}></div>
+        <div style={{ margin: '50px' }}></div>
         <ReactPaginate
             breakLabel="..."
             nextLabel=<span>{">"}</span>

@@ -10,10 +10,10 @@ interface TableProps<T> {
 
 export default function TableV2<T extends object>({ columns, data, className }: TableProps<T>) {    
     return <>
-        <table className={className ? className : "table_bs"}>
+        <table style={{width : '100%'}} className={className ? className : "table_bs"}>
             <thead>
                 <tr>
-                    {columns && columns.map((col) => <td style={{minWidth : '150px'}} key={col}>{col}</td>)}
+                    {columns && columns.map((col) => <td style={{minWidth : '100px'}} key={col}>{col}</td>)}
                 </tr>
             </thead>
             <tbody>

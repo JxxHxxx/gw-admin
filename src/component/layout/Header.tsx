@@ -27,7 +27,11 @@ export default function Header({ menu = '' }: HeaderProp) {
     const nav = useNavigate();
 
     const handleOnClickMenu = (url: string) => {
-        nav(url);
+        nav(url, {
+            state : {
+                selectedMenu : ''
+            }
+        });
     }
 
     return <List className="list_header">

@@ -11,6 +11,7 @@ export default function MessageDestinationContent() {
 
     return <>
         <MainContainer>
+            {/* <div style={{ maxWidth : 'inherit', border: '1px solid black'}}>test</div> */}
             <Title
                 id="messageDestinationTitle"
                 name="목적지 관리" />

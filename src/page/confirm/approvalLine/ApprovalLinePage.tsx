@@ -9,7 +9,7 @@ export default function ApprovalLinePage() {
     cnAside="side_b"
     cnMain="main_b"
     header={<Header menu="confirm"/>}
-    sidebar={<ConfirmSidebar />}>
+    sidebar={<ConfirmSidebar selectedMenu="approvalLine"/>}>
     <div>결재선 페이지</div>
 </Page>
 }

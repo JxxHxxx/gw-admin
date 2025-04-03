@@ -10,7 +10,7 @@ export default function BatchConfigurationPage() {
         cnAside="side_b"
         cnMain="main_b"
         header={<Header menu="batch" />}
-        sidebar={<BatchSidebar />}>
+        sidebar={<BatchSidebar selectedMenu='config'/>}>
         <BatchConfigurationContent />
     </Page>
 }

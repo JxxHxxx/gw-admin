@@ -1,8 +1,8 @@
 
 export interface SidebarProp {
-
+    selectedMenu: string;
 }
 
 export interface SidebarState {
-    selected:string
+    select:string
 }

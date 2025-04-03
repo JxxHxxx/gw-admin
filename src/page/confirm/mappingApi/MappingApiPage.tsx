@@ -9,7 +9,7 @@ export default function MappingApiPage() {
         cnAside="side_b"
         cnMain="main_b"
         header={<Header menu="confirm"/>}
-        sidebar={<ConfirmSidebar />}>
+        sidebar={<ConfirmSidebar selectedMenu="mappingApi" />}>
         <MappingApiContent />
     </Page>
 }

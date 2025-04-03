@@ -10,7 +10,7 @@ export default function MessageRetryPage() {
         cnAside="side_b"
         cnMain="main_b"
         header={<Header menu="message" />}
-        sidebar={<MessageSidebar />}>
+        sidebar={<MessageSidebar selectedMenu="retry"/>}>
         <MessageRetryContent />
     </Page>
 }

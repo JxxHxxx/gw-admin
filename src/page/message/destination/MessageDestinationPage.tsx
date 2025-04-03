@@ -10,7 +10,7 @@ export default function MessageDestinationPage() {
         cnAside="side_b"
         cnMain="main_b"
         header={<Header menu="message" />}
-        sidebar={<MessageSidebar />}>
+        sidebar={<MessageSidebar selectedMenu="destination"/>}>
         <MessageDestinationContent />
     </Page>
 }
