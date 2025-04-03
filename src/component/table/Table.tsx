@@ -12,7 +12,7 @@ interface TableProps {
 export default function Table({ columns, rows, className }: TableProps) {
 
     return <Fragment>
-        <table className={className ? className : "table_bs"}>
+        <table style={{width : '100%'}} className={className ? className : "table_bs"}>
             <thead>
                 <tr>
                     {columns && columns.map((col) => <td key={col}>{col}</td>)}

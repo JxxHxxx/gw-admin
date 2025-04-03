@@ -52,7 +52,7 @@
 
 }
 
-.selected_li {
+.selected {
     font-weight: bold;
     border-radius: 10px;
     background-color: rgb(203, 215, 230);
@@ -62,6 +62,10 @@
     list-style-type: none;
     display: inline;
     margin: 5px;
+}
+
+.pnliContainer {
+    padding-left: 0px;
 }
 
 .rpnA {

@@ -76,21 +76,24 @@ export default function MessageDestinationList({ itemsPerPage }) {
         <TableV2 columns={["서비스 ID", "서비스 명", "목적지 유형", "사용 여부", "생성일시"]}
             data={currentItems} />
         <div style={{ margin: '50px' }}></div>
-        <ReactPaginate
-            breakLabel="..."
-            nextLabel=<span>{">"}</span>
-            previousLabel=<span>{"<"}</span>
-            pageClassName="pnli"
-            nextClassName="pnli"
-            previousClassName="pnli"
-            pageLinkClassName="rpnA"
-            nextLinkClassName="rpnA"
-            previousLinkClassName="rpnA"
-            activeLinkClassName="rpnAActive"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            pageCount={pageCount}
-            renderOnZeroPageCount={null}
-        />
+        <div style={{textAlign : 'center'}}>
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel=<span>{">"}</span>
+                previousLabel=<span>{"<"}</span>
+                className="pnliContainer"
+                pageClassName="pnli"
+                nextClassName="pnli"
+                previousClassName="pnli"
+                pageLinkClassName="rpnA"
+                nextLinkClassName="rpnA"
+                previousLinkClassName="rpnA"
+                activeLinkClassName="rpnAActive"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={pageCount}
+                renderOnZeroPageCount={null}
+            />
+        </div>
     </div>
 }
